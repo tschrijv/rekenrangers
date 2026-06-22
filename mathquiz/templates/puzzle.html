@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center">
+
+  <!-- Title -->
+  <h1 class="mb-1 display-3 fw-bold text-success">PUZZEL</h1>
+  <h2 class="display-4 fw-bold text-success mb-3">{{ name }}</h2>
+
+  <!-- Action button -->
+  <form action="{{ url_for('student.buy_piece', puzzle_id=puzzle_id) }}" method="post" class="mb-3">
+    {% if puzzle_complete %}
+      <button type="button" class="btn btn-secondary btn-lg px-5 py-3 fw-bold" disabled>
+        Puzzel compleet!
+      </button>
+      <p class="mt-2 text-success fw-semibold">Goed gedaan! Je hebt de puzzel voltooid.</p>
+    {% elif current_points >= cost %}
+      <button type="submit" id="buyPieceButton" class="btn btn-jungle btn-jungle-md px-5 py-3 fw-bold">
+        Koop een puzzelstukje (<i class="bi bi-coin fs-4"></i> {{ cost }})
+      </button>
+    {% else %}
+      <button type="button" class="btn btn-secondary btn-lg px-5 py-3 fw-bold" disabled>
+        Niet genoeg punten (<i class="bi bi-coin fs-4"></i> {{ cost }})
+      </button>
+      <p class="mt-2 text-danger fw-semibold">Verdien meer punten door oefeningen te maken!</p>
+    {% endif %}
+  </form>
+
+  <!-- Puzzle grid container -->
+  <div class="d-flex justify-content-center mb-3 position-relative">
+    <div id="puzzleGrid"
+         class="puzzle-grid border border-success rounded shadow-sm"
+         style="--rows: {{ rows }}; --cols: {{ cols }};">
+      {% for i in range(rows * cols) %}
+        {% set row = i // cols %}
+        {% set col = i % cols %}
+        {% set x = 100 / (cols - 1) * col if cols > 1 else 0 %}
+        {% set y = 100 / (rows - 1) * row if rows > 1 else 0 %}
+        <div class="piece {% if i not in owned_pieces %}locked{% endif %}"
+             style="background-position: {{ x }}% {{ y }}%;">
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Confetti canvas -->
+    <canvas id="confettiCanvas" class="position-absolute top-0 start-0 w-100 h-100"></canvas>
+  </div>
+
+  <!-- Reset Puzzle Button -->
+  <form action="{{ url_for('student.reset_puzzle', puzzle_id=puzzle_id) }}" method="post" class="mb-3">
+    <button type="submit" class="btn btn-outline-danger"
+            onclick="return confirm('Weet je zeker dat je de puzzel opnieuw wilt beginnen?')">
+      🔄 Reset puzzel
+    </button>
+  </form>
+
+  <!-- Navigation buttons -->
+  <div class="d-flex justify-content-center gap-3">
+    <a href="{{ url_for('student.puzzles_list') }}" class="btn btn-jungle btn-jungle-md">
+      ← Terug naar puzzellijst
+    </a>
+    <a href="{{ url_for('student.select_exercise') }}" class="btn btn-jungle btn-jungle-md">
+      ← Terug naar oefeningen
+    </a>
+  </div>
+</div>
+
+<!-- Puzzle CSS -->
+<style>
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+  width: min(90vw, 450px);
+  aspect-ratio: calc(var(--cols) / var(--rows));
+  overflow: hidden;
+  border-radius: 10px;
+  transition: all 0.4s ease;
+}
+
+
+
+.piece {
+  background-image: url('{{ image_path }}');
+  background-size: calc(var(--cols) * 100%) calc(var(--rows) * 100%);
+  background-repeat: no-repeat;
+  border: 1px solid #eee;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.locked {
+  background-color: #e8f5e9;
+  background-image: none;
+  opacity: 0.7;
+}
+
+.puzzle-complete .piece {
+  border: none !important;
+  opacity: 1 !important;
+  transform: scale(1.01);
+}
+</style>
+
+<!-- Confetti + Celebration Script -->
+{% if puzzle_complete %}
+<script>
+document.getElementById("puzzleGrid").classList.add("puzzle-complete");
+
+
+// --- GOLD CONFETTI ----------------------------------------
+const canvas = document.getElementById("confettiCanvas");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const confetti = [];
+const colors = ["#FFD700", "#FFC300", "#FFEA70", "#FFF8C6"]; // gold tones
+
+for (let i = 0; i < 150; i++) {
+    confetti.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * -canvas.height,
+        w: Math.random() * 8 + 6,
+        h: Math.random() * 3 + 2,
+        d: Math.random() * 2 + 1,
+        tilted: Math.random() * 1,
+        color: colors[Math.floor(Math.random() * colors.length)]
+    });
+}
+
+function drawConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    confetti.forEach(c => {
+        ctx.save();
+        ctx.translate(c.x, c.y);
+        ctx.rotate(c.tilted);
+        ctx.fillStyle = c.color;
+        ctx.fillRect(-c.w / 2, -c.h / 2, c.w, c.h);
+        ctx.restore();
+    });
+
+    updateConfetti();
+}
+
+function updateConfetti() {
+    confetti.forEach(c => {
+        c.y += c.d * 3;
+        c.x += Math.sin(c.y * 0.02);
+
+        if (c.y > canvas.height) {
+            c.y = -10;
+            c.x = Math.random() * canvas.width;
+        }
+    });
+}
+
+setInterval(drawConfetti, 16);
+</script>
+{% endif %}
+
+<script>
+document.addEventListener("keydown", function (event) {
+
+    // Only trigger on Space
+    if (event.code === "Space" || event.key === " ") {
+
+        // Do NOT trigger if user is typing in an input or textarea
+        const active = document.activeElement;
+        if (active && (
+            active.tagName === "INPUT" ||
+            active.tagName === "TEXTAREA" ||
+            active.isContentEditable
+        )) {
+            return;
+        }
+
+        const buyButton = document.getElementById("buyPieceButton");
+
+        // Only click if button exists and is enabled
+        if (buyButton && !buyButton.disabled) {
+            event.preventDefault(); // prevent page scroll
+            buyButton.click();
+        }
+    }
+});
+</script>
+{% endblock %}

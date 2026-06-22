@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center">
+
+  <!-- Title -->
+  <h1 class="mb-1 display-3 fw-bold text-success">PUZZEL</h1>
+  <h2 class="display-4 fw-bold text-success mb-3">Leeuw</h2>
+
+  <!-- Action button (looks like real puzzle) -->
+  <form id="buy-form" action="{{ url_for('student.demo_buy_lion_piece') }}" method="post" class="mb-3">
+    {% if session.get('demo_lion_bought') %}
+      <!-- After buying once: show "cannot buy" state like real puzzle -->
+      <button type="button" class="btn btn-secondary btn-lg px-5 py-3 fw-bold" disabled>
+        Niet genoeg punten (<i class="bi bi-coin fs-4"></i> 0)
+      </button>
+    {% else %}
+      <!-- Only clickable button -->
+      <button id="buy-btn" type="submit" class="btn btn-jungle btn-jungle-md px-5 py-3 fw-bold">
+        Koop een puzzelstukje (<i class="bi bi-coin fs-4"></i> 0)
+      </button>
+    {% endif %}
+  </form>
+
+  <!-- Puzzle grid container -->
+  <div class="d-flex justify-content-center mb-3 position-relative">
+    <div id="puzzleGrid"
+         class="puzzle-grid border border-success rounded shadow-sm"
+         style="--rows: 5; --cols: 3;">
+      {% for i in range(15) %}
+        {% set row = i // 3 %}
+        {% set col = i % 3 %}
+        {% set x = 100 / (3 - 1) * col %}
+        {% set y = 100 / (5 - 1) * row %}
+        <div class="piece {% if not session.get('demo_lion_bought') or i != 7 %}locked{% endif %}"
+             style="background-position: {{ x }}% {{ y }}%;">
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Reset button (disabled, but same as real location) -->
+  <form class="mb-3">
+    <button type="button" class="btn btn-outline-secondary" disabled>
+      🔄 Reset puzzel
+    </button>
+  </form>
+
+  <!-- Navigation buttons (btn-jungle but greyed/disabled) -->
+  <div class="d-flex justify-content-center gap-3">
+    <a href="#"
+       class="btn btn-jungle btn-jungle-md demo-disabled"
+       onclick="return false;" aria-disabled="true">
+      ← Terug naar puzzellijst
+    </a>
+    <a href="#"
+       class="btn btn-jungle btn-jungle-md demo-disabled"
+       onclick="return false;" aria-disabled="true">
+      ← Terug naar oefeningen
+    </a>
+  </div>
+</div>
+
+<!-- Hidden form to POST demo_next (used for auto-advance) -->
+<form id="demo-next-form" method="post" action="{{ url_for('student.demo_next') }}" class="d-none"></form>
+
+<style>
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+  width: min(90vw, 450px);
+  aspect-ratio: calc(var(--cols) / var(--rows));
+  overflow: hidden;
+  border-radius: 10px;
+  transition: all 0.4s ease;
+}
+
+.piece {
+  background-image: url('/static/puzzles/lion.png');
+  background-size: calc(var(--cols) * 100%) calc(var(--rows) * 100%);
+  background-repeat: no-repeat;
+  border: 1px solid #eee;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.locked {
+  background-color: #e8f5e9;
+  background-image: none;
+  opacity: 0.7;
+}
+
+.demo-disabled {
+  opacity: 0.45;
+  filter: grayscale(0.9);
+  pointer-events: none;
+}
+</style>
+
+<script>
+  // IMPORTANT:
+  // On this page, audio finishing should NOT automatically go to the next demo step.
+  // The page should only continue after the lion piece is bought.
+  window.__demoDisableAudioAutoNext = true;
+</script>
+
+{% include "_demo_overlay.html" %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const buyBtn = document.getElementById("buy-btn");
+  const buyForm = document.getElementById("buy-form");
+  const nextForm = document.getElementById("demo-next-form");
+  const bought = {{ 'true' if session.get('demo_lion_bought') else 'false' }};
+
+  // 1) Spacebar triggers the buy button (only if not bought yet)
+  document.addEventListener("keydown", function (e) {
+    if (e.code === "Space") {
+      e.preventDefault();
+
+      if (buyBtn && buyForm && !bought) {
+        buyForm.submit();
+      }
+    }
+  });
+
+  // 2) After piece is bought, auto advance after 3 seconds
+  if (bought && nextForm) {
+    setTimeout(() => {
+      nextForm.submit();
+    }, 3000);
+  }
+});
+</script>
+
+{% endblock %}

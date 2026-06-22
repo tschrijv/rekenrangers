@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="display-4 fw-bold text-success mb-4">Kies een puzzel</h1>
+
+<div class="d-flex flex-wrap justify-content-center gap-4">
+
+  <!-- ✅ LEEUW (enige actieve) -->
+  <div class="card shadow-sm text-center demo-highlight" style="width: 260px;">
+    <div class="position-relative">
+      <div class="bg-success bg-opacity-25 d-flex align-items-center justify-content-center" style="height:180px;">
+        <i class="bi bi-puzzle text-success fs-1"></i>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title text-success fw-bold">Leeuw</h5>
+
+      <div class="progress mb-2" style="height: 10px;">
+        <div class="progress-bar bg-success" role="progressbar"
+             style="width: 0%;"
+             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        </div>
+      </div>
+      <p class="text-muted small">0% voltooid</p>
+
+      <!-- POST naar demo_next -->
+      <form id="puzzle-form" method="post" action="{{ url_for('student.demo_next') }}" class="m-0">
+        <button id="puzzle-btn" type="submit"
+                class="btn btn-jungle btn-jungle-sm mt-2 puzzle-button"
+                disabled>
+          Open puzzel
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔒 GIRAF (locked) -->
+  <div class="card shadow-sm text-center demo-locked" style="width: 260px;">
+    <div class="position-relative">
+      <div class="bg-success bg-opacity-25 d-flex align-items-center justify-content-center" style="height:180px;">
+        <i class="bi bi-puzzle text-success fs-1"></i>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title text-success fw-bold">Giraf</h5>
+      <div class="progress mb-2" style="height: 10px;">
+        <div class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+      </div>
+      <p class="text-muted small">0% voltooid</p>
+      <button type="button" class="btn btn-jungle btn-jungle-sm mt-2" disabled>
+        Open puzzel
+      </button>
+    </div>
+  </div>
+
+  <!-- 🔒 NEUSHOORN (locked) -->
+  <div class="card shadow-sm text-center demo-locked" style="width: 260px;">
+    <div class="position-relative">
+      <div class="bg-success bg-opacity-25 d-flex align-items-center justify-content-center" style="height:180px;">
+        <i class="bi bi-puzzle text-success fs-1"></i>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title text-success fw-bold">Neushoorn</h5>
+      <div class="progress mb-2" style="height: 10px;">
+        <div class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+      </div>
+      <p class="text-muted small">0% voltooid</p>
+      <button type="button" class="btn btn-jungle btn-jungle-sm mt-2" disabled>
+        Open puzzel
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<a href="#"
+   class="btn btn-jungle btn-jungle-md mt-4 demo-disabled"
+   onclick="return false;"
+   aria-disabled="true">
+  ← Terug naar oefeningen
+</a>
+
+<style>
+  .demo-locked { opacity: 0.35; filter: grayscale(0.9); pointer-events: none; }
+  .demo-disabled { opacity: 0.45; filter: grayscale(0.9); pointer-events: none; }
+  .demo-highlight {
+    outline: 5px solid rgba(25,135,84,0.55);
+    border-radius: 18px;
+    box-shadow: 0 0 0 6px rgba(25,135,84,0.18);
+    animation: demoPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes demoPulse { 0% {transform: scale(1);} 50% {transform: scale(1.03);} 100% {transform: scale(1);} }
+</style>
+
+{% include "_demo_overlay.html" %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("puzzle-form");
+  const btn = document.getElementById("puzzle-btn");
+
+  function isDone() {
+    return window.__demoAudioDone === true;
+  }
+
+  // start locked
+  if (btn) btn.disabled = true;
+
+  // unlock when audio finished
+  const poll = setInterval(() => {
+    if (isDone()) {
+      clearInterval(poll);
+      if (btn) btn.disabled = false;
+    }
+  }, 150);
+
+  // extra safety: block submit while locked
+  form.addEventListener("submit", (e) => {
+    if (!isDone()) e.preventDefault();
+  });
+
+  // Enter only works when unlocked
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (isDone()) form.submit();
+    }
+  });
+});
+</script>
+
+{% endblock %}

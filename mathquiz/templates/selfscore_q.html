@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="display-4 text-success mb-4">Hoe zeker ben je van je antwoord?</h1>
+
+<form id="selfscore-form" method="post"
+      class="d-flex justify-content-center gap-4 flex-wrap">
+
+  <input type="hidden" name="time_self_score" id="time_self_score" value="0">
+
+  <div id="smiley-wrapper" class="d-flex justify-content-center gap-4 flex-wrap">
+
+    <!-- 1 -->
+    <label class="smiley-label text-center">
+      <input id="score1" type="radio" name="self_score" value="1" class="d-none" required>
+      
+      <div class="smiley-card">
+        <img src="{{ url_for('static', filename='smiley_0.png') }}"
+            alt="Heel onzeker" class="smiley-option">
+
+        <div class="smiley-text text-danger">
+          heel onzeker<br>
+          <small>ik denk dat ik fout was</small>
+        </div>
+      </div>
+    </label>
+
+    <!-- 2 -->
+    <label class="smiley-label text-center">
+      <input id="score2" type="radio" name="self_score" value="2" class="d-none" required>
+      
+      <div class="smiley-card">
+        <img src="{{ url_for('static', filename='smiley_1.png') }}"
+            alt="Heel onzeker" class="smiley-option">
+
+        <div class="smiley-text text-warning">
+          onzeker<br>
+          <small>dat ik juist was</small>
+        </div>
+      </div>
+    </label>
+
+    <!-- 3 -->
+    <label class="smiley-label text-center">
+      <input id="score3" type="radio" name="self_score" value="3" class="d-none" required>
+      
+      <div class="smiley-card">
+        <img src="{{ url_for('static', filename='smiley_2.png') }}"
+            alt="Heel onzeker" class="smiley-option">
+
+        <div class="smiley-text" style="color:#c7d322;"">
+          een beetje zeker <br>
+          <small>dat ik juist was</small>
+        </div>
+      </div>
+    </label>
+
+    <!-- 4 -->
+    <label class="smiley-label text-center">
+      <input id="score4" type="radio" name="self_score" value="4" class="d-none" required>
+      
+      <div class="smiley-card">
+        <img src="{{ url_for('static', filename='smiley_3.png') }}"
+            alt="Heel onzeker" class="smiley-option">
+
+        <div class="smiley-text text-success">
+          heel zeker<br>
+          <small>dat ik juist was</small>
+        </div>
+      </div>
+    </label>
+
+  </div>
+
+  <div class="w-100 text-center mt-4">
+    <button type="submit" class="btn btn-jungle btn-jungle-md">Verstuur</button>
+  </div>
+</form>
+
+<style>
+.smiley-card {
+  background-color: #ffe9cd;
+  border-radius: 16px;
+  padding: 12px 10px 10px 10px;
+  transition: transform 0.2s, filter 0.2s;
+}
+
+.smiley-label:hover .smiley-card {
+  transform: scale(1.08);
+  filter: brightness(1.05);
+}
+
+.smiley-label input:checked ~ .smiley-card {
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgba(40, 167, 69, 0.6);
+}
+
+.smiley-option {
+  width: 90px;
+  margin-bottom: 6px;
+}
+
+.smiley-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.smiley-text small {
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("selfscore-form");
+    const wrapper = document.getElementById("smiley-wrapper");
+    const timeInput = document.getElementById("time_self_score");
+    const startTime = performance.now();
+
+    let submitted = false;
+
+    function submitWithTime() {
+      if (submitted) return;
+      submitted = true;
+      if (timeInput) {
+        timeInput.value = ((performance.now() - startTime) / 1000).toFixed(3);
+      }
+      form.submit();
+    }
+
+    form.addEventListener("submit", function(e) {
+      if (submitted) { e.preventDefault(); return; }
+      submitted = true;
+      if (timeInput) {
+        timeInput.value = ((performance.now() - startTime) / 1000).toFixed(3);
+      }
+    });
+
+    document.addEventListener("keydown", function(e) {
+      const keyMap = {
+        "f": "score1",
+        "g": "score2",
+        "h": "score3",
+        "j": "score4",
+        "F": "score1",
+        "G": "score2",
+        "H": "score3",
+        "J": "score4"
+      };
+
+      if (keyMap[e.key]) {
+        const input = document.getElementById(keyMap[e.key]);
+        if (input) input.checked = true;
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const selected = document.querySelector('input[name="self_score"]:checked');
+
+        if (selected) {
+          submitWithTime();
+        } else {
+          wrapper.classList.add("shake");
+          setTimeout(() => wrapper.classList.remove("shake"), 400);
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

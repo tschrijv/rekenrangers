@@ -1,0 +1,605 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="display-4 text-success mb-4">Hoe zeker ben je van je antwoord?</h1>
+
+<!-- Demo audios -->
+<audio id="audio-wrong-orange" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.1.1.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-correct-orange" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.1.2.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-explain-intro" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.2 intro.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-explain-green" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.2 groen.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-explain-yellow" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.2 geel.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-explain-orange" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.2 oranje.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-explain-red" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.2 rood.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-blue-ball" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.3.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-check-intro" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.4.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-check-1" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.4.1.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-check-2" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.4.2.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-check-3" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.4.3.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-check-4" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.4.4.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-summary" preload="auto" playsinline>
+  <source src="{{ url_for('static', filename='audio/3.5.mp3') }}" type="audio/mpeg">
+</audio>
+
+<form id="demo-next-form" method="post" action="{{ url_for('student.demo_next') }}" class="d-none"></form>
+
+<form id="selfscore-form" method="post"
+      class="d-flex justify-content-center gap-4 flex-wrap"
+      onsubmit="return false;">
+
+  <div id="smiley-wrapper" class="d-flex justify-content-center gap-4 flex-wrap">
+
+    <!-- 1 -->
+    <label class="smiley-label text-center">
+      <input id="score1" type="radio" name="self_score" value="1" class="d-none" required>
+      
+      <div class="smiley-card" id="card1">
+        <img src="{{ url_for('static', filename='smiley_0.png') }}"
+             alt="Heel onzeker" class="smiley-option">
+
+        <div class="smiley-text text-danger">
+          heel onzeker<br>
+          <small>ik denk dat ik fout was</small>
+        </div>
+      </div>
+    </label>
+
+    <!-- 2 -->
+    <label class="smiley-label text-center">
+      <input id="score2" type="radio" name="self_score" value="2" class="d-none" required>
+      
+      <div class="smiley-card" id="card2">
+        <img src="{{ url_for('static', filename='smiley_1.png') }}"
+             alt="Onzeker" class="smiley-option">
+
+        <div class="smiley-text text-warning">
+          onzeker<br>
+          <small>dat ik juist was</small>
+        </div>
+      </div>
+    </label>
+
+    <!-- 3 -->
+    <label class="smiley-label text-center">
+      <input id="score3" type="radio" name="self_score" value="3" class="d-none" required>
+      
+      <div class="smiley-card" id="card3">
+        <img src="{{ url_for('static', filename='smiley_2.png') }}"
+             alt="Een beetje zeker" class="smiley-option">
+
+        <div class="smiley-text" style="color:#c7d322;">
+          een beetje zeker <br>
+          <small>dat ik juist was</small>
+        </div>
+      </div>
+    </label>
+
+    <!-- 4 -->
+    <label class="smiley-label text-center">
+      <input id="score4" type="radio" name="self_score" value="4" class="d-none" required>
+      
+      <div class="smiley-card" id="card4">
+        <img src="{{ url_for('static', filename='smiley_3.png') }}"
+             alt="Heel zeker" class="smiley-option">
+
+        <div class="smiley-text text-success">
+          heel zeker<br>
+          <small>dat ik juist was</small>
+        </div>
+      </div>
+    </label>
+
+  </div>
+
+  <div class="w-100 text-center mt-4">
+    <button id="submitBtn" type="submit" class="btn btn-jungle btn-jungle-md" disabled>
+      Verstuur
+    </button>
+  </div>
+</form>
+
+<style>
+.smiley-card {
+  background-color: #ffe9cd;
+  border-radius: 16px;
+  padding: 12px 10px 10px 10px;
+  transition: transform 0.2s, filter 0.2s, box-shadow 0.2s;
+}
+
+.smiley-label:hover .smiley-card {
+  transform: scale(1.08);
+  filter: brightness(1.05);
+}
+
+.smiley-label input:checked ~ .smiley-card {
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgba(40, 167, 69, 0.6);
+}
+
+.smiley-option {
+  width: 90px;
+  margin-bottom: 6px;
+}
+
+.smiley-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.smiley-text small {
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.smiley-card.demo-highlight {
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgba(40, 167, 69, 0.6);
+}
+
+.smiley-card.demo-shake {
+  animation: smileyShake 0.45s ease;
+}
+
+@keyframes smileyShake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-8px); }
+  50%  { transform: translateX(8px); }
+  75%  { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.btn-jungle:disabled {
+  background-color: #5B995A;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Fredoka', sans-serif;
+  box-shadow: 0px 6px 0 #1c5c39;
+  opacity: 1;
+  cursor: default;
+  transform: none;
+}
+</style>
+
+{% include "_demo_overlay.html" %}
+
+<script>
+  window.__demoDisableAudioAutoNext = true;
+  window.__demoAudioDone = false;
+
+  const form = document.getElementById("selfscore-form");
+  const nextForm = document.getElementById("demo-next-form");
+  const submitBtn = document.getElementById("submitBtn");
+  const listenIndicator = document.getElementById("listen-indicator");
+
+  const wrongOrangeAudio = document.getElementById("audio-wrong-orange");
+  const correctOrangeAudio = document.getElementById("audio-correct-orange");
+  const explainIntroAudio = document.getElementById("audio-explain-intro");
+  const explainGreenAudio = document.getElementById("audio-explain-green");
+  const explainYellowAudio = document.getElementById("audio-explain-yellow");
+  const explainOrangeAudio = document.getElementById("audio-explain-orange");
+  const explainRedAudio = document.getElementById("audio-explain-red");
+  const blueBallAudio = document.getElementById("audio-blue-ball");
+  const checkIntroAudio = document.getElementById("audio-check-intro");
+  const check1Audio = document.getElementById("audio-check-1");
+  const check2Audio = document.getElementById("audio-check-2");
+  const check3Audio = document.getElementById("audio-check-3");
+  const check4Audio = document.getElementById("audio-check-4");
+  const summaryAudio = document.getElementById("audio-summary");
+
+  let mainAudio = null;
+
+  // phases:
+  // introLocked
+  // findOrange
+  // wrongLocked
+  // afterCorrectLocked
+  // explanationLocked
+  // testIntroLocked
+  // testWaiting
+  // summaryLocked
+  // finished
+  let phase = "introLocked";
+
+  // test order: yellow, red, green, orange
+  const testSteps = [
+    { audio: check1Audio, expected: "3" }, // yellow = H
+    { audio: check2Audio, expected: "1" }, // red = F
+    { audio: check3Audio, expected: "4" }, // green = J
+    { audio: check4Audio, expected: "2" }  // orange = G
+  ];
+  let currentTestIndex = -1;
+
+  const inputByScore = {
+    "1": document.getElementById("score1"),
+    "2": document.getElementById("score2"),
+    "3": document.getElementById("score3"),
+    "4": document.getElementById("score4")
+  };
+
+  const cardByScore = {
+    "1": document.getElementById("card1"),
+    "2": document.getElementById("card2"),
+    "3": document.getElementById("card3"),
+    "4": document.getElementById("card4")
+  };
+
+  function showListenIndicator() {
+    if (listenIndicator) listenIndicator.classList.remove("d-none");
+  }
+
+  function hideListenIndicator() {
+    if (listenIndicator) listenIndicator.classList.add("d-none");
+  }
+
+  function attachListenIndicator(audioEl) {
+    if (!audioEl) return;
+    audioEl.addEventListener("play", showListenIndicator);
+    audioEl.addEventListener("playing", showListenIndicator);
+    audioEl.addEventListener("pause", hideListenIndicator);
+    audioEl.addEventListener("ended", hideListenIndicator);
+  }
+
+  [
+    wrongOrangeAudio, correctOrangeAudio,
+    explainIntroAudio, explainGreenAudio, explainYellowAudio,
+    explainOrangeAudio, explainRedAudio,
+    blueBallAudio, checkIntroAudio, check1Audio, check2Audio,
+    check3Audio, check4Audio, summaryAudio
+  ].forEach(attachListenIndicator);
+
+  function stopAndReset(audioEl) {
+    if (!audioEl) return;
+    try { audioEl.pause(); } catch (e) {}
+    try { audioEl.currentTime = 0; } catch (e) {}
+  }
+
+  function stopLocalAudio() {
+    [
+      wrongOrangeAudio, correctOrangeAudio,
+      explainIntroAudio, explainGreenAudio, explainYellowAudio,
+      explainOrangeAudio, explainRedAudio,
+      blueBallAudio, checkIntroAudio, check1Audio, check2Audio,
+      check3Audio, check4Audio, summaryAudio
+    ].forEach(stopAndReset);
+
+    hideListenIndicator();
+  }
+
+  function clearSelection() {
+    Object.values(inputByScore).forEach(input => {
+      if (input) input.checked = false;
+    });
+  }
+
+  function clearHighlights() {
+    Object.values(cardByScore).forEach(card => {
+      if (card) card.classList.remove("demo-highlight", "demo-shake");
+    });
+  }
+
+  function setSelected(score) {
+    clearSelection();
+    const input = inputByScore[String(score)];
+    if (input) input.checked = true;
+  }
+
+  function highlightSelected(score) {
+    setSelected(score);
+    clearHighlights();
+    const card = cardByScore[String(score)];
+    if (card) card.classList.add("demo-highlight");
+  }
+
+  function shakeSelected(score) {
+    const card = cardByScore[String(score)];
+    if (!card) return;
+    card.classList.remove("demo-shake");
+    void card.offsetWidth;
+    card.classList.add("demo-shake");
+  }
+
+  function setSubmitEnabled(enabled) {
+    submitBtn.disabled = !enabled;
+  }
+
+  function playAudio(audioEl, onEnded) {
+    if (!audioEl) {
+      if (onEnded) onEnded();
+      return;
+    }
+
+    audioEl.onended = null;
+    audioEl.onended = () => {
+      hideListenIndicator();
+      if (onEnded) onEnded();
+    };
+
+    audioEl.play().catch(() => {
+      hideListenIndicator();
+      if (onEnded) onEnded();
+    });
+  }
+
+  function playSequence(items, done) {
+    const queue = [...items];
+
+    function next() {
+      if (!queue.length) {
+        if (done) done();
+        return;
+      }
+
+      const item = queue.shift();
+      if (item.before) item.before();
+
+      playAudio(item.audio, () => {
+        if (item.after) item.after();
+        next();
+      });
+    }
+
+    next();
+  }
+
+  function unlockAfterIntro() {
+    if (window.__demoAudioDone === true && phase === "introLocked") {
+      phase = "findOrange";
+      setSubmitEnabled(false);
+      clearSelection();
+      clearHighlights();
+    }
+  }
+
+  function handleWrongChoiceInitial(score) {
+    if (phase !== "findOrange") return;
+
+    phase = "wrongLocked";
+    stopLocalAudio();
+    highlightSelected(score);
+    shakeSelected(score);
+
+    playAudio(wrongOrangeAudio, () => {
+      clearSelection();
+      clearHighlights();
+      phase = "findOrange";
+    });
+  }
+
+  function startTestQuestion(index) {
+    currentTestIndex = index;
+
+    if (currentTestIndex >= testSteps.length) {
+      startSummary();
+      return;
+    }
+
+    const step = testSteps[currentTestIndex];
+    phase = "testIntroLocked";
+
+    clearHighlights();
+    clearSelection();
+
+    playAudio(step.audio, () => {
+      phase = "testWaiting";
+    });
+  }
+
+  function handleTestChoice(score) {
+    if (phase !== "testWaiting") return;
+
+    const expected = testSteps[currentTestIndex].expected;
+    highlightSelected(score);
+
+    if (String(score) === String(expected)) {
+      setTimeout(() => {
+        startTestQuestion(currentTestIndex + 1);
+      }, 350);
+    } else {
+      shakeSelected(score);
+    }
+  }
+
+  function startSummary() {
+    phase = "summaryLocked";
+    clearHighlights();
+    clearSelection();
+
+    playAudio(summaryAudio, () => {
+      phase = "finished";
+      nextForm.submit();
+    });
+  }
+
+  function startExplanationFlow() {
+    phase = "afterCorrectLocked";
+    stopLocalAudio();
+
+    playAudio(correctOrangeAudio, () => {
+      phase = "explanationLocked";
+
+      playSequence([
+        {
+          audio: explainIntroAudio,
+          before: () => {
+            clearSelection();
+            clearHighlights();
+          }
+        },
+        {
+          audio: explainGreenAudio,
+          before: () => highlightSelected("4")
+        },
+        {
+          audio: explainYellowAudio,
+          before: () => highlightSelected("3")
+        },
+        {
+          audio: explainOrangeAudio,
+          before: () => highlightSelected("2")
+        },
+        {
+          audio: explainRedAudio,
+          before: () => highlightSelected("1")
+        },
+        {
+          audio: blueBallAudio,
+          before: () => {
+            highlightSelected("2");
+            setSubmitEnabled(false);
+          }
+        },
+        {
+          audio: checkIntroAudio,
+          before: () => {
+            clearHighlights();
+            clearSelection();
+          }
+        }
+      ], () => {
+        startTestQuestion(0);
+      });
+    });
+  }
+
+  function handleCorrectChoiceInitial() {
+    if (phase !== "findOrange") return;
+    highlightSelected("2");
+    startExplanationFlow();
+  }
+
+  function handleSmileyChoice(score) {
+    if (phase === "findOrange") {
+      if (score === "2") handleCorrectChoiceInitial();
+      else handleWrongChoiceInitial(score);
+      return;
+    }
+
+    if (phase === "testWaiting") {
+      handleTestChoice(score);
+    }
+  }
+
+  function handleSmileyFromKeyboard(key) {
+    const map = {
+      "f": "1",
+      "g": "2",
+      "h": "3",
+      "j": "4",
+      "F": "1",
+      "G": "2",
+      "H": "3",
+      "J": "4"
+    };
+
+    const score = map[key];
+    if (!score) return;
+    handleSmileyChoice(score);
+  }
+
+  function attachMainAudioWhenReady() {
+    const el = document.getElementById("demo-audio");
+    if (el) {
+      mainAudio = el;
+      unlockAfterIntro();
+      mainAudio.addEventListener("ended", unlockAfterIntro);
+
+      const t = setInterval(() => {
+        if (window.__demoAudioDone === true) {
+          clearInterval(t);
+          unlockAfterIntro();
+        }
+      }, 200);
+
+      return;
+    }
+    requestAnimationFrame(attachMainAudioWhenReady);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setSubmitEnabled(false);
+    clearSelection();
+    clearHighlights();
+    attachMainAudioWhenReady();
+
+    document.getElementById("card1").addEventListener("click", (e) => {
+      e.preventDefault();
+      handleSmileyChoice("1");
+    });
+
+    document.getElementById("card2").addEventListener("click", (e) => {
+      e.preventDefault();
+      handleSmileyChoice("2");
+    });
+
+    document.getElementById("card3").addEventListener("click", (e) => {
+      e.preventDefault();
+      handleSmileyChoice("3");
+    });
+
+    document.getElementById("card4").addEventListener("click", (e) => {
+      e.preventDefault();
+      handleSmileyChoice("4");
+    });
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    const key = e.key.toLowerCase();
+
+    if (["f", "g", "h", "j"].includes(key)) {
+      e.preventDefault();
+      handleSmileyFromKeyboard(key);
+      return;
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  });
+</script>
+
+{% endblock %}

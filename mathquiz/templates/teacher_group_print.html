@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  /* Compact print defaults */
+  @media print {
+    .no-print { display: none !important; }
+    body { background: white !important; }
+    .container, .container-fluid { max-width: 100% !important; }
+  }
+
+  /* Slightly tighter spacing overall */
+  .print-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .print-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 1.0rem;
+  }
+
+  .group-badge {
+    font-size: 1.2rem !important;
+    padding: 0.4rem 0.8rem !important;
+  }
+
+  /* Card grid: more cards per page */
+  .card-grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(3, 1fr); /* default: 3 per row on wide pages */
+  }
+
+  /* If screen is narrow, show 2 columns for readability */
+  @media (max-width: 992px) {
+    .card-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Print: stick to 3 columns if possible, but fall back to 2 on narrow paper/printers */
+  @media print {
+    .card-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .student-card {
+    border: 2px dashed #198754;
+    border-radius: 14px;
+    padding: 10px 12px;
+    background: #f7fbf8; /* subtle green-ish */
+    page-break-inside: avoid;
+    break-inside: avoid;
+    min-height: 95px;
+  }
+
+  .student-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #198754;
+    margin-bottom: 2px;
+    line-height: 1.1;
+    word-break: break-word;
+  }
+
+  .animal-code {
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.0;
+    margin: 4px 0 6px 0;
+  }
+
+  .meta-line {
+    font-size: 0.85rem;
+    color: #5c6b63;
+    line-height: 1.1;
+  }
+
+  .meta-line strong { color: #198754; }
+
+  /* Make header more compact */
+  .header-block {
+    border: 2px solid #198754;
+    border-radius: 14px;
+    padding: 10px 12px;
+    background: #f7fbf8;
+    margin-bottom: 12px;
+  }
+</style>
+
+<div class="d-flex justify-content-between gap-3 align-items-center mb-3 no-print">
+  <a href="{{ url_for('teacher.group', group_id=group_id) }}"
+     class="btn btn-success btn-lg">
+    ← Terug naar groep
+  </a>
+
+  <button class="btn btn-success btn-lg" onclick="window.print()">
+    Print
+  </button>
+</div>
+
+<div class="header-block text-center">
+  <h1 class="fw-bold text-success print-title mb-1">{{ group_name }}</h1>
+
+  <div class="print-subtitle">
+    Activatiecode:
+    <span class="badge bg-success group-badge">{{ activation_code }}</span>
+  </div>
+
+  <div class="text-muted" style="font-size: 0.9rem;">
+    Knip de kaartjes uit en deel ze uit aan de leerlingen.
+  </div>
+</div>
+
+{% if students %}
+  <div class="card-grid">
+    {% for s in students %}
+      <div class="student-card">
+        <div class="student-name">{{ s[0] }}</div>
+        <div class="animal-code">{{ s[2] }}</div>
+        <div class="meta-line">
+          Groepcode: <strong>{{ activation_code }}</strong>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted text-center">Nog geen leerlingen toegevoegd.</p>
+{% endif %}
+
+{% endblock %}

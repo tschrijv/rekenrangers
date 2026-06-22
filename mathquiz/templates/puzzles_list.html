@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="display-4 fw-bold text-success mb-4">Kies een puzzel</h1>
+
+<div class="d-flex flex-wrap justify-content-center gap-4">
+  {% for p in puzzles %}
+  <div class="card shadow-sm text-center" style="width: 260px;">
+    <div class="position-relative">
+      {% if p.complete %}
+        <img src="{{ p.image_path }}" class="card-img-top" alt="Puzzle image">
+      {% else %}
+        <!-- Placeholder mystery image -->
+        <div class="bg-success bg-opacity-25 d-flex align-items-center justify-content-center" style="height:180px;">
+          <i class="bi bi-puzzle text-success fs-1"></i>
+        </div>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title text-success fw-bold">{{ p.name }}</h5>
+
+      {% if p.complete %}
+        <p class="text-success fw-semibold mb-2">✅ Voltooid!</p>
+      {% else %}
+        <div class="progress mb-2" style="height: 10px;">
+          <div class="progress-bar bg-success" role="progressbar"
+               style="width: {{ p.progress }}%;"
+               aria-valuenow="{{ p.progress }}" aria-valuemin="0" aria-valuemax="100">
+          </div>
+        </div>
+        <p class="text-muted small">{{ p.progress }}% voltooid</p>
+      {% endif %}
+
+      <a href="{{ url_for('student.puzzle', puzzle_id=p.id) }}" class="btn btn-jungle btn-jungle-sm mt-2 puzzle-button">
+        Open puzzel
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<a href="{{ url_for('student.select_exercise') }}" class="btn btn-jungle btn-jungle-md mt-4">
+  ← Terug naar oefeningen
+</a>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const buttons = Array.from(document.querySelectorAll(".puzzle-button"));
+    if (buttons.length === 0) return;
+
+    let currentIndex = 0;
+
+    // Add visual selection class
+    function updateSelection() {
+        buttons.forEach((btn, index) => {
+            if (index === currentIndex) {
+                btn.classList.add("keyboard-selected");
+                btn.focus();
+            } else {
+                btn.classList.remove("keyboard-selected");
+            }
+        });
+    }
+
+    updateSelection();
+
+    document.addEventListener("keydown", function (event) {
+
+        const columns = Math.floor(
+            document.querySelector(".d-flex.flex-wrap").offsetWidth /
+            buttons[0].closest(".card").offsetWidth
+        ) || 1;
+
+        switch (event.key) {
+            case "ArrowRight":
+                event.preventDefault();
+                if (currentIndex < buttons.length - 1) {
+                    currentIndex++;
+                    updateSelection();
+                }
+                break;
+
+            case "ArrowLeft":
+                event.preventDefault();
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateSelection();
+                }
+                break;
+
+            case "ArrowDown":
+                event.preventDefault();
+                if (currentIndex + columns < buttons.length) {
+                    currentIndex += columns;
+                    updateSelection();
+                }
+                break;
+
+            case "ArrowUp":
+                event.preventDefault();
+                if (currentIndex - columns >= 0) {
+                    currentIndex -= columns;
+                    updateSelection();
+                }
+                break;
+
+            case "Enter":
+                event.preventDefault();
+                buttons[currentIndex].click();
+                break;
+        }
+    });
+});
+</script>
+{% endblock %}

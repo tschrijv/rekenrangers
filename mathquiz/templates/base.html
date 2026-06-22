@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title or "RekenRangers" }}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+
+
+
+
+  <!-- Bootstrap CSS via CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="bg-light {% if research_mode %}research-mode{% endif %}{% if mouse_locked %} mouse-locked{% endif %}">
+
+  <!-- 💰 Points display (top right) -->
+{% if show_points %}
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+  <div class="bg-success text-white px-3 py-2 rounded shadow-sm d-flex align-items-center gap-2">
+    <i class="bi bi-coin fs-4"></i>
+    <span class="fw-bold fs-5">{{ g.user_points or 0 }}</span>
+  </div>
+</div>
+{% endif %}
+
+<!-- Flash messages -->
+<div class="position-fixed top-0 start-50 translate-middle-x mt-3" 
+     style="z-index: 9999; width: 90%; max-width: 600px;">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+{% if research_mode and mouse_locked %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function blockMouse(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+
+    ["mousedown", "mouseup", "click", "dblclick", "contextmenu", "dragstart"].forEach(function(eventName) {
+      document.addEventListener(eventName, blockMouse, true);
+    });
+  });
+</script>
+{% endif %}
+
+  <!-- Main content wrapper -->
+  <div class="{% if scroll_page %}d-flex flex-column justify-content-start align-items-center min-vh-100 py-5{% else %}d-flex flex-column justify-content-center align-items-center vh-100{% endif %}">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

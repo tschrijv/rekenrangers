@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+
+
+<h1 class="display-4 text-success mb-3 fw-bold">Leerkracht Registratie</h1>
+
+<form method="post" class="w-50">
+  <!-- Username -->
+  <div class="mb-3">
+    <label for="username" class="form-label fw-bold fs-5">Gebruikersnaam</label>
+    <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Kies een gebruikersnaam" required>
+  </div>
+
+  <!-- Password -->
+  <div class="mb-3 position-relative">
+    <label for="password" class="form-label fw-bold fs-5">Wachtwoord</label>
+    <div class="input-group">
+      <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Kies een wachtwoord" required>
+      <button type="button" class="btn btn-secondary" id="togglePassword">
+        <i class="bi bi-eye"></i>
+      </button>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success btn-lg w-100">Account Aanmaken</button>
+</form>
+
+<!-- Back buttons -->
+<a href="{{ url_for('auth.login_teacher') }}" class="btn btn-success btn-lg mt-3 w-50">← Terug naar Login</a>
+<a href="{{ url_for('auth.index') }}" class="btn btn-outline-success btn-lg mt-3">← Terug naar start</a>
+
+<script>
+  const togglePassword = document.querySelector("#togglePassword");
+  const password = document.querySelector("#password");
+  const icon = togglePassword.querySelector("i");
+
+  togglePassword.addEventListener("click", function () {
+    const type = password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+    icon.classList.toggle("bi-eye");
+    icon.classList.toggle("bi-eye-slash");
+  });
+</script>
+{% endblock %}

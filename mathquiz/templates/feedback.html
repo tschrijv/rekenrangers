@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="display-4 text-success fw-bold mb-3 text-center">Feedback</h1>
+
+<div class="container text-center">
+
+    <!-- ======= BLOK 1: REKENFEEDBACK ======= -->
+    <div class="p-4 mb-3 border rounded-4 bg-light">
+        <h3 class="fw-bold text-success mb-3">Jouw antwoord</h3>
+
+        <p class="fs-2 fw-bold">
+            {{ a }} {% if operation=='add' %}+{% elif operation=='multiply' %}×{% else %}−{% endif %} {{ b }} =
+            {% if answer is none %}
+                <span class="text-muted">Geen antwoord</span>
+            {% else %}
+                {{ answer }}
+            {% endif %}
+        </p>
+
+        {% if answer == correct %}
+            <p class="fs-2  feedback-correct fw-bold">✓ Juist! Goed gedaan!</p>
+        {% else %}
+            <p class="fs-2 feedback-wrong fw-bold">
+                ✗ Foutje.<br>
+                {{ a }} {% if operation=='add' %}+{% elif operation=='multiply' %}×{% else %}−{% endif %} {{ b }} = {{ correct }}
+            </p>
+        {% endif %}
+    </div>
+
+    {% if meta_answer is not none %}
+    <!-- ======= BLOK 2: METACOGNITIEVE FEEDBACK ======= -->
+    <div class="p-4 mt-2 border rounded-4 bg-light">
+        <h3 class="fw-bold text-success mb-3">Jouw gevoel</h3>
+
+        <img src="{{ url_for('static', filename='smiley_' ~ (meta_answer-1) ~ '.png') }}"
+             alt="Jouw zelfscore"
+             class="smiley-option mb-3"
+             style="width: 80px;">
+
+        {% set correct_flag = (answer == correct) %}
+        {% set high = (meta_answer|int >= 3) %}
+        {% set low = (meta_answer|int <= 2) %}
+
+        {% if correct_flag and low %}
+            <p class="fs-2 feedback-wrong fw-bold">
+                ✗ Hier heb je jezelf fout ingeschat!
+            </p>
+        {% elif (not correct_flag) and high %}
+            <p class="fs-2 feedback-wrong fw-bold">
+                ✗ Hier heb je jezelf fout ingeschat!
+            </p>
+        {% else %}
+            <p class="fs-2 feedback-correct fw-bold">
+                ✓ Een goede inschatting van jezelf!
+            </p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <form id="feedback-form" method="post" class="mt-4">
+        <input type="hidden" name="time_feedback" id="time_feedback" value="0">
+        <button type="submit" class="btn btn-jungle btn-jungle-md">Verdergaan</button>
+    </form>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("feedback-form");
+    const timeInput = document.getElementById("time_feedback");
+    const startTime = performance.now();
+
+    let submitted = false;
+
+    function submitWithTime() {
+        if (submitted) return;
+        submitted = true;
+        if (timeInput) {
+            timeInput.value = ((performance.now() - startTime) / 1000).toFixed(3);
+        }
+        form.submit();
+    }
+
+    form.addEventListener("submit", function(e) {
+        if (submitted) { e.preventDefault(); return; }
+        submitted = true;
+        if (timeInput) {
+            timeInput.value = ((performance.now() - startTime) / 1000).toFixed(3);
+        }
+    });
+
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            submitWithTime();
+        }
+    });
+});
+</script>
+
+{% endblock %}

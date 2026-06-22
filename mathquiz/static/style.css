@@ -1,0 +1,273 @@
+/* Algemene styling voor kindvriendelijk UI */
+
+/*body {*/
+   /* lichte wiskundeachtergrond */
+/*   background-image: url('/static/safaridieren.png');
+/*   background-repeat: repeat;
+/*   background-size: 1px;  /* grootte van het patroon */
+/*  background-color: #f8f9fa; /* fallback lichte kleur */
+/*}*/
+
+body {
+  /* safari achtergrond */
+  background-image: url('/static/safaridieren.png');
+  background-repeat: no-repeat; /* voorkomt herhaling */
+  background-size: cover;       /* laat de afbeelding het hele scherm vullen */
+  background-position: center;  /* centreert de afbeelding */
+  background-attachment: fixed; /* laat de achtergrond niet meescrollen */
+  background-color: #f8f9fa;    /* lichte fallbackkleur */
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4); /* witte laag met 60% transparantie */
+  z-index: -1; /* achter de inhoud */
+}
+
+
+
+.smiley-option {
+  width: 100px;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+
+  background-color: #ffe9cd;
+  border-radius: 12px;
+  padding: 5px;
+  box-sizing: content-box;
+}
+
+.smiley-option:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* ONE unified active style */
+.smiley-option.smiley-active {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px #28a745);
+}
+
+
+
+
+@font-face {
+  font-family: 'Safari';
+  src: url('/static/fonts/Tribeca.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+/* MAIN UI FONT */
+body {
+    font-family: 'Fredoka', sans-serif;
+}
+
+
+.title-safari-font {
+    font-family: 'Safari', cursive; /* fallback to cursive */
+    color: #5B995A;
+    /*text-shadow: 7px 7px px #8B5A2B;*/
+    letter-spacing: 0px;
+    /* you can set default color or leave color to be applied separately */
+}
+
+.feedback-correct {
+    color: #10e71b
+}
+
+.feedback-wrong {
+    color: #ff2828
+
+}
+
+.btn-jungle {
+    background-color: #5B995A;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Fredoka', sans-serif;
+
+    box-shadow: 0px 6px 0 #1c5c39;
+    transition: all 0.15s ease;
+}
+
+.btn-jungle:hover {
+    background-color: #F3A800;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 0 #865822ad;
+    color: white;
+}
+
+.btn-jungle.keyboard-selected {
+    background-color: #F3A800;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 0 #865822ad;
+    color: white;
+}
+
+ .btn-jungle:disabled {
+    background-color: #5B995A;
+    color: white;
+    border: none;
+    box-shadow: 0px 6px 0 #1c5c39;
+    opacity: 1;              /* no fading */
+    cursor: default;         /* not-allowed looks ugly */
+    transform: none;
+}
+
+
+/* Small jungle button */
+.btn-jungle-sm {
+    padding: 0.6rem 1.4rem;
+    font-size: 1.2rem;
+}
+
+/* Medium (normal default size) */
+.btn-jungle-md {
+    padding: 0.8rem 2rem;
+    font-size: 1.4rem;
+}
+
+/* Large jungle button */
+.btn-jungle-lg {
+    padding: 1.2rem 3rem;
+    font-size: 2rem;
+}
+
+.safari-title-box {
+    background: rgba(255, 255, 255, 0.75);   /* licht wit, leesbaar */
+    padding: 1.5rem 3rem;
+    border-radius: 18px;
+    color:  #5B995A;
+
+    border: 3px solid #5B995A;                /* jungle green border */
+    box-shadow: 0px 6px 0px #82402655;        /* safari brown drop shadow */
+
+    display: inline-block;
+}
+
+
+/* Shake effect */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shake 0.4s ease;
+}
+
+
+.mix-settings-block {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+}
+
+
+
+/* ----------------------------------------------- */
+/* OVERRIDE BOOTSTRAP SUCCESS COLOR → Jungle Green */
+/* ----------------------------------------------- */
+
+:root {
+    --bs-success: #5B995A !important;
+    --bs-success-rgb: 91, 153, 90 !important;
+}
+
+/* Backgrounds */
+.bg-success {
+    background-color: #5B995A !important;
+}
+
+/* Text */
+.text-success {
+    color: #5B995A !important;
+}
+
+/* Borders */
+.border-success {
+    border-color: #5B995A !important;
+}
+
+/* Buttons */
+.btn-success {
+    background-color: #5B995A !important;
+    border-color: #5B995A !important;
+}
+
+.btn-success:hover,
+.btn-success:focus {
+    background-color: #437941 !important;
+    border-color: #437941 !important;
+}
+
+/* Outline button */
+.btn-outline-success {
+    color: #5B995A !important;
+    border-color: #5B995A !important;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus {
+    background-color: #5B995A !important;
+    color: white !important;
+    border-color: #5B995A !important;
+}
+
+/* Table success header rows */
+.table-success {
+    --bs-table-bg: #96D65E !important; /* jouw lichte groen */
+    --bs-table-border-color: #5B995A !important;
+    color: #431F07 !important; /* goed leesbaar */
+}
+
+/* Badges */
+.badge.bg-success {
+    background-color: #5B995A !important;
+}
+
+/* Alerts */
+.alert-success {
+    background-color: #96D65E !important;
+    border-color: #5B995A !important;
+    color: #431F07 !important;
+}
+
+.border {
+    background-color:  #ffe9cd !important;
+}
+
+
+body.research-mode.mouse-locked,
+body.research-mode.mouse-locked * {
+  cursor: none !important;
+}
+body.research-mode.mouse-locked a,
+body.research-mode.mouse-locked button,
+body.research-mode.mouse-locked input,
+body.research-mode.mouse-locked select,
+body.research-mode.mouse-locked textarea,
+body.research-mode.mouse-locked label,
+body.research-mode.mouse-locked [onclick] {
+  pointer-events: none !important;
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="timeoutScreen" class="container text-center" style="max-width: 900px;">
+  <h1 class="display-4 fw-bold text-success mb-4">Oeps!</h1>
+
+  <div class="p-4 mb-3 border rounded-4 bg-light shadow-sm" style="border-radius: 20px;">
+    <p class="fs-2 text-success mb-4">
+      Je was te laat, probeer volgende keer sneller te werken.
+    </p>
+
+    <img src="{{ url_for('static', filename='too_late.png') }}"
+         class="img-fluid mx-auto d-block mb-4"
+         style="max-height: 260px;"
+         alt="Te laat">
+
+    <form id="demo-next-form" method="post" action="{{ url_for('student.demo_next') }}">
+      <button type="submit" id="timeoutContinueBtn" class="btn btn-jungle btn-jungle-md">
+        Verder
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const form = document.getElementById("demo-next-form");
+      if (form) form.requestSubmit ? form.requestSubmit() : form.submit();
+    }
+  });
+</script>
+
+{% include "_demo_overlay.html" %}
+{% endblock %}

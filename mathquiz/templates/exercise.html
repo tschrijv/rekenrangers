@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- FIXATION OVERLAY -->
+{% if fixation_screen %}
+<div id="fixationOverlay" class="fixation-overlay show" aria-hidden="false">
+  <div class="fixation-cross"></div>
+</div>
+{% endif %}
+
+<!-- EXERCISE CONTENT -->
+<div id="exerciseContent"
+     class="container text-center"
+     {% if fixation_screen %}style="display:none;"{% endif %}>
+
+  <h1 class="display-4 fw-bold text-success mb-4">Oefening</h1>
+
+  <!-- De som groot in beeld -->
+  <p class="display-1 fw-bold text-dark mb-5">
+    {{ a }} 
+    {% if operation=='add' %}+{% elif operation=='multiply' %}×{% else %}−{% endif %}
+    {{ b }} = ?
+  </p>
+
+  <form method="post" id="exerciseForm" class="d-flex flex-column align-items-center">
+    <!-- Hidden velden -->
+    <input type="hidden" name="a" value="{{ a }}">
+    <input type="hidden" name="b" value="{{ b }}">
+    <input type="hidden" name="operation" value="{{ operation }}">
+    <input type="hidden" name="difficulty" value="{{ difficulty }}">
+
+    <!-- Nieuw: timeout/meta velden -->
+    <input type="hidden" name="response_time" id="responseTimeInput" value="">
+    <input type="hidden" name="timed_out" id="timedOutInput" value="0">
+    <input type="hidden" name="timeout_continue" id="timeoutContinueInput" value="0">
+
+    <!-- Antwoordveld -->
+    <input type="number"
+       name="answer"
+       id="answerBox"
+       class="form-control form-control-lg text-center mb-4"
+       style="font-size: 4rem; width:400px;"
+       required
+       autofocus
+       min="0"
+       max="999">
+
+    <button type="submit" id="submitBtn" class="btn btn-jungle btn-jungle-md">
+      Verstuur
+    </button>
+  </form>
+
+  <!-- Timer sectie -->
+  <div class="mt-5 text-center">
+    {% if session.get('show_timer') %}
+      <h2 id="timerDisplay" class="text-danger fw-bold" style="font-size: 3rem;">0.0 s</h2>
+    {% else %}
+      <h2 class="text-secondary fw-light"
+          style="font-size: 3rem; visibility:hidden;">
+        0.0 s
+      </h2>
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- TIMEOUT SCREEN -->
+<div id="timeoutScreen" class="container text-center" style="display:none; max-width: 900px;">
+  <h1 class="display-4 fw-bold text-success mb-4">Oeps!</h1>
+
+  <div class="p-4 mb-3 border rounded-4 bg-light shadow-sm" style="border-radius: 20px;">
+    <p class="fs-2  text-success mb-4">
+      Je was te laat, probeer volgende keer sneller te werken.
+    </p>
+
+    <!-- Vervang dit pad door jouw eigen afbeelding -->
+    <img src="/static/too_late.png"
+         class="img-fluid mx-auto d-block mb-4"
+         style="max-height: 260px;">
+
+    <button type="button" id="timeoutContinueBtn" class="btn btn-jungle btn-jungle-md">
+      Verder
+    </button>
+  </div>
+</div>
+
+<!-- FIXATION STYLING -->
+<style>
+.fixation-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.fixation-overlay.show{
+  display: flex;
+}
+
+/* Green fixation dot */
+.fixation-cross{
+  width: 28px;
+  height: 28px;
+  background: #5B995A;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(91,153,90,0.6);
+}
+</style>
+
+<!-- SCRIPT -->
+<script>
+let startTime = Date.now();
+let showTimer = {{ session.get('show_timer', False) | tojson }};
+let useFixation = {{ fixation_screen | default(False) | tojson }};
+let timeLimit = {{ time_limit | tojson }};
+
+let timerInterval = null;
+let timeoutHandle = null;
+let exerciseTimedOut = false;
+
+function stopTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+}
+
+function setResponseTimeValue(seconds) {
+  const responseInput = document.getElementById("responseTimeInput");
+  if (responseInput) {
+    responseInput.value = seconds.toFixed(3);
+  }
+}
+
+const answerBox = document.getElementById("answerBox");
+
+answerBox.addEventListener("input", function () {
+  if (this.value.length > 3) {
+    this.value = this.value.slice(0, 3);
+  }
+});
+
+function startTimer() {
+  startTime = Date.now();
+
+  if (showTimer) {
+    const timerDisplay = document.getElementById("timerDisplay");
+    timerInterval = setInterval(() => {
+      const now = Date.now();
+      const elapsed = (now - startTime) / 1000;
+      timerDisplay.textContent = elapsed.toFixed(1) + " s";
+    }, 100);
+  }
+
+  timeoutHandle = setTimeout(() => {
+    handleTimeout();
+  }, timeLimit * 1000);
+}
+
+function revealExercise() {
+  const content = document.getElementById("exerciseContent");
+  content.style.display = "block";
+
+  const answerBox = document.getElementById("answerBox");
+  if (answerBox) {
+    answerBox.focus();
+    setTimeout(() => answerBox.focus(), 50);
+  }
+
+  startTimer();
+}
+
+function handleTimeout() {
+  if (exerciseTimedOut) return;
+  exerciseTimedOut = true;
+
+  stopTimer();
+
+  const elapsed = (Date.now() - startTime) / 1000;
+  setResponseTimeValue(elapsed);
+
+  const timedOutInput = document.getElementById("timedOutInput");
+  if (timedOutInput) timedOutInput.value = "1";
+
+  const answerBox = document.getElementById("answerBox");
+  if (answerBox) {
+    answerBox.required = false;
+    answerBox.disabled = true;
+    answerBox.value = "";
+  }
+
+  const submitBtn = document.getElementById("submitBtn");
+  if (submitBtn) submitBtn.disabled = true;
+
+  const exerciseContent = document.getElementById("exerciseContent");
+  const timeoutScreen = document.getElementById("timeoutScreen");
+
+  if (exerciseContent) exerciseContent.style.display = "none";
+  if (timeoutScreen) timeoutScreen.style.display = "block";
+}
+
+if (useFixation) {
+  const overlay = document.getElementById("fixationOverlay");
+
+  setTimeout(() => {
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden", "true");
+    revealExercise();
+  }, 1000);
+
+} else {
+  revealExercise();
+}
+
+let formSubmitted = false;
+
+const form = document.getElementById("exerciseForm");
+form.addEventListener("submit", function(e) {
+  if (formSubmitted) {
+    e.preventDefault();
+    return;
+  }
+  formSubmitted = true;
+
+  if (timeoutHandle) {
+    clearTimeout(timeoutHandle);
+    timeoutHandle = null;
+  }
+
+  stopTimer();
+
+  const endTime = Date.now();
+  const responseTime = (endTime - startTime) / 1000;
+  setResponseTimeValue(responseTime);
+});
+
+const timeoutContinueBtn = document.getElementById("timeoutContinueBtn");
+timeoutContinueBtn.addEventListener("click", function() {
+  if (formSubmitted) return;
+  formSubmitted = true;
+  timeoutContinueBtn.disabled = true;
+  const timeoutContinueInput = document.getElementById("timeoutContinueInput");
+  if (timeoutContinueInput) timeoutContinueInput.value = "1";
+  form.submit();
+});
+
+// ENTER handling for both normal screen and timeout screen
+document.addEventListener("keydown", function(e) {
+  if (e.key !== "Enter") return;
+
+  const timeoutScreen = document.getElementById("timeoutScreen");
+  const answerBox = document.getElementById("answerBox");
+
+  if (timeoutScreen && timeoutScreen.style.display !== "none") {
+    e.preventDefault();
+    if (formSubmitted) return;
+    formSubmitted = true;
+
+    const timeoutContinueInput = document.getElementById("timeoutContinueInput");
+    if (timeoutContinueInput) timeoutContinueInput.value = "1";
+
+    form.submit();
+    return;
+  }
+
+  if (!exerciseTimedOut && answerBox && !answerBox.disabled) {
+    e.preventDefault();
+
+    if (answerBox.value !== "") {
+      form.requestSubmit ? form.requestSubmit() : form.submit();
+    }
+  }
+});
+</script>
+
+{% endblock %}

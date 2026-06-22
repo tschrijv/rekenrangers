@@ -1,0 +1,238 @@
+{% if session.get('demo_mode') and (demo_audio or demo_audio_list) %}
+<audio id="demo-audio" preload="auto" playsinline></audio>
+
+<!-- Listen indicator -->
+<div id="listen-indicator" class="listen-indicator d-none" aria-live="polite">
+  <div class="listen-indicator-inner">
+    <span class="listen-ear">👂</span>
+    <span class="listen-text">Luister</span>
+  </div>
+</div>
+
+<style>
+  .listen-indicator {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 3002;
+  pointer-events: none;
+}
+
+.listen-indicator-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  background: rgba(25, 135, 84, 0.96);
+  color: white;
+
+  padding: 22px 32px;     /* MUCH BIGGER BADGE */
+  border-radius: 999px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  border: 3px solid rgba(255,255,255,0.35);
+
+  font-weight: 700;
+  font-size: 1.6rem;      /* BIGGER TEXT */
+
+  animation: listenPulse 1.2s ease-in-out infinite;
+}
+
+.listen-ear {
+  font-size: 2.2rem;      /* BIG EAR ICON */
+  line-height: 1;
+}
+
+.listen-text {
+  white-space: nowrap;
+}
+
+/* stronger pulse so it stays visible */
+@keyframes listenPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.92;
+  }
+}
+</style>
+
+{% if session.get('demo_mode') and (demo_audio or demo_audio_list) %}
+<audio id="demo-audio" preload="auto" playsinline></audio>
+
+<!-- Listen indicator -->
+<div id="listen-indicator" class="listen-indicator d-none" aria-live="polite">
+  <div class="listen-indicator-inner">
+    <span class="listen-ear">👂</span>
+    <span class="listen-text">Luister</span>
+  </div>
+</div>
+
+<style>
+  .listen-indicator {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 3002;
+    pointer-events: none;
+  }
+
+  .listen-indicator-inner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    background: rgba(25, 135, 84, 0.96);
+    color: white;
+
+    padding: 22px 32px;
+    border-radius: 999px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    border: 3px solid rgba(255,255,255,0.35);
+
+    font-weight: 700;
+    font-size: 1.6rem;
+
+    animation: listenPulse 1.2s ease-in-out infinite;
+  }
+
+  .listen-ear {
+    font-size: 2.2rem;
+    line-height: 1;
+  }
+
+  .listen-text {
+    white-space: nowrap;
+  }
+
+  @keyframes listenPulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.92;
+    }
+    50% {
+      transform: scale(1.12);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.92;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .listen-indicator {
+      right: 14px;
+      bottom: 14px;
+    }
+
+    .listen-indicator-inner {
+      padding: 16px 24px;
+      font-size: 1.2rem;
+      gap: 10px;
+    }
+
+    .listen-ear {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    function init() {
+      const audioEl = document.getElementById("demo-audio");
+      const indicator = document.getElementById("listen-indicator");
+      if (!audioEl) return;
+
+      const list =
+        {% if demo_audio_list %}
+          {{ demo_audio_list | tojson }}
+        {% else %}
+          {{ [demo_audio] | tojson }}
+        {% endif %};
+
+      const base = "{{ url_for('static', filename='audio/') }}";
+      const playlist = (list || []).map(name => base + name);
+
+      let idx = 0;
+
+      function showIndicator() {
+        if (indicator) indicator.classList.remove("d-none");
+      }
+
+      function hideIndicator() {
+        if (indicator) indicator.classList.add("d-none");
+      }
+
+      function playIndex(i) {
+        if (!playlist.length) return Promise.reject(new Error("No demo audio in playlist"));
+        idx = i;
+        audioEl.src = playlist[idx];
+        audioEl.currentTime = 0;
+        return audioEl.play();
+      }
+
+      function playFromStart() {
+        return playIndex(0);
+      }
+
+      audioEl.addEventListener("play", showIndicator);
+      audioEl.addEventListener("playing", showIndicator);
+      audioEl.addEventListener("pause", hideIndicator);
+
+      audioEl.addEventListener("ended", () => {
+        idx += 1;
+
+        if (idx < playlist.length) {
+          playIndex(idx).catch(() => {});
+        } else {
+          hideIndicator();
+          window.__demoAudioDone = true;
+
+          // Default behavior: audio ending advances demo.
+          // Specific pages can disable this with:
+          // window.__demoDisableAudioAutoNext = true;
+          if (!window.__demoDisableAudioAutoNext) {
+            const nextForm = document.getElementById("demo-next-form");
+            if (nextForm) nextForm.submit();
+          }
+        }
+      });
+
+      // Try autoplay immediately
+      playFromStart()
+        .then(() => {
+          showIndicator();
+        })
+        .catch(() => {
+          hideIndicator();
+
+          const resume = () => {
+            playFromStart()
+              .then(() => {
+                showIndicator();
+              })
+              .catch(() => {});
+          };
+
+          window.addEventListener("pointerdown", resume, { once: true });
+          window.addEventListener("keydown", resume, { once: true });
+          window.addEventListener("touchstart", resume, { once: true });
+        });
+    }
+
+    if (document.readyState === "complete") init();
+    else window.addEventListener("load", init, { once: true });
+  })();
+</script>
+{% endif %}
+{% endif %}

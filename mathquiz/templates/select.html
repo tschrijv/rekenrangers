@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="max-width: 1000px;">
+
+  {% if research_mode %}
+    <h1 class="display-4 fw-bold text-success mb-3">De volgende oefening</h1>
+    <p class="fs-3 text-success mb-4">
+      Straks maak je de volgende oefening.
+      Volg rustig de aanwijzingen en druk op <strong>Start</strong> wanneer dat gevraagd wordt.
+    </p>
+  {% else %}
+    <h1 class="display-4 fw-bold text-success mb-3">Kies je volgende oefening</h1>
+    <p class="fs-3 text-success mb-4">
+      Klaar voor een nieuwe oefening? Kies hieronder waarmee je verder wil oefenen.
+    </p>
+  {% endif %}
+
+
+
+  <!-- Compact instellingenkader -->
+  <div class="settings-panel mb-5">
+    <div class="settings-title">Zo zal deze oefening verlopen</div>
+
+    <div class="settings-grid">
+
+      <div class="setting-pill">
+        <div class="setting-label">🎯 Moeilijkheid</div>
+        <div class="setting-value">
+          {% if difficulty_choice == 1 %}
+            Kies zelf
+          {% elif difficulty_choice == 2 %}
+            Adaptief
+          {% else %}
+            {% if fixed_difficulty == 1 %}
+              ★ Makkelijk
+            {% elif fixed_difficulty == 2 %}
+              ★★ Gemiddeld
+            {% elif fixed_difficulty == 3 %}
+              ★★★ Moeilijk
+            {% elif fixed_difficulty == 4 %}
+              Mix <i class="bi bi-shuffle ms-1"></i>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="setting-pill">
+        <div class="setting-label">⏱️ Timer</div>
+        <div class="setting-value">
+          {% if allow_timer_choice %}
+            Kies zelf
+          {% else %}
+            {% if fixed_show_timer %}
+              Zichtbaar
+            {% else %}
+              Verborgen
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="setting-pill">
+        <div class="setting-label">🧭 Metacognitie</div>
+        <div class="setting-value">
+          {% if meta_prompt_mode == 1 %}
+            Aan
+          {% else %}
+            Uit
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {% if difficulty_choice == 1 %}
+  <div class="mb-4 framed-choice-block">
+    <h2 class="fs-2 text-success fw-bold mb-3">Kies moeilijkheid</h2>
+
+   <div class="btn-group mb-2" role="group" aria-label="Moeilijkheid">
+      <input type="radio" class="btn-check" name="difficulty" id="diff1" value="1" checked>
+      <label class="btn btn-jungle btn-jungle-sm" id="diffLabel1" for="diff1">★</label>
+
+      <input type="radio" class="btn-check" name="difficulty" id="diff2" value="2">
+      <label class="btn btn-jungle btn-jungle-sm" id="diffLabel2" for="diff2">★★</label>
+
+      <input type="radio" class="btn-check" name="difficulty" id="diff3" value="3">
+      <label class="btn btn-jungle btn-jungle-sm" id="diffLabel3" for="diff3">★★★</label>
+    </div>
+
+    <p class="text-success fs-5 mb-0">
+      ★ makkelijk &nbsp;&nbsp;|&nbsp;&nbsp; ★★ gemiddeld &nbsp;&nbsp;|&nbsp;&nbsp; ★★★ moeilijk
+    </p>
+  </div>
+  {% endif %}
+
+  {% if allow_timer_choice %}
+  <div class="mb-5 framed-choice-block">
+    <h2 class="fs-2 text-success fw-bold mb-3">Wil je de timer zien?</h2>
+
+    <div class="d-flex justify-content-center gap-4 mb-0 flex-wrap">
+      <button class="btn btn-jungle btn-jungle-md px-5 py-3" id="timerYes">
+        Ja, ik wil de tijd zien
+      </button>
+      <button class="btn btn-jungle btn-jungle-md px-5 py-3" id="timerNo">
+        Nee, liever niet
+      </button>
+    </div>
+  </div>
+  {% endif %}
+
+    {% if seq %}
+  {% set step = seq.current_step %}
+  {% set total = seq.total_steps %}
+
+  <div class="mb-5">
+    <div class="fw-bold text-success mb-2 fs-3">
+      Reeksvoortgang
+    </div>
+
+    <div class="text-muted mb-3 fs-4">
+      Stap <strong>{{ step }}</strong> van {{ total }}
+    </div>
+
+    <div class="sequence-track">
+      {% for i in range(1, total + 1) %}
+      <div class="seq-icon 
+                  {% if i < step %}done
+                  {% elif i == step %}current
+                  {% else %}upcoming
+                  {% endif %}">
+        {% if i < step %}
+          🐾
+        {% elif i == step %}
+          🦁
+        {% else %}
+          🐾
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if research_mode %}
+    <h2 class="text-success fw-bold mb-4">
+      Klik op <strong>Start</strong> bij de oefening die de onderzoeker aanduidt
+    </h2>
+  {% else %}
+    <h2 class="text-success fw-bold mb-4">Kies waarmee je wil oefenen</h2>
+  {% endif %}
+
+  <div class="d-flex flex-wrap justify-content-center gap-4 mb-5">
+
+    {% if visible_operations.add %}
+    <a href="#" class="text-decoration-none text-center" onclick="startSet('add'); return false;">
+      <div class="bg-light rounded shadow p-4" style="width:280px;">
+        <div class="display-1 text-success fw-bold">+</div>
+        <p class="mt-3 fs-3 text-dark mb-3">Optellen</p>
+        <button type="button" class="btn btn-jungle btn-jungle-md">Start</button>
+      </div>
+    </a>
+    {% endif %}
+
+    {% if visible_operations.negation %}
+    <a href="#" class="text-decoration-none text-center" onclick="startSet('negation'); return false;">
+      <div class="bg-light rounded shadow p-4" style="width:280px;">
+        <div class="display-1 text-success fw-bold">−</div>
+        <p class="mt-3 fs-3 text-dark mb-3">Aftrekken</p>
+        <button type="button" class="btn btn-jungle btn-jungle-md">Start</button>
+      </div>
+    </a>
+    {% endif %}
+
+    {% if visible_operations.multiply %}
+    <a href="#" class="text-decoration-none text-center" onclick="startSet('multiply'); return false;">
+      <div class="bg-light rounded shadow p-4" style="width:280px;">
+        <div class="display-1 text-success fw-bold">×</div>
+        <p class="mt-3 fs-3 text-dark mb-3">Vermenigvuldigen</p>
+        <button type="button" class="btn btn-jungle btn-jungle-md">Start</button>
+      </div>
+    </a>
+    {% endif %}
+
+    {% if visible_operations.mix %}
+    <a href="#" class="text-decoration-none text-center" onclick="startSet('mix'); return false;">
+      <div class="bg-light rounded shadow p-4" style="width:280px;">
+        <div class="display-1 text-success fw-bold">
+          <i class="bi bi-shuffle"></i>
+        </div>
+        <p class="mt-3 fs-3 text-dark mb-3">Mix</p>
+        <button type="button" class="btn btn-jungle btn-jungle-md">Start</button>
+      </div>
+    </a>
+    {% endif %}
+
+  </div>
+
+  {% if not research_mode %}
+  <div class="text-center mb-4">
+    <a href="{{ url_for('auth.index') }}" class="btn btn-jungle btn-jungle-md mt-2">← Terug naar start</a>
+
+    <a href="{{ url_for('student.demo_start') }}" class="btn btn-jungle btn-jungle-md mt-2">
+      🎬 Demo opnieuw
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+
+<style>
+  .settings-panel {
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px solid #d7eadc;
+    border-radius: 20px;
+    padding: 24px 24px 20px 24px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  }
+
+  .settings-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #198754;
+    margin-bottom: 18px;
+  }
+
+  .settings-grid {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .setting-pill {
+    min-width: 200px;
+    background: #f8fbf9;
+    border: 2px solid #d7eadc;
+    border-radius: 16px;
+    padding: 14px 18px;
+  }
+
+  .setting-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #198754;
+    margin-bottom: 4px;
+  }
+
+  .setting-value {
+    font-size: 1.2rem;
+    color: #212529;
+    font-weight: 600;
+  }
+
+  .framed-choice-block {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #d7eadc;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  }
+
+  .countdown-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .countdown-overlay.show {
+    display: flex;
+  }
+
+  .countdown-number {
+    font-size: clamp(6rem, 18vw, 14rem);
+    font-weight: 900;
+    color: #5B995A;
+    text-shadow: 0 6px 0 rgba(0, 0, 0, 0.25);
+    line-height: 1;
+  }
+
+  .sequence-track {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .seq-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #198754;
+    background: #f7fbf8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transition: all 0.2s ease;
+  }
+
+  .seq-icon.done {
+    background: #198754;
+    color: white;
+    border-color: #198754;
+  }
+
+  .seq-icon.current {
+    background: #d1f3df;
+    transform: scale(1.15);
+    box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.25);
+  }
+
+  .seq-icon.upcoming {
+    opacity: 0.6;
+  }
+</style>
+
+<script>
+  let showTimer = 'yes';
+
+  {% if allow_timer_choice %}
+  const yesBtn = document.getElementById("timerYes");
+  const noBtn = document.getElementById("timerNo");
+
+  yesBtn.type = "button";
+  noBtn.type = "button";
+
+  yesBtn.addEventListener("click", function () {
+    showTimer = 'yes';
+    yesBtn.classList.add("keyboard-selected");
+    noBtn.classList.remove("keyboard-selected");
+  });
+
+  noBtn.addEventListener("click", function () {
+    showTimer = 'no';
+    noBtn.classList.add("keyboard-selected");
+    yesBtn.classList.remove("keyboard-selected");
+  });
+  {% else %}
+  showTimer = "{{ 'yes' if fixed_show_timer else 'no' }}";
+  {% endif %}
+
+  {% if difficulty_choice == 1 %}
+    const diff1 = document.getElementById("diff1");
+    const diff2 = document.getElementById("diff2");
+    const diff3 = document.getElementById("diff3");
+
+    const diffLabel1 = document.getElementById("diffLabel1");
+    const diffLabel2 = document.getElementById("diffLabel2");
+    const diffLabel3 = document.getElementById("diffLabel3");
+
+    function updateDifficultySelection() {
+      diffLabel1.classList.remove("keyboard-selected");
+      diffLabel2.classList.remove("keyboard-selected");
+      diffLabel3.classList.remove("keyboard-selected");
+
+      if (diff1.checked) diffLabel1.classList.add("keyboard-selected");
+      if (diff2.checked) diffLabel2.classList.add("keyboard-selected");
+      if (diff3.checked) diffLabel3.classList.add("keyboard-selected");
+    }
+
+    diff1.addEventListener("change", updateDifficultySelection);
+    diff2.addEventListener("change", updateDifficultySelection);
+    diff3.addEventListener("change", updateDifficultySelection);
+
+    updateDifficultySelection();
+    {% endif %}
+
+  function startSet(operation) {
+    const difficulty = {% if difficulty_choice == 1 %}
+      document.querySelector('input[name="difficulty"]:checked')?.value || 1
+    {% else %}
+      {{ fixed_difficulty }}
+    {% endif %};
+
+    const base = "{{ url_for('student.exercise') }}";
+    const targetUrl = `${base}?operation=${operation}&difficulty=${difficulty}&show_timer=${showTimer}`;
+
+    const overlay = document.getElementById("countdownOverlay");
+    const numberEl = document.getElementById("countdownNumber");
+
+    if (!overlay || !numberEl) {
+      window.location = targetUrl;
+      return;
+    }
+
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden", "false");
+
+    let n = 3;
+    numberEl.textContent = n;
+
+    const interval = setInterval(() => {
+      n -= 1;
+      if (n <= 0) {
+        clearInterval(interval);
+        window.location = targetUrl;
+      } else {
+        numberEl.textContent = n;
+      }
+    }, 800);
+  }
+</script>
+
+<div id="countdownOverlay" class="countdown-overlay" aria-hidden="true">
+  <div id="countdownNumber" class="countdown-number">3</div>
+</div>
+
+{% endblock %} 

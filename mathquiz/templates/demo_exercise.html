@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "_demo_overlay.html" %}
+
+<h1 class="display-4 fw-bold text-success mb-4">Oefening</h1>
+
+<!-- Fake demo som -->
+<p class="display-1 fw-bold text-dark mb-5">
+  5 + 3 = ?
+</p>
+
+<!-- Audio for wrong answer -->
+<audio id="audio-wrong">
+  <source src="{{ url_for('static', filename='audio/Als fout.mp3') }}" type="audio/mpeg">
+</audio>
+
+<audio id="audio-correct">
+  <source src="{{ url_for('static', filename='audio/Als juist.mp3') }}" type="audio/mpeg">
+</audio>
+
+<form id="demo-exercise-form" method="post" action="{{ url_for('student.demo_next') }}"
+      class="d-flex flex-column align-items-center">
+
+  <input type="number" name="answer" id="answerBox"
+         class="form-control form-control-lg text-center mb-4"
+         style="font-size: 4rem; width:400px;"
+         required autofocus
+         disabled>
+
+  <button id="submitBtn" type="submit" class="btn btn-jungle btn-jungle-md" disabled>
+    Verstuur
+  </button>
+</form>
+
+<script>
+  const form = document.getElementById("demo-exercise-form");
+  const answerBox = document.getElementById("answerBox");
+  const submitBtn = document.getElementById("submitBtn");
+  const wrongAudio = document.getElementById("audio-wrong");
+  const correctAudio = document.getElementById("audio-correct");
+  const listenIndicator = document.getElementById("listen-indicator");
+
+  function showListenIndicator() {
+    if (listenIndicator) listenIndicator.classList.remove("d-none");
+  }
+
+  function hideListenIndicator() {
+    if (listenIndicator) listenIndicator.classList.add("d-none");
+  }
+
+  function attachListenIndicator(audioEl) {
+    if (!audioEl) return;
+    audioEl.addEventListener("play", showListenIndicator);
+    audioEl.addEventListener("playing", showListenIndicator);
+    audioEl.addEventListener("pause", hideListenIndicator);
+    audioEl.addEventListener("ended", hideListenIndicator);
+  }
+
+  attachListenIndicator(wrongAudio);
+  attachListenIndicator(correctAudio);
+
+  function stopAndReset(audioEl) {
+    if (!audioEl) return;
+    try { audioEl.pause(); } catch(e) {}
+    try { audioEl.currentTime = 0; } catch(e) {}
+  }
+
+  function stopAllDemoAudio() {
+    stopAndReset(document.getElementById("demo-audio"));
+    stopAndReset(wrongAudio);
+    stopAndReset(correctAudio);
+    hideListenIndicator();
+  }
+
+  let audioFinished = false;
+  let submittingAfterCorrect = false;
+
+  function setEnabled(enabled) {
+    audioFinished = enabled;
+    if (answerBox) answerBox.disabled = !enabled;
+    if (submitBtn) submitBtn.disabled = !enabled;
+    if (enabled && answerBox) {
+      answerBox.focus();
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setEnabled(false);
+
+    const unlockIfDone = () => {
+      if (window.__demoAudioDone === true) setEnabled(true);
+    };
+
+    unlockIfDone();
+
+    const main = document.getElementById("demo-audio");
+    if (main) {
+      main.addEventListener("ended", unlockIfDone);
+    }
+
+    const t = setInterval(() => {
+      if (window.__demoAudioDone === true) {
+        clearInterval(t);
+        setEnabled(true);
+      }
+    }, 200);
+
+    if (answerBox) {
+      answerBox.addEventListener("keydown", (e) => {
+        if (!audioFinished) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      });
+    }
+  });
+
+  form.addEventListener("submit", function (e) {
+    if (submittingAfterCorrect) {
+      return;
+    }
+
+    if (!audioFinished) {
+      e.preventDefault();
+      return;
+    }
+
+    const val = (answerBox.value || "").trim();
+
+    if (val !== "8") {
+      e.preventDefault();
+
+      stopAllDemoAudio();
+
+      if (wrongAudio) {
+        wrongAudio.currentTime = 0;
+        wrongAudio.play().catch(() => {});
+      }
+
+      answerBox.classList.remove("shake");
+      void answerBox.offsetWidth;
+      answerBox.classList.add("shake");
+
+      answerBox.focus();
+      answerBox.select();
+      return;
+    }
+
+    e.preventDefault();
+
+    setEnabled(false);
+    stopAndReset(wrongAudio);
+    stopAndReset(correctAudio);
+
+    if (correctAudio) {
+      correctAudio.currentTime = 0;
+      correctAudio.onended = () => {
+        hideListenIndicator();
+        submittingAfterCorrect = true;
+        form.submit();
+      };
+      correctAudio.play().catch(() => {
+        hideListenIndicator();
+        submittingAfterCorrect = true;
+        form.submit();
+      });
+    } else {
+      submittingAfterCorrect = true;
+      form.submit();
+    }
+  });
+</script>
+
+{% endblock %}

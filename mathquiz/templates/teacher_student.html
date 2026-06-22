@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
+  <h1 class="display-5 text-success fw-bold mb-0" id="student-name-display">Resultaten van {{ username }}</h1>
+  <button class="btn btn-success " onclick="toggleRename()">✏️ Naam wijzigen</button>
+</div>
+
+<form id="rename-form" class="d-none mb-3 d-flex gap-2 align-items-center"
+      method="post" action="{{ url_for('teacher.rename_student', student_id=student_id) }}">
+  <input type="text" name="new_name" class="form-control form-control-lg w-auto"
+         value="{{ username }}" required maxlength="255">
+  <button type="submit" class="btn btn-success btn-lg">Opslaan</button>
+  <button type="button" class="btn btn-outline-secondary btn-lg" onclick="toggleRename()">Annuleren</button>
+</form>
+
+<script>
+  function toggleRename() {
+    const form = document.getElementById("rename-form");
+    form.classList.toggle("d-none");
+  }
+</script>
+
+{% if group_name %}
+<h1 class="mb-3">Groep: <span class="fw-bold text-success">{{ group_name }}</span></h1>
+{% endif %}
+
+<!-- Oefeningen -->
+
+<div class="table-responsive w-75 shadow-sm">
+  <table class="table table-bordered table-hover align-middle text-center">
+    <thead class="table-success">
+      <tr>
+        <th>Reeks</th>
+        <th>Operatie</th>
+        <th>Moeilijkheid</th>
+        <th>Timer</th>
+        <th>a</th>
+        <th>b</th>
+        <th>Antwoord</th>
+        <th>Correct</th>
+        <th>Juist?</th>
+        <th>Reactietijd (s)</th>
+        <th>Meta_score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in exercises %}
+      <tr>
+        <td>{{ e[0] }}</td>
+          <td>{% if e[1] == 'add' %}+{% elif e[1] == 'multiply' %}×{%else%}-{% endif %}</td>
+          <td>
+            {% if e[8] == 1 %}
+              ★
+            {% elif e[8] == 2 %}
+              ★★
+            {% elif e[8] == 3 %}
+              ★★★
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>{{ 'Ja' if e[9] == 1 else 'Nee' }}</td>
+          <td>{{ e[2] }}</td>
+          <td>{{ e[3] }}</td>
+          <td>{{ e[4] }}</td>
+          <td>{{ e[5] }}</td>
+          <td>
+            {% if e[6] == 1 %}
+              <span class="text-success fw-bold">✓</span>
+            {% else %}
+              <span class="text-danger fw-bold">✗</span>
+            {% endif %}
+          </td>
+          <td>{{ "%.2f"|format(e[7]) }}</td>
+          <td>{{ e[10] }}</td>
+
+      </tr>
+      {% endfor %}
+      {% if not exercises %}
+      <tr><td colspan="11" class="text-muted">Nog geen oefeningen gemaakt.</td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+
+<!-- Terugknop -->
+<div class="mt-3 mb-3 text-center">
+  <a href="{{ url_for('teacher.group', group_id=group_id)  }}" class="btn btn-success btn-lg px-5 py-3">
+    ⬅ Terug naar groep
+  </a>
+</div>
+
+{% endblock %}

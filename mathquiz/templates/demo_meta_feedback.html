@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="display-4 text-success fw-bold mb-3 text-center">Feedback</h1>
+
+<div class="container text-center">
+
+  <div class="p-4 mb-3 border rounded-4 bg-light">
+    <h3 class="fw-bold text-success mb-3">Jouw antwoord</h3>
+
+    <p class="fs-2 fw-bold">
+      5 + 3 = 8
+    </p>
+
+    <p class="fs-2 feedback-correct fw-bold">✓ Juist! Goed gedaan!</p>
+  </div>
+
+  <div class="p-4 mt-2 border rounded-4 bg-light">
+    <h3 class="fw-bold text-success mb-3">Jouw gevoel</h3>
+
+    <img src="{{ url_for('static', filename='smiley_3.png') }}"
+         alt="Jouw zelfscore"
+         class="smiley-option mb-3"
+         style="width: 80px;">
+
+    <p class="fs-2 feedback-correct fw-bold">
+      ✓ Een goede inschatting van jezelf!
+    </p>
+  </div>
+
+  <form id="feedback-form" method="post" action="{{ url_for('student.demo_next') }}" class="mt-4">
+    <button id="feedback-btn" type="submit" class="btn btn-jungle btn-jungle-md" disabled>
+      Verdergaan
+    </button>
+  </form>
+
+</div>
+
+{% include "_demo_overlay.html" %}
+
+<script>
+(function () {
+  const form = document.getElementById("feedback-form");
+  const btn = document.getElementById("feedback-btn");
+
+  function unlock() {
+    if (btn) btn.disabled = false;
+  }
+
+  function isDone() {
+    return window.__demoAudioDone === true;
+  }
+
+  // unlock when overlay audio is finished
+  const poll = setInterval(() => {
+    if (isDone()) {
+      clearInterval(poll);
+      unlock();
+    }
+  }, 150);
+
+  // block submit until unlocked
+  form.addEventListener("submit", (e) => {
+    if (!isDone()) e.preventDefault();
+  });
+
+  // Enter submits only when unlocked
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    if (isDone()) form.submit();
+  });
+})();
+</script>
+{% endblock %}

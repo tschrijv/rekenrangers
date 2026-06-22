@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="display-1 text-success mb-4 fw-bold">Login via groep</h1>
+<form method="post" class="w-50">
+  <div class="d-flex flex-column gap-3 mb-4 w-100">
+    <input type="text"
+           name="activation_code"
+           class="form-control form-control-lg"
+           placeholder="Activatiecode"
+           required>
+
+    <button class="btn btn-jungle btn-jungle-md w-100" type="submit">
+        Doorgaan
+    </button>
+</div>
+</form>
+{% endblock %}

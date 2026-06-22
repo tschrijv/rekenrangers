@@ -1,0 +1,19 @@
+# info: ports and volumes use host:container format
+
+# useful commands
+# start (-d for detach): podman-compose up -d
+# stop: podman-compose down
+# logs (-f = follow log): podman-compose logs -f --tail 200
+
+# get shell inside container (-it is interactive, tty)
+# - podman-compose exec -it container_name /bin/bash
+
+version: "3.9"
+services:
+  rekenrangers-backend:
+#    image: rekenrangers/rekenrangers:latest
+    image: localhost/rekenrangers:latest
+    container_name: "rekenrangers-backend"
+    restart: always
+    ports:
+      - 5000:5000

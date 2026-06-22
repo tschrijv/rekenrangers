@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="max-width: 1000px;">
+
+  <h1 class="display-4 fw-bold text-success mb-3">De volgende oefening</h1>
+  <p class="fs-3 text-success mb-4">
+    Straks maak je de volgende oefening.
+    Volg rustig de aanwijzingen en druk op <strong>Start</strong> wanneer dat gevraagd wordt.
+  </p>
+
+  <!-- Compact instellingenkader -->
+  <div class="settings-panel mb-5">
+    <div class="settings-title">Zo zal deze oefening verlopen</div>
+
+    <div class="settings-grid">
+
+      <div class="setting-pill">
+        <div class="setting-label">🎯 Moeilijkheid</div>
+        <div class="setting-value">
+          ★ Makkelijk
+        </div>
+      </div>
+
+      <div class="setting-pill">
+        <div class="setting-label">⏱️ Timer</div>
+        <div class="setting-value">
+          Verborgen
+        </div>
+      </div>
+
+      <div class="setting-pill">
+        <div class="setting-label">🧭 Metacognitie</div>
+        <div class="setting-value">
+          {% if meta_prompt_mode == 1 %}
+            Aan
+          {% else %}
+            Uit
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <h2 class="text-success fw-bold mb-4">
+    Klik op <strong>Start</strong> bij de oefening die de onderzoeker aanduidt
+  </h2>
+
+  <div class="d-flex flex-wrap justify-content-center gap-4 mb-5 demo-no-clicks">
+
+    <a href="#" class="text-decoration-none text-center" onclick="return false;">
+      <div class="bg-light rounded shadow p-4" style="width:280px;">
+        <div class="display-1 text-success fw-bold">+</div>
+        <p class="mt-3 fs-3 text-dark mb-3">Optellen</p>
+        <button type="button" class="btn btn-jungle btn-jungle-md">Start</button>
+      </div>
+    </a>
+
+  </div>
+
+</div>
+
+<style>
+  .settings-panel {
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px solid #d7eadc;
+    border-radius: 20px;
+    padding: 24px 24px 20px 24px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  }
+
+  .settings-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #198754;
+    margin-bottom: 18px;
+  }
+
+  .settings-grid {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .setting-pill {
+    min-width: 200px;
+    background: #f8fbf9;
+    border: 2px solid #d7eadc;
+    border-radius: 16px;
+    padding: 14px 18px;
+  }
+
+  .setting-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #198754;
+    margin-bottom: 4px;
+  }
+
+  .setting-value {
+    font-size: 1.2rem;
+    color: #212529;
+    font-weight: 600;
+  }
+
+  .demo-no-clicks,
+  .demo-no-clicks * {
+    pointer-events: none;
+  }
+</style>
+
+<form id="demo-next-form" method="post" action="{{ url_for('student.demo_next') }}" class="d-none"></form>
+
+{% include "_demo_overlay.html" %}
+{% endblock %}

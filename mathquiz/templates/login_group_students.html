@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="display-1 text-success mb-4 fw-bold text-center">Kies je naam</h1>
+
+<!-- Hidden form submitted after PIN entry -->
+<form id="student-login-form" method="post">
+    <input type="hidden" name="username" id="form-username">
+    <input type="hidden" name="pin" id="form-pin">
+</form>
+
+<div class="d-flex flex-wrap justify-content-center gap-3">
+  {% for student in students %}
+    <button type="button" class="btn btn-jungle btn-jungle-md px-5"
+            onclick='openPinModal({{ student|tojson }})'>
+        {{ student }}
+    </button>
+  {% endfor %}
+</div>
+
+<!-- PIN MODAL -->
+<div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4" style="border-radius: 20px;">
+      
+      <h3 class="mb-3 text-success fw-bold">Kies je dieren-code</h3>
+      <p class="text-muted mb-4">Klik de dieren in de juiste volgorde!</p>
+
+      <!-- Entered code slots -->
+      <div class="d-flex justify-content-center gap-3 mb-3">
+        {% for i in range(4) %}
+          <div id="slot-{{i}}" class="fs-1 fw-bold animal-slot">⬜</div>
+        {% endfor %}
+      </div>
+
+      <!-- Animal keypad -->
+      <div class="d-flex flex-wrap justify-content-center gap-2 mb-3" style="max-width: 420px; margin: 0 auto;">
+        <!-- Buttons injected by JS to keep same source of truth (animals array) -->
+        <div id="animal-keypad" class="d-flex flex-wrap justify-content-center gap-2"></div>
+      </div>
+
+      <!-- Small controls -->
+      <div class="d-flex justify-content-center gap-2 mb-3">
+        <button type="button" class="btn btn-light fw-bold px-3 py-2"
+                style="border-radius: 12px;"
+                onclick="backspaceAnimal()">
+          ⌫
+        </button>
+
+        <button type="button" class="btn btn-light fw-bold px-3 py-2"
+                style="border-radius: 12px;"
+                onclick="resetAnimalPin()">
+          Reset
+        </button>
+      </div>
+
+      <div class="mt-4 d-flex justify-content-center gap-3">
+        <button type="button" class="btn btn-success px-4 py-3 fw-bold"
+                style="border-radius: 12px; font-size: 1.4rem;"
+                onclick="submitAnimalPin()">
+          Start!
+        </button>
+
+        <button type="button" class="btn btn-secondary px-4 py-3 fw-bold"
+                style="border-radius: 12px; font-size: 1.2rem;"
+                data-bs-dismiss="modal">
+          Annuleren
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+const animals = ["🦁","🦒","🐘","🦓","🐵","🐍","🐊","🐅","🦩","🦏"];
+let animalCode = []; // array of indices (length 0..4)
+
+function buildAnimalKeypad() {
+    const keypad = document.getElementById("animal-keypad");
+    if (!keypad) return;
+
+    // Only build once
+    if (keypad.dataset.built === "1") return;
+    keypad.dataset.built = "1";
+
+    animals.forEach((emoji, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn btn-light fs-2 px-3 py-2";
+        btn.style.borderRadius = "14px";
+        btn.textContent = emoji;
+        btn.onclick = () => pressAnimal(idx);
+        keypad.appendChild(btn);
+    });
+}
+
+function openPinModal(studentName) {
+    document.getElementById('form-username').value = studentName;
+
+    buildAnimalKeypad();
+    resetAnimalPin();
+
+    new bootstrap.Modal(document.getElementById('pinModal')).show();
+}
+
+function resetAnimalPin() {
+    animalCode = [];
+    for (let i = 0; i < 4; i++) {
+        document.getElementById("slot-" + i).textContent = "⬜";
+    }
+}
+
+function pressAnimal(animalIndex) {
+    if (animalCode.length >= 4) return;
+
+    animalCode.push(animalIndex);
+    const slot = animalCode.length - 1;
+    document.getElementById("slot-" + slot).textContent = animals[animalIndex];
+}
+
+function backspaceAnimal() {
+    if (animalCode.length === 0) return;
+    const slot = animalCode.length - 1;
+    animalCode.pop();
+    document.getElementById("slot-" + slot).textContent = "⬜";
+}
+
+function submitAnimalPin() {
+    // Keep same server format as before: 4 digits made from indices
+    // If user didn't enter all 4, we still submit what they entered (same behavior as "dials" could)
+    // If you prefer forcing 4, change this to an early return when animalCode.length < 4.
+    let numericPin = animalCode.map(n => n.toString()).join("");
+    document.getElementById('form-pin').value = numericPin;
+    document.getElementById('student-login-form').submit();
+}
+</script>
+
+{% endblock %}

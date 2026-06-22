@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="max-width: 900px;">
+
+  <h1 class="display-4 text-success fw-bold mb-4">
+    Je bent klaar!
+  </h1>
+
+  <div class="p-4 mb-4 border rounded-4 bg-light shadow-sm"
+       style="border-radius: 20px;">
+
+    <p class="fs-3 fw-bold text-success mb-3">
+      Je hebt alle oefenstappen afgewerkt die je leerkracht heeft ingesteld.
+      Er zijn op dit moment geen nieuwe reeksen meer om te maken.
+    </p>
+
+    <img src="/static/party_animals.png"
+         class="img-fluid mx-auto d-block mb-4"
+         style="max-height: 350px;">
+
+    <div class="p-3 bg-white border rounded-3 shadow-sm"
+         style="max-width: 600px; margin: 0 auto;">
+      <p class="fs-4 text-success mb-0">
+        Wacht nu rustig en in stilte tot de onderzoeker aangeeft
+        dat je klaar bent voor vandaag.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Buttons -->
+<div class="d-flex justify-content-center gap-4 flex-wrap">
+
+  <!-- Locked back button (no action) -->
+  <button id="btn-back"
+          type="button"
+          class="btn btn-jungle btn-jungle-md demo-locked"
+          disabled>
+    ← Terug naar start
+  </button>
+
+  <!-- POST to demo_next -->
+  <form id="result-form"
+        method="post"
+        action="{{ url_for('student.demo_next') }}"
+        class="m-0">
+    <button id="result-btn"
+            type="submit"
+            class="btn btn-jungle btn-jungle-md"
+            disabled>
+      Naar puzzelomgeving
+    </button>
+  </form>
+
+</div>
+
+</div>
+
+<style>
+  /* Locked look (grey + unclickable) */
+  .demo-locked {
+    pointer-events: none;
+    opacity: 0.45;
+    filter: grayscale(0.8);
+  }
+</style>
+
+{% include "_demo_overlay.html" %}
+
+<script>
+(function () {
+  const resultBtn = document.getElementById("result-btn");
+  const backBtn = document.getElementById("btn-back");
+  const form = document.getElementById("result-form");
+
+  function isDone() {
+    return window.__demoAudioDone === true;
+  }
+
+  function lockButtons() {
+    if (resultBtn) resultBtn.disabled = true;
+    if (backBtn) backBtn.disabled = true;
+  }
+
+  function unlockPuzzleOnly() {
+    if (resultBtn) resultBtn.disabled = false;
+    if (backBtn) backBtn.disabled = true;
+  }
+
+  // ✅ Start fully locked
+  lockButtons();
+
+  // Poll until audio done
+  const poll = setInterval(() => {
+    if (isDone()) {
+      clearInterval(poll);
+      unlockPuzzleOnly();
+    }
+  }, 150);
+
+  // Prevent submit while locked (extra safety)
+  form.addEventListener("submit", function(e) {
+    if (!isDone()) {
+      e.preventDefault();
+    }
+  });
+
+  // Enter key only works when unlocked
+  document.addEventListener("keydown", function(e) {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+
+    if (isDone()) {
+      form.submit();
+    }
+  });
+
+})();
+</script>
+{% endblock %}

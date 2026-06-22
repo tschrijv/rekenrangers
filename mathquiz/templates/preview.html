@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center">
+  <h1 class="display-5 fw-bold text-success mb-4">Voorbeeldopgave</h1>
+
+  <div class="card shadow-sm p-5 mx-auto" style="max-width: 900px;">
+    {% if preview.fixation_screen %}
+      <p class="text-muted fs-5 mb-3">Fixatiescherm actief vóór de opgave</p>
+    {% endif %}
+
+    <p class="display-1 fw-bold text-dark mb-4">
+      {{ preview.a }}
+      {% if preview.operation == 'add' %}+{% elif preview.operation == 'multiply' %}×{% else %}−{% endif %}
+      {{ preview.b }} = ?
+    </p>
+
+    <div class="row justify-content-center text-start mt-3">
+      <div class="col-md-8">
+        <ul class="list-unstyled fs-5">
+          <li><strong>Bewerking:</strong> {{ preview.operation }}</li>
+          <li><strong>Moeilijkheid:</strong> {{ preview.difficulty }}</li>
+          <li><strong>Timer zichtbaar:</strong> {{ 'Ja' if preview.show_timer else 'Nee' }}</li>
+          <li><strong>Metacognitie:</strong> {{ 'Ja' if preview.meta_prompt_mode == 1 else 'Nee' }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 d-flex gap-3 justify-content-center">
+    <a href="{{ url_for('teacher.preview_group_exercise', group_id=group_id, step_id=step_id) }}"
+       class="btn btn-success btn-lg">
+      🔄 Ander voorbeeld
+    </a>
+
+    <a href="{{ url_for('teacher.group', group_id=group_id) }}"
+       class="btn btn-success btn-lg">
+      ← Terug
+    </a>
+  </div>
+</div>
+{% endblock %}
