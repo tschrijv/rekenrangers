@@ -1,0 +1,9 @@
+Vale, esas caritas las puedes usar entonces para indicar, después de resolver el ejercicio de cálculo,
+qué tan seguro estás de tu respuesta.
+Pero, ¿qué significan esas caritas?
+Si estás muy seguro de que tu respuesta es correcta, entonces pulsas la carita verde.
+Si no estás completamente seguro, pero sí un poco seguro de que la respuesta es correcta,
+entonces pulsas la carita amarilla.
+Si dudas mucho y por lo tanto no estás seguro de que tu respuesta sea correcta, entonces pulsas la carita naranja.
+Si dudas muchísimo y por lo tanto estás muy inseguro sobre tu respuesta y hasta piensas que puede que esté mal,
+pulsas la carita roja.

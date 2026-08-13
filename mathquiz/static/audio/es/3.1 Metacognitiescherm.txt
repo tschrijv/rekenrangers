@@ -1,0 +1,9 @@
+Ahora vamos a ver qué pasa después de que resuelvas un ejercicio de cálculo.
+Los buenos rekenrangers intentan evaluar lo mejor posible
+si acertaron o si cometieron un error.
+Por eso, después de cada ejercicio tienes que pensar un momento en la respuesta que diste.
+En tu pantalla aparece la pregunta: ¿qué tan seguro estás de tu respuesta?
+Y entonces también verás aparecer unas caritas.
+Esas caritas también las ves en las teclas del medio de tu teclado.
+¿Las ves?
+Pulsa la carita naranja en tu teclado.

@@ -1,0 +1,6 @@
+Cuando termines los tres bloques, y hayas hecho todos los ejercicios de ese día,
+podrás comprar piezas de rompecabezas con las monedas que hayas reunido.
+Arriba a la derecha de la pantalla puedes ver cuántas monedas tienes ya.
+Para elegir un rompecabezas, puedes usar las teclas de flechas del teclado.
+Yo quiero elegir el león.
+¿Pulsas tú la bola azul para ayudarme a elegir ese rompecabezas?
