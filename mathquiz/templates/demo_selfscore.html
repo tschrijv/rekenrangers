@@ -1,63 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="display-4 text-success mb-4">Hoe zeker ben je van je antwoord?</h1>
+<h1 class="display-4 text-success mb-4">{{ _('Hoe zeker ben je van je antwoord?') }}</h1>
 
 <!-- Demo audios -->
 <audio id="audio-wrong-orange" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.1.1.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.1.1.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-correct-orange" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.1.2.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.1.2.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-explain-intro" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.2 intro.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.2 intro.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-explain-green" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.2 groen.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.2 groen.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-explain-yellow" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.2 geel.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.2 geel.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-explain-orange" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.2 oranje.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.2 oranje.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-explain-red" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.2 rood.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.2 rood.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-blue-ball" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.3.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.3.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-check-intro" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.4.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.4.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-check-1" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.4.1.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.4.1.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-check-2" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.4.2.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.4.2.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-check-3" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.4.3.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.4.3.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-check-4" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.4.4.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.4.4.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-summary" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/3.5.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('3.5.mp3') }}" type="audio/mpeg">
 </audio>
 
 <form id="demo-next-form" method="post" action="{{ url_for('student.demo_next') }}" class="d-none"></form>
@@ -74,11 +74,11 @@
       
       <div class="smiley-card" id="card1">
         <img src="{{ url_for('static', filename='smiley_0.png') }}"
-             alt="Heel onzeker" class="smiley-option">
+             alt="{{ _('Heel onzeker') }}" class="smiley-option">
 
         <div class="smiley-text text-danger">
-          heel onzeker<br>
-          <small>ik denk dat ik fout was</small>
+          {{ _('heel onzeker') }}<br>
+          <small>{{ _('ik denk dat ik fout was') }}</small>
         </div>
       </div>
     </label>
@@ -86,14 +86,14 @@
     <!-- 2 -->
     <label class="smiley-label text-center">
       <input id="score2" type="radio" name="self_score" value="2" class="d-none" required>
-      
+
       <div class="smiley-card" id="card2">
         <img src="{{ url_for('static', filename='smiley_1.png') }}"
-             alt="Onzeker" class="smiley-option">
+             alt="{{ _('Onzeker') }}" class="smiley-option">
 
         <div class="smiley-text text-warning">
-          onzeker<br>
-          <small>dat ik juist was</small>
+          {{ _('onzeker') }}<br>
+          <small>{{ _('dat ik juist was') }}</small>
         </div>
       </div>
     </label>
@@ -101,14 +101,14 @@
     <!-- 3 -->
     <label class="smiley-label text-center">
       <input id="score3" type="radio" name="self_score" value="3" class="d-none" required>
-      
+
       <div class="smiley-card" id="card3">
         <img src="{{ url_for('static', filename='smiley_2.png') }}"
-             alt="Een beetje zeker" class="smiley-option">
+             alt="{{ _('Een beetje zeker') }}" class="smiley-option">
 
         <div class="smiley-text" style="color:#c7d322;">
-          een beetje zeker <br>
-          <small>dat ik juist was</small>
+          {{ _('een beetje zeker') }} <br>
+          <small>{{ _('dat ik juist was') }}</small>
         </div>
       </div>
     </label>
@@ -116,14 +116,14 @@
     <!-- 4 -->
     <label class="smiley-label text-center">
       <input id="score4" type="radio" name="self_score" value="4" class="d-none" required>
-      
+
       <div class="smiley-card" id="card4">
         <img src="{{ url_for('static', filename='smiley_3.png') }}"
-             alt="Heel zeker" class="smiley-option">
+             alt="{{ _('Heel zeker') }}" class="smiley-option">
 
         <div class="smiley-text text-success">
-          heel zeker<br>
-          <small>dat ik juist was</small>
+          {{ _('heel zeker') }}<br>
+          <small>{{ _('dat ik juist was') }}</small>
         </div>
       </div>
     </label>
@@ -132,7 +132,7 @@
 
   <div class="w-100 text-center mt-4">
     <button id="submitBtn" type="submit" class="btn btn-jungle btn-jungle-md" disabled>
-      Verstuur
+      {{ _('Verstuur') }}
     </button>
   </div>
 </form>

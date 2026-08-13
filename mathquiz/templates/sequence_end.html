@@ -4,15 +4,15 @@
 <div class="container text-center" style="max-width: 900px;">
 
   <h1 class="display-4 text-success fw-bold mb-4">
-    Je bent klaar!
+    {{ _('Je bent klaar!') }}
   </h1>
 
   <div class="p-4 mb-4 border rounded-4 bg-light shadow-sm"
        style="border-radius: 20px;">
 
     <p class="fs-3 fw-bold text-success mb-3">
-      Je hebt alle oefenstappen afgewerkt die je leerkracht heeft ingesteld.
-      Er zijn op dit moment geen nieuwe reeksen meer om te maken.
+      {% trans %}Je hebt alle oefenstappen afgewerkt die je leerkracht heeft ingesteld.
+      Er zijn op dit moment geen nieuwe reeksen meer om te maken.{% endtrans %}
     </p>
 
     <!-- Happy animals image -->
@@ -25,8 +25,8 @@
     <div class="p-3 bg-white border rounded-3 shadow-sm"
          style="max-width: 600px; margin: 0 auto;">
       <p class="fs-4 text-success mb-0">
-        Wacht nu rustig en in stilte tot de onderzoeker aangeeft
-        dat je klaar bent voor vandaag.
+        {% trans %}Wacht nu rustig en in stilte tot de onderzoeker aangeeft
+        dat je klaar bent voor vandaag.{% endtrans %}
       </p>
     </div>
     {% endif %}
@@ -36,12 +36,12 @@
 
       <a href="{{ url_for('auth.index') }}"
          class="btn btn-jungle btn-jungle-md">
-        ← Terug naar start
+        ← {{ _('Terug naar start') }}
       </a>
 
       <a href="{{ url_for('student.puzzles_list') }}"
          class="btn btn-jungle btn-jungle-md">
-        Naar puzzelomgeving
+        {{ _('Naar puzzelomgeving') }}
       </a>
 
     </div>

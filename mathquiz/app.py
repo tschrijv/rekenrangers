@@ -6,7 +6,7 @@ load_dotenv()  # load .env BEFORE anything else
 from flask import Flask
 from config import Config
 import extensions
-from extensions import bootstrap, init_engine
+from extensions import bootstrap, babel, init_engine, select_locale, audio_url
 from models.db import init_db
 from blueprints.auth.routes import auth_bp
 from blueprints.student.routes import student_bp
@@ -19,6 +19,9 @@ def create_app():
     app.config.from_object(Config)
 
     bootstrap.init_app(app)
+    babel.init_app(app, locale_selector=select_locale)
+    app.jinja_env.globals["audio_url"] = audio_url
+    app.jinja_env.globals["LANGUAGE"] = Config.LANGUAGE
     init_engine(Config.DATABASE_URL)
     init_db()
     generate_exercises_all.main()

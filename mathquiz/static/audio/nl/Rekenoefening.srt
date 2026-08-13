@@ -1,0 +1,20 @@
+1
+00:00:00,000 --> 00:00:03,220
+Je hebt net geleerd hoe je een rekenoefening kan oplossen.
+
+2
+00:00:03,840 --> 00:00:07,460
+Nu gaan we dit even proberen bij een echte rekenoefening.
+
+3
+00:00:08,260 --> 00:00:10,360
+Wat is het antwoord op 5 plus 3?
+
+4
+00:00:11,040 --> 00:00:16,160
+Denk maar even na en druk dan op het juiste cijfer bovenaan het toetsenbord.
+
+5
+00:00:16,820 --> 00:00:20,140
+Als je klaar bent, mag je op de knop met de blauwe bol drukken.
+

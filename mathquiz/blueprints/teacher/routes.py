@@ -2,6 +2,7 @@ from flask import (
     Blueprint, render_template, request, redirect, url_for,
     session, flash, Response
 )
+from flask_babel import gettext as _
 from datetime import datetime
 from random import randint
 import csv, io, json
@@ -312,7 +313,7 @@ def delete_group(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Je hebt geen toegang tot deze groep!", "danger")
+        flash(_("Je hebt geen toegang tot deze groep!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     students = db_query_all(
@@ -328,7 +329,7 @@ def delete_group(group_id):
 
     db_execute('DELETE FROM `groups` WHERE id=:gid', {'gid': group_id})
 
-    flash("Groep en bijhorende leerlingen zijn verwijderd.", "success")
+    flash(_("Groep en bijhorende leerlingen zijn verwijderd."), "success")
     return redirect(url_for('teacher.dashboard'))
 
 @teacher_bp.route("/import_students", methods=["POST"])
@@ -343,7 +344,7 @@ def import_students():
 
     file = request.files.get("file")
     if not file:
-        flash("Geen bestand gekozen!", "danger")
+        flash(_("Geen bestand gekozen!"), "danger")
         return redirect(url_for("teacher.dashboard"))
 
     try:
@@ -352,11 +353,11 @@ def import_students():
         rows = list(reader)
     except Exception as e:
         print("Error reading CSV:", e)
-        flash("Kon bestand niet lezen! Zorg voor een CSV bestand.", "danger")
+        flash(_("Kon bestand niet lezen! Zorg voor een CSV bestand."), "danger")
         return redirect(url_for("teacher.dashboard"))
 
     if len(rows) < 2:
-        flash("Bestand bevat geen gegevens!", "danger")
+        flash(_("Bestand bevat geen gegevens!"), "danger")
         return redirect(url_for("teacher.dashboard"))
 
     # Skip header
@@ -403,7 +404,7 @@ def import_students():
         except Exception:
             pass  # likely already exists — skip gracefully
 
-    flash("Leerlingen succesvol geïmporteerd!", "success")
+    flash(_("Leerlingen succesvol geïmporteerd!"), "success")
     return redirect(url_for("teacher.dashboard"))
 
 
@@ -421,7 +422,7 @@ def group(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Je hebt geen toegang tot deze groep!", "danger")
+        flash(_("Je hebt geen toegang tot deze groep!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     # -------------------------
@@ -431,7 +432,7 @@ def group(group_id):
         name = (request.form.get('student_name') or '').strip()
         pin = str(randint(1000, 9999))
         if not name:
-            flash("Naam mag niet leeg zijn.", "warning")
+            flash(_("Naam mag niet leeg zijn."), "warning")
             return redirect(url_for('teacher.group', group_id=group_id))
 
         try:
@@ -444,9 +445,9 @@ def group(group_id):
                 'g': group_id,
                 'p': pin
             })
-            flash("Leerling toegevoegd!", "success")
+            flash(_("Leerling toegevoegd!"), "success")
         except Exception:
-            flash("Leerling toevoegen mislukt! De leerling bestaat al.", "danger")
+            flash(_("Leerling toevoegen mislukt! De leerling bestaat al."), "danger")
 
         return redirect(url_for('teacher.group', group_id=group_id))
 
@@ -567,7 +568,7 @@ def update_group_settings(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     f = request.form
@@ -637,17 +638,17 @@ def update_group_settings(group_id):
     if not has_active_sequence(group_id):
 
         if operation_add_visible + operation_multiply_visible + operation_negation_visible + operation_mix_visible == 0:
-            flash("Instellingen opslaan mislukt! Er moet minstens 1 operatie beschikbaar zijn.", "danger")
+            flash(_("Instellingen opslaan mislukt! Er moet minstens 1 operatie beschikbaar zijn."), "danger")
             return redirect(url_for('teacher.group', group_id=group_id))
 
         if mix_add + mix_multiply + mix_negation == 0 and operation_mix_visible:
-            flash("Instellingen opslaan mislukt! Mix moet minstens 1 operatie bevatten.", "danger")
+            flash(_("Instellingen opslaan mislukt! Mix moet minstens 1 operatie bevatten."), "danger")
             return redirect(url_for('teacher.group', group_id=group_id))
         
         validation_settings = build_validation_settings(group_step_settings, new_research_settings)
         error_msg = validate_group_settings(validation_settings)
         if error_msg:
-            flash(f"Instellingen opslaan mislukt! {error_msg}", "danger")
+            flash(_("Instellingen opslaan mislukt! %(error)s", error=error_msg), "danger")
             return redirect(url_for('teacher.group', group_id=group_id))
     else:
         steps = db_query_all('''
@@ -688,7 +689,8 @@ def update_group_settings(group_id):
             error_msg = validate_group_settings(validation_settings)
             if error_msg:
                 flash(
-                    f"Instellingen opslaan mislukt! De nieuwe onderzoeksinstellingen zijn niet compatibel met stap {step[1]} van de oefenreeksreeks. {error_msg}",
+                    _("Instellingen opslaan mislukt! De nieuwe onderzoeksinstellingen zijn niet compatibel met stap %(step)s van de oefenreeksreeks. %(error)s",
+                      step=step[1], error=error_msg),
                     "danger"
                 )
                 return redirect(url_for('teacher.group', group_id=group_id))
@@ -752,7 +754,7 @@ def update_group_settings(group_id):
     # 3) heavy step: build all pools (can take up to a minute)
     build_group_pools(group_id, build_validation_settings(group_step_settings, new_research_settings))
 
-    flash("Instellingen opgeslagen en oefenreeksen voorbereid.", "success")
+    flash(_("Instellingen opgeslagen en oefenreeksen voorbereid."), "success")
     return redirect(url_for('teacher.group', group_id=group_id))
 
 
@@ -767,7 +769,7 @@ def group_sequence(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Je hebt geen toegang tot deze groep!", "danger")
+        flash(_("Je hebt geen toegang tot deze groep!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     sequence_id = get_or_create_sequence_for_group(group_id)
@@ -810,7 +812,7 @@ def add_sequence_step(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     sequence_id = get_or_create_sequence_for_group(group_id)
@@ -842,16 +844,16 @@ def add_sequence_step(group_id):
     mix_negation = 1 if 'mix_negation' in f else 0
 
     if operation_add_visible + operation_multiply_visible + operation_negation_visible + operation_mix_visible == 0:
-        flash("Instellingen opslaan mislukt! Er moet minstens 1 operatie beschikbaar zijn.", "danger")
+        flash(_("Instellingen opslaan mislukt! Er moet minstens 1 operatie beschikbaar zijn."), "danger")
         return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
     if mix_add + mix_multiply + mix_negation == 0 and operation_mix_visible:
-        flash("Instellingen opslaan mislukt! Mix moet minstens 1 operatie bevatten.", "danger")
+        flash(_("Instellingen opslaan mislukt! Mix moet minstens 1 operatie bevatten."), "danger")
         return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
     research_settings = get_group_research_settings(group_id)
     if not research_settings:
-        flash("Onderzoeksinstellingen van de groep konden niet geladen worden.", "danger")
+        flash(_("Onderzoeksinstellingen van de groep konden niet geladen worden."), "danger")
         return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
     step_settings = {
@@ -870,7 +872,7 @@ def add_sequence_step(group_id):
     validation_settings = build_validation_settings(step_settings, research_settings)
     error_msg = validate_group_settings(validation_settings)
     if error_msg:
-        flash(f"Stap toevoegen mislukt! {error_msg}", "danger")
+        flash(_("Stap toevoegen mislukt! %(error)s", error=error_msg), "danger")
         return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
     db_execute('''
@@ -908,7 +910,7 @@ def add_sequence_step(group_id):
         'mn': mix_negation
     })
 
-    flash("Stap toegevoegd aan reeks.", "success")
+    flash(_("Stap toegevoegd aan reeks."), "success")
     return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
 
@@ -924,7 +926,7 @@ def delete_sequence_step(group_id, step_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     # delete step
@@ -942,9 +944,9 @@ def delete_sequence_step(group_id, step_id):
                    {'p': pos, 'id': sid})
         pos += 1
     if rows == []:
-        flash("Alle stappen in de reeks zijn verwijderd. De groep gebruikt nu weer de standaardinstellingen.", "success")
+        flash(_("Alle stappen in de reeks zijn verwijderd. De groep gebruikt nu weer de standaardinstellingen."), "success")
     else:
-        flash("Stap verwijderd.", "success")
+        flash(_("Stap verwijderd."), "success")
     
     return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
@@ -960,7 +962,7 @@ def edit_sequence_step(group_id, step_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     # ensure step belongs to this group’s sequence
@@ -978,7 +980,7 @@ def edit_sequence_step(group_id, step_id):
     ''', {'sid': step_id, 'gid': group_id})
 
     if not row:
-        flash("Stap niet gevonden.", "danger")
+        flash(_("Stap niet gevonden."), "danger")
         return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
     g_row = db_query_one('SELECT name FROM `groups` WHERE id=:gid', {'gid': group_id})
@@ -1004,7 +1006,7 @@ def update_sequence_step(group_id, step_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     ok = db_query_one('''
@@ -1015,7 +1017,7 @@ def update_sequence_step(group_id, step_id):
     ''', {'sid': step_id, 'gid': group_id})
 
     if not ok:
-        flash("Stap niet gevonden.", "danger")
+        flash(_("Stap niet gevonden."), "danger")
         return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
     f = request.form
@@ -1039,16 +1041,16 @@ def update_sequence_step(group_id, step_id):
     mix_negation = 1 if 'mix_negation' in f else 0
 
     if operation_add_visible + operation_multiply_visible + operation_negation_visible + operation_mix_visible == 0:
-        flash("Opslaan mislukt! Er moet minstens 1 operatie beschikbaar zijn.", "danger")
+        flash(_("Opslaan mislukt! Er moet minstens 1 operatie beschikbaar zijn."), "danger")
         return redirect(url_for('teacher.edit_sequence_step', group_id=group_id, step_id=step_id))
 
     if mix_add + mix_multiply + mix_negation == 0 and operation_mix_visible:
-        flash("Opslaan mislukt! Mix moet minstens 1 operatie bevatten.", "danger")
+        flash(_("Opslaan mislukt! Mix moet minstens 1 operatie bevatten."), "danger")
         return redirect(url_for('teacher.edit_sequence_step', group_id=group_id, step_id=step_id))
 
     research_settings = get_group_research_settings(group_id)
     if not research_settings:
-        flash("Onderzoeksinstellingen van de groep konden niet geladen worden.", "danger")
+        flash(_("Onderzoeksinstellingen van de groep konden niet geladen worden."), "danger")
         return redirect(url_for('teacher.edit_sequence_step', group_id=group_id, step_id=step_id))
 
     step_settings = {
@@ -1067,7 +1069,7 @@ def update_sequence_step(group_id, step_id):
     validation_settings = build_validation_settings(step_settings, research_settings)
     error_msg = validate_group_settings(validation_settings)
     if error_msg:
-        flash(f"Opslaan mislukt! {error_msg}", "danger")
+        flash(_("Opslaan mislukt! %(error)s", error=error_msg), "danger")
         return redirect(url_for('teacher.edit_sequence_step', group_id=group_id, step_id=step_id))
 
     db_execute('''
@@ -1103,7 +1105,7 @@ def update_sequence_step(group_id, step_id):
         'sid': step_id
     })
 
-    flash("Stap aangepast.", "success")
+    flash(_("Stap aangepast."), "success")
     return redirect(url_for('teacher.group_sequence', group_id=group_id))
 
 
@@ -1119,7 +1121,7 @@ def clear_sequence_steps(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for("teacher.dashboard"))
 
     sequence_id = get_or_create_sequence_for_group(group_id)
@@ -1138,7 +1140,7 @@ def clear_sequence_steps(group_id):
         WHERE group_id = :gid
     """, {"gid": group_id})
 
-    flash("Alle stappen in de reeks zijn verwijderd. De groep gebruikt nu weer de standaardinstellingen.", "success")
+    flash(_("Alle stappen in de reeks zijn verwijderd. De groep gebruikt nu weer de standaardinstellingen."), "success")
     return redirect(url_for("teacher.group_sequence", group_id=group_id))
 
 
@@ -1153,7 +1155,7 @@ def reset_sequence_students(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for("teacher.dashboard"))
 
     # Reset every student in group to step 1
@@ -1163,7 +1165,7 @@ def reset_sequence_students(group_id):
         WHERE group_id = :gid
     """, {"gid": group_id})
 
-    flash("Alle leerlingen opnieuw gestart vanaf stap 1.", "success")
+    flash(_("Alle leerlingen opnieuw gestart vanaf stap 1."), "success")
     return redirect(url_for("teacher.group_sequence", group_id=group_id))
 
 
@@ -1191,9 +1193,9 @@ def create_group():
             INSERT INTO `groups` (name, teacher_id, activation_code, created_at)
             VALUES (:n, :t, :a, NOW())
         ''', {'n': name, 't': teacher_id, 'a': activation})
-        flash("Groep aangemaakt!", "success")
+        flash(_("Groep aangemaakt!"), "success")
     except Exception:
-        flash("Groepsnaam bestaat al!", "danger")
+        flash(_("Groepsnaam bestaat al!"), "danger")
 
     return redirect(url_for('teacher.dashboard'))
 
@@ -1219,7 +1221,7 @@ def student(student_id):
     ''', {'u': student_id, 't': teacher_id})
 
     if not row:
-        flash("Leerling niet gevonden.", "danger")
+        flash(_("Leerling niet gevonden."), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     username, group_id = row
@@ -1265,12 +1267,12 @@ def rename_student(student_id):
     """, {"sid": student_id, "tid": teacher_id})
 
     if not row:
-        flash("Leerling niet gevonden.", "danger")
+        flash(_("Leerling niet gevonden."), "danger")
         return redirect(url_for("teacher.dashboard"))
 
     new_name = (request.form.get("new_name") or "").strip()
     if not new_name:
-        flash("Naam mag niet leeg zijn.", "warning")
+        flash(_("Naam mag niet leeg zijn."), "warning")
         return redirect(url_for("teacher.student", student_id=student_id))
 
     try:
@@ -1278,9 +1280,9 @@ def rename_student(student_id):
             "UPDATE students SET username=:name WHERE id=:sid",
             {"name": new_name, "sid": student_id}
         )
-        flash("Naam succesvol gewijzigd.", "success")
+        flash(_("Naam succesvol gewijzigd."), "success")
     except Exception:
-        flash("Naam wijzigen mislukt. Mogelijk bestaat deze naam al in de groep.", "danger")
+        flash(_("Naam wijzigen mislukt. Mogelijk bestaat deze naam al in de groep."), "danger")
 
     return redirect(url_for("teacher.student", student_id=student_id))
 
@@ -1305,7 +1307,7 @@ def delete_student(student_id):
     """, {"sid": student_id, "tid": teacher_id})
 
     if not row:
-        flash("Je mag deze leerling niet verwijderen.", "danger")
+        flash(_("Je mag deze leerling niet verwijderen."), "danger")
         return redirect(url_for("teacher.dashboard"))
 
     group_id = row[0]
@@ -1313,7 +1315,7 @@ def delete_student(student_id):
     # deleting the student cascades to exercises, points, puzzle pieces, etc.
     db_execute("DELETE FROM students WHERE id = :sid", {"sid": student_id})
 
-    flash("Leerling verwijderd.", "success")
+    flash(_("Leerling verwijderd."), "success")
     return redirect(url_for("teacher.group", group_id=group_id))
 
 @teacher_bp.route("/student/<int:student_id>/reset", methods=["POST"])
@@ -1334,7 +1336,7 @@ def reset_sequence_student(student_id):
     """, {"sid": student_id, "tid": teacher_id})
 
     if not row:
-        flash("Je mag deze leerling niet verwijderen.", "danger")
+        flash(_("Je mag deze leerling niet verwijderen."), "danger")
         return redirect(url_for("teacher.dashboard"))
     
     group_id = row[0]
@@ -1347,7 +1349,7 @@ def reset_sequence_student(student_id):
             AND id = :sid
     """, {"gid": group_id, "sid": student_id} )
 
-    flash("Leerling opnieuw gestart vanaf stap 1.", "success")
+    flash(_("Leerling opnieuw gestart vanaf stap 1."), "success")
     return redirect(url_for("teacher.group", group_id=group_id))
 
 @teacher_bp.route("/group/<int:group_id>/print")
@@ -1361,7 +1363,7 @@ def print_group_cards(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     g_row = db_query_one(
@@ -1369,7 +1371,7 @@ def print_group_cards(group_id):
         {'gid': group_id}
     )
     if not g_row:
-        flash("Groep bestaat niet.", "danger")
+        flash(_("Groep bestaat niet."), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     group_name, activation_code = g_row
@@ -1404,7 +1406,7 @@ def preview_group_exercise(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     step_id = request.args.get("step_id", type=int)
@@ -1414,7 +1416,7 @@ def preview_group_exercise(group_id):
     preview = build_preview_exercise(group_id, gs)
 
     if preview is None:
-        flash("Geen voorbeeldopgave mogelijk met deze instellingen.", "warning")
+        flash(_("Geen voorbeeldopgave mogelijk met deze instellingen."), "warning")
         return redirect(url_for('teacher.group', group_id=group_id))
 
     return render_template(
@@ -1440,7 +1442,7 @@ def export_group_csv(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     g_row = db_query_one(
@@ -1448,7 +1450,7 @@ def export_group_csv(group_id):
         {'gid': group_id}
     )
     if not g_row:
-        flash("Groep bestaat niet.", "danger")
+        flash(_("Groep bestaat niet."), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     group_name = g_row[0]
@@ -1524,7 +1526,7 @@ def export_group_settings(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     g_row = db_query_one('''
@@ -1544,7 +1546,7 @@ def export_group_settings(group_id):
     ''', {'gid': group_id})
 
     if not g_row:
-        flash("Groep niet gevonden.", "danger")
+        flash(_("Groep niet gevonden."), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     payload = {
@@ -1637,22 +1639,22 @@ def import_group_settings(group_id):
     )[0]
 
     if not teacher_owns_group(teacher_id, group_id):
-        flash("Geen toegang!", "danger")
+        flash(_("Geen toegang!"), "danger")
         return redirect(url_for('teacher.dashboard'))
 
     uploaded = request.files.get("settings_file")
     if not uploaded:
-        flash("Geen bestand geselecteerd.", "danger")
+        flash(_("Geen bestand geselecteerd."), "danger")
         return redirect(url_for('teacher.group', group_id=group_id))
 
     try:
         data = json.loads(uploaded.stream.read().decode('utf-8'))
     except Exception:
-        flash("Ongeldig bestand. Upload een geldig JSON-instellingenbestand.", "danger")
+        flash(_("Ongeldig bestand. Upload een geldig JSON-instellingenbestand."), "danger")
         return redirect(url_for('teacher.group', group_id=group_id))
 
     if data.get("version") != 1 or "settings" not in data:
-        flash("Ongeldig instellingenbestand (verkeerde versie of formaat).", "danger")
+        flash(_("Ongeldig instellingenbestand (verkeerde versie of formaat)."), "danger")
         return redirect(url_for('teacher.group', group_id=group_id))
 
     s = data["settings"]
@@ -1729,16 +1731,16 @@ def import_group_settings(group_id):
                        step_settings['operation_negation_visible'] +
                        step_settings['operation_mix_visible'])
             if ops_sum == 0:
-                flash(f"Importeren mislukt! Stap {i} heeft geen operaties.", "danger")
+                flash(_("Importeren mislukt! Stap %(i)s heeft geen operaties.", i=i), "danger")
                 return redirect(url_for('teacher.group', group_id=group_id))
             if step_settings['operation_mix_visible'] and (
                     step_settings['mix_add'] + step_settings['mix_multiply'] + step_settings['mix_negation'] == 0):
-                flash(f"Importeren mislukt! Mix in stap {i} heeft geen operaties.", "danger")
+                flash(_("Importeren mislukt! Mix in stap %(i)s heeft geen operaties.", i=i), "danger")
                 return redirect(url_for('teacher.group', group_id=group_id))
             validation_settings = build_validation_settings(step_settings, new_research_settings)
             error_msg = validate_group_settings(validation_settings)
             if error_msg:
-                flash(f"Importeren mislukt! Stap {i}: {error_msg}", "danger")
+                flash(_("Importeren mislukt! Stap %(i)s: %(error)s", i=i, error=error_msg), "danger")
                 return redirect(url_for('teacher.group', group_id=group_id))
 
         # Save research settings to the group
@@ -1824,7 +1826,7 @@ def import_group_settings(group_id):
         }
         build_group_pools(group_id, build_validation_settings(first_step_settings, new_research_settings))
 
-        flash("Instellingen en oefenreeks succesvol geïmporteerd. Alle leerlingen starten opnieuw vanaf stap 1.", "success")
+        flash(_("Instellingen en oefenreeks succesvol geïmporteerd. Alle leerlingen starten opnieuw vanaf stap 1."), "success")
         return redirect(url_for('teacher.group', group_id=group_id))
 
     # --- Case B: no sequence in file — apply full group settings ---
@@ -1843,17 +1845,17 @@ def import_group_settings(group_id):
     }
 
     if operation_add_visible + operation_multiply_visible + operation_negation_visible + operation_mix_visible == 0:
-        flash("Importeren mislukt! Er moet minstens 1 operatie beschikbaar zijn.", "danger")
+        flash(_("Importeren mislukt! Er moet minstens 1 operatie beschikbaar zijn."), "danger")
         return redirect(url_for('teacher.group', group_id=group_id))
 
     if mix_add + mix_multiply + mix_negation == 0 and operation_mix_visible:
-        flash("Importeren mislukt! Mix moet minstens 1 operatie bevatten.", "danger")
+        flash(_("Importeren mislukt! Mix moet minstens 1 operatie bevatten."), "danger")
         return redirect(url_for('teacher.group', group_id=group_id))
 
     validation_settings = build_validation_settings(group_step_settings, new_research_settings)
     error_msg = validate_group_settings(validation_settings)
     if error_msg:
-        flash(f"Importeren mislukt! {error_msg}", "danger")
+        flash(_("Importeren mislukt! %(error)s", error=error_msg), "danger")
         return redirect(url_for('teacher.group', group_id=group_id))
 
     db_execute('''
@@ -1913,5 +1915,5 @@ def import_group_settings(group_id):
 
     build_group_pools(group_id, build_validation_settings(group_step_settings, new_research_settings))
 
-    flash("Instellingen succesvol geïmporteerd en opgeslagen.", "success")
+    flash(_("Instellingen succesvol geïmporteerd en opgeslagen."), "success")
     return redirect(url_for('teacher.group', group_id=group_id))

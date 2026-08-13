@@ -3,20 +3,20 @@
 <div class="container text-center">
 
   <!-- Title -->
-  <h1 class="mb-1 display-3 fw-bold text-success">PUZZEL</h1>
-  <h2 class="display-4 fw-bold text-success mb-3">Leeuw</h2>
+  <h1 class="mb-1 display-3 fw-bold text-success">{{ _('PUZZEL') }}</h1>
+  <h2 class="display-4 fw-bold text-success mb-3">{{ _('Leeuw') }}</h2>
 
   <!-- Action button (looks like real puzzle) -->
   <form id="buy-form" action="{{ url_for('student.demo_buy_lion_piece') }}" method="post" class="mb-3">
     {% if session.get('demo_lion_bought') %}
       <!-- After buying once: show "cannot buy" state like real puzzle -->
       <button type="button" class="btn btn-secondary btn-lg px-5 py-3 fw-bold" disabled>
-        Niet genoeg punten (<i class="bi bi-coin fs-4"></i> 0)
+        {{ _('Niet genoeg punten') }} (<i class="bi bi-coin fs-4"></i> 0)
       </button>
     {% else %}
       <!-- Only clickable button -->
       <button id="buy-btn" type="submit" class="btn btn-jungle btn-jungle-md px-5 py-3 fw-bold">
-        Koop een puzzelstukje (<i class="bi bi-coin fs-4"></i> 0)
+        {{ _('Koop een puzzelstukje') }} (<i class="bi bi-coin fs-4"></i> 0)
       </button>
     {% endif %}
   </form>
@@ -41,7 +41,7 @@
   <!-- Reset button (disabled, but same as real location) -->
   <form class="mb-3">
     <button type="button" class="btn btn-outline-secondary" disabled>
-      🔄 Reset puzzel
+      🔄 {{ _('Reset puzzel') }}
     </button>
   </form>
 
@@ -50,12 +50,12 @@
     <a href="#"
        class="btn btn-jungle btn-jungle-md demo-disabled"
        onclick="return false;" aria-disabled="true">
-      ← Terug naar puzzellijst
+      ← {{ _('Terug naar puzzellijst') }}
     </a>
     <a href="#"
        class="btn btn-jungle btn-jungle-md demo-disabled"
        onclick="return false;" aria-disabled="true">
-      ← Terug naar oefeningen
+      ← {{ _('Terug naar oefeningen') }}
     </a>
   </div>
 </div>

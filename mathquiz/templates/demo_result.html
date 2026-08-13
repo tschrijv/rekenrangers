@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="display-4 text-success fw-bold mb-4 text-center">Resultaten</h1>
+<h1 class="display-4 text-success fw-bold mb-4 text-center">{{ _('Resultaten') }}</h1>
 
 <div class="text-center mb-4">
   <div class="fs-1 fw-bold text-success mb-2">
-    Correct {{ total_correct }}/{{ total_questions }}
+    {% trans total_correct=total_correct, total_questions=total_questions %}Correct {{ total_correct }}/{{ total_questions }}{% endtrans %}
   </div>
 </div>
 
@@ -13,8 +13,8 @@
      style="max-width: 900px;  border-radius: 20px;">
 
   <p class="fs-3 text-success">
-    Heel goed bezig! Je bent een super-rekenranger! Je mag even rusten.
-    Wacht in stilte en blijf rustig zitten tot de onderzoeker komt.
+    {{ _('Heel goed bezig! Je bent een super-rekenranger! Je mag even rusten.
+      Wacht in stilte en blijf rustig zitten tot de onderzoeker komt.') }}
   </p>
 
   <img src="/static/happy_animals.png"
@@ -26,7 +26,7 @@
         action="{{ url_for('student.demo_next') }}"
         class="m-0 text-center">
     <button id="result-btn" type="submit" class="btn btn-jungle btn-jungle-md" disabled>
-      Verdergaan
+      {{ _('Verdergaan') }}
     </button>
   </form>
 

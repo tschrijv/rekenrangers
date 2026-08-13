@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:04,620
+Hier kan je puzzelstukjes kopen om het dier dat je gekozen hebt bij elkaar te puzzelen.
+
+2
+00:00:05,320 --> 00:00:09,500
+Om een puzzelstukje te kopen, moet je op de knop met de paarse sticker drukken.
+
+3
+00:00:09,900 --> 00:00:10,740
+Probeer het maar eens!
+

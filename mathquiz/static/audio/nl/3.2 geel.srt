@@ -1,0 +1,8 @@
+1
+00:00:00,000 --> 00:00:06,860
+Als je niet helemaal zeker bent, maar wel een beetje zeker bent dat het antwoord juist is,
+
+2
+00:00:07,380 --> 00:00:09,540
+dan druk je op de gele smiley.
+

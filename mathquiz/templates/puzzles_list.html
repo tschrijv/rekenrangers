@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="display-4 fw-bold text-success mb-4">Kies een puzzel</h1>
+<h1 class="display-4 fw-bold text-success mb-4">{{ _('Kies een puzzel') }}</h1>
 
 <div class="d-flex flex-wrap justify-content-center gap-4">
   {% for p in puzzles %}
@@ -20,7 +20,7 @@
       <h5 class="card-title text-success fw-bold">{{ p.name }}</h5>
 
       {% if p.complete %}
-        <p class="text-success fw-semibold mb-2">✅ Voltooid!</p>
+        <p class="text-success fw-semibold mb-2">✅ {{ _('Voltooid!') }}</p>
       {% else %}
         <div class="progress mb-2" style="height: 10px;">
           <div class="progress-bar bg-success" role="progressbar"
@@ -28,11 +28,11 @@
                aria-valuenow="{{ p.progress }}" aria-valuemin="0" aria-valuemax="100">
           </div>
         </div>
-        <p class="text-muted small">{{ p.progress }}% voltooid</p>
+        <p class="text-muted small">{{ _('%(pct)s%% voltooid', pct=p.progress) }}</p>
       {% endif %}
 
       <a href="{{ url_for('student.puzzle', puzzle_id=p.id) }}" class="btn btn-jungle btn-jungle-sm mt-2 puzzle-button">
-        Open puzzel
+        {{ _('Open puzzel') }}
       </a>
     </div>
   </div>
@@ -40,7 +40,7 @@
 </div>
 
 <a href="{{ url_for('student.select_exercise') }}" class="btn btn-jungle btn-jungle-md mt-4">
-  ← Terug naar oefeningen
+  ← {{ _('Terug naar oefeningen') }}
 </a>
 
 

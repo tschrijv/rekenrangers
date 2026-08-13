@@ -2,38 +2,38 @@
 
 {% block content %}
 <h1 class="display-4 fw-bold text-success mb-3">
-  Groep: {{ group[0] }}
+  {{ _('Groep') }}: {{ group[0] }}
 </h1>
 
 <!-- Activatiecode -->
 <p class="fs-4 mb-3">
-  Activatiecode:
+  {{ _('Activatiecode') }}:
   <span class="badge bg-success fs-4 px-3 py-2">{{ group[1] }}</span>
 </p>
 
 <!-- Nieuwe leerling toevoegen -->
 <div class="card shadow-sm p-4 mb-4 w-75">
-  <h3 class="text-success mb-3">Nieuwe leerling toevoegen</h3>
+  <h3 class="text-success mb-3">{{ _('Nieuwe leerling toevoegen') }}</h3>
   <form method="post" class="d-flex gap-3" action="{{ url_for('teacher.group', group_id=group_id) }}">
-    <input type="text" name="student_name" class="form-control form-control-lg" placeholder="Naam leerling" required>
-    <button type="submit" class="btn btn-success btn-lg">Toevoegen</button>
+    <input type="text" name="student_name" class="form-control form-control-lg" placeholder="{{ _('Naam leerling') }}" required>
+    <button type="submit" class="btn btn-success btn-lg">{{ _('Toevoegen') }}</button>
   </form>
 </div>
 
 <!-- Leerlingenlijst -->
 <div class="card shadow-sm p-4 w-75 mb-3">
-  <h3 class="text-success mb-3">Leerlingen in deze groep</h3>
+  <h3 class="text-success mb-3">{{ _('Leerlingen in deze groep') }}</h3>
   {% if students %}
   <table class="table table-hover align-middle text-center">
     <thead class="table-success">
       <tr>
-        <th>Naam</th>
-        <th>Pincode</th>
-        <th>Reeksvoortgang</th>
-        <th>ELO rating</th>
-        <th>Bekijk resultaten</th>
-        <th>Reset reeksvoortgang</th>
-        <th>Verwijderen</th>
+        <th>{{ _('Naam') }}</th>
+        <th>{{ _('Pincode') }}</th>
+        <th>{{ _('Reeksvoortgang') }}</th>
+        <th>{{ _('ELO rating') }}</th>
+        <th>{{ _('Bekijk resultaten') }}</th>
+        <th>{{ _('Reset reeksvoortgang') }}</th>
+        <th>{{ _('Verwijderen') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -47,7 +47,7 @@
         <!-- Sequence Progress -->
         <td class="fs-6">
           {% if total_steps == 0 %}
-          <span class="text-muted">Geen reeks actief</span>
+          <span class="text-muted">{{ _('Geen reeks actief') }}</span>
           {% else %}
           {% set current = s[2] or 1 %}
           {% set completed = current - 1 %}
@@ -67,7 +67,7 @@
             <!-- Always-visible centered text -->
             <div class="position-absolute w-100 text-center fw-bold" style="line-height: 26px;">
               {% if is_done %}
-              Klaar
+              {{ _('Klaar') }}
               {% else %}
               {{ completed }} / {{ total_steps }}
               {% endif %}
@@ -81,15 +81,15 @@
         <!-- View Results -->
         <td>
           <a href="{{ url_for('teacher.student', student_id=s[0]) }}" class="btn btn-outline-success btn-sm">
-            📊 Bekijk
+            📊 {{ _('Bekijk') }}
           </a>
         </td>
 
         <td>
           <form method="post" action="{{ url_for('teacher.reset_sequence_student', student_id=s[0]) }}" class="m-0">
             <button type="submit" class="btn btn-outline-warning btn-sm"
-              onclick="return confirm('Ben je zeker dat je {{ s[1] }} wil resetten?');">
-              Reset
+              onclick="return confirm('{{ _('Ben je zeker dat je %(name)s wil resetten?', name=s[1]) }}');">
+              {{ _('Reset') }}
             </button>
           </form>
         </td>
@@ -98,8 +98,8 @@
         <td>
           <form method="post" action="{{ url_for('teacher.delete_student', student_id=s[0]) }}" class="m-0">
             <button type="submit" class="btn btn-outline-danger btn-sm"
-              onclick="return confirm('Ben je zeker dat je {{ s[1] }} wil verwijderen? Dit verwijdert ook alle resultaten.');">
-              Verwijder
+              onclick="return confirm('{{ _('Ben je zeker dat je %(name)s wil verwijderen? Dit verwijdert ook alle resultaten.', name=s[1]) }}');">
+              {{ _('Verwijder') }}
             </button>
           </form>
         </td>
@@ -109,19 +109,19 @@
     </tbody>
   </table>
   {% else %}
-  <p class="text-muted">Nog geen leerlingen toegevoegd.</p>
+  <p class="text-muted">{{ _('Nog geen leerlingen toegevoegd.') }}</p>
   {% endif %}
 </div>
 
 <div class="d-flex gap-3 mb-5 flex-wrap">
 
   <a href="{{ url_for('teacher.export_group_csv', group_id=group_id) }}" class="btn btn-success btn-lg">
-    Exporteer groep naar CSV
+    {{ _('Exporteer groep naar CSV') }}
   </a>
 
   <a href="{{ url_for('teacher.print_group_cards', group_id=group_id) }}" class="btn btn-success btn-lg"
     target="_blank">
-    Print leerlingenkaartjes
+    {{ _('Print leerlingenkaartjes') }}
   </a>
 
 </div>
@@ -130,11 +130,11 @@
 <div class="w-75 mb-4">
 
   <a href="{{ url_for('teacher.group_sequence', group_id=group_id) }}" class="btn btn-success btn-lg w-100">
-    📋 Beheer oefenreeks voor deze groep
+    📋 {{ _('Beheer oefenreeks voor deze groep') }}
   </a>
 
   <p class="text-muted mt-2">
-    In een <strong>oefenreeks</strong> kan je meerdere blokken instellen die leerlingen
+    {% trans %}In een <strong>oefenreeks</strong> kan je meerdere blokken instellen die leerlingen
     na elkaar doorlopen.
     Elke blok kan eigen instellingen hebben voor <strong>moeilijkheid</strong>,
     <strong>timer</strong>, <strong>bewerkingen</strong> en het
@@ -144,112 +144,112 @@
     uitgesloten getallen) blijven altijd gelden voor de hele groep.
     <br>
     Als er geen blokken zijn aangemaakt, gebruiken leerlingen automatisch de
-    <strong>standaard groepsinstellingen</strong>.
+    <strong>standaard groepsinstellingen</strong>.{% endtrans %}
   </p>
 
 </div>
 
 <!-- Groepsinstellingen -->
 <div class="card shadow-sm p-4 w-75">
-  <h3 class="text-success mb-4">Instellingen voor deze groep</h3>
+  <h3 class="text-success mb-4">{{ _('Instellingen voor deze groep') }}</h3>
 
   <form id="settings-form" method="post" action="{{ url_for('teacher.update_group_settings', group_id=group_id) }}">
 
     {% set sequence_active = total_steps > 0 %}
 
     {% if sequence_active %}
-  
+
     <div class="p-3 border border-success rounded bg-light mb-4" role="alert">
-      Er is momenteel een <strong>oefenreeks actief</strong>. Daarom zijn de gewone groepsinstellingen verborgen.
-      Alleen de <strong>onderzoeksinstellingen</strong> blijven aanpasbaar voor deze groep.
+      {% trans %}Er is momenteel een <strong>oefenreeks actief</strong>. Daarom zijn de gewone groepsinstellingen verborgen.
+      Alleen de <strong>onderzoeksinstellingen</strong> blijven aanpasbaar voor deze groep.{% endtrans %}
     </div>
     {% endif %}
 
     {% if not sequence_active %}
 
     <!-- TIMER -->
-    <h5 class="text-success fw-bold mb-2">⏱️ Timerinstellingen</h5>
+    <h5 class="text-success fw-bold mb-2">⏱️ {{ _('Timerinstellingen') }}</h5>
     <p class="text-muted small mb-3">
-      Bepaal of leerlingen de timer zelf mogen kiezen en wat de standaardinstelling is.
+      {{ _('Bepaal of leerlingen de timer zelf mogen kiezen en wat de standaardinstelling is.') }}
     </p>
 
     <div class="form-check mb-3">
       <input class="form-check-input" type="checkbox" name="allow_timer_choice" id="allow_timer_choice" {% if
         allow_timer_choice %}checked{% endif %}>
       <label class="form-check-label fs-5" for="allow_timer_choice">
-        Leerlingen mogen zelf kiezen of de timer zichtbaar is
+        {{ _('Leerlingen mogen zelf kiezen of de timer zichtbaar is') }}
       </label>
     </div>
 
-    <label class="form-label fs-5">Standaard timerinstelling (als keuze niet is toegestaan):</label>
+    <label class="form-label fs-5">{{ _('Standaard timerinstelling (als keuze niet is toegestaan):') }}</label>
     <select class="form-select form-select-lg mb-4" name="fixed_show_timer">
-      <option value="1" {% if fixed_show_timer %}selected{% endif %}>⏱️ Zichtbaar</option>
-      <option value="0" {% if not fixed_show_timer %}selected{% endif %}>🙈 Verborgen</option>
+      <option value="1" {% if fixed_show_timer %}selected{% endif %}>⏱️ {{ _('Zichtbaar') }}</option>
+      <option value="0" {% if not fixed_show_timer %}selected{% endif %}>🙈 {{ _('Verborgen') }}</option>
     </select>
 
     <hr class="my-4">
 
     <!-- BEWERKINGEN -->
-    <h5 class="text-success fw-bold mb-2">➕ Bewerkingen</h5>
+    <h5 class="text-success fw-bold mb-2">➕ {{ _('Bewerkingen') }}</h5>
     <p class="text-muted small mb-3">
-      Kies welke bewerkingen leerlingen mogen zien.
-      Als <strong>Mix</strong> beschikbaar is, moet minstens één onderdeel zijn ingeschakeld.
+      {% trans %}Kies welke bewerkingen leerlingen mogen zien.
+      Als <strong>Mix</strong> beschikbaar is, moet minstens één onderdeel zijn ingeschakeld.{% endtrans %}
     </p>
 
-    <label class="form-label fs-5">Zichtbare bewerkingen:</label>
+    <label class="form-label fs-5">{{ _('Zichtbare bewerkingen:') }}</label>
 
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_add_visible" id="op_add" {% if
         operation_add_visible %}checked{% endif %}>
-      <label class="form-check-label fs-5" for="op_add">Optellen (+)</label>
+      <label class="form-check-label fs-5" for="op_add">{{ _('Optellen (+)') }}</label>
     </div>
 
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_multiply_visible" id="op_mul" {% if
         operation_multiply_visible %}checked{% endif %}>
-      <label class="form-check-label fs-5" for="op_mul">Vermenigvuldigen (×)</label>
+      <label class="form-check-label fs-5" for="op_mul">{{ _('Vermenigvuldigen (×)') }}</label>
     </div>
 
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_negation_visible" id="op_neg" {% if
         operation_negation_visible %}checked{% endif %}>
-      <label class="form-check-label fs-5" for="op_neg">Aftrekken (−)</label>
+      <label class="form-check-label fs-5" for="op_neg">{{ _('Aftrekken (−)') }}</label>
     </div>
 
     <div class="form-check mb-2">
   <input class="form-check-input" type="checkbox" name="operation_mix_visible" id="op_mix" {% if
     operation_mix_visible %}checked{% endif %}>
-  <label class="form-check-label fs-5" for="op_mix">Mix (willekeurig)</label>
+  <label class="form-check-label fs-5" for="op_mix">{{ _('Mix (willekeurig)') }}</label>
 </div>
 
 <!-- MIX BLOCK -->
 <div id="mix-settings-block"
      class="p-3 border border-success rounded bg-light mb-4 mix-settings-block {% if not operation_mix_visible %}d-none{% endif %}">
   <div class="d-flex align-items-center mb-2">
-    <h6 class="text-success mb-0">Samenstelling van “Mix”</h6>
+    <h6 class="text-success mb-0">{{ _('Samenstelling van “Mix”') }}</h6>
   </div>
 
   <p class="text-muted small mb-3">
-    Welke bewerkingen kunnen verschijnen als een leerling <strong>“Mix”</strong> kiest?
+    {% trans %}Welke bewerkingen kunnen verschijnen als een leerling <strong>“Mix”</strong> kiest?{% endtrans %}
   </p>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_add" id="mix_add" {% if mix_add %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_add">Optellen (+)</label>
+    <label class="form-check-label fs-5" for="mix_add">{{ _('Optellen (+)') }}</label>
   </div>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_multiply" id="mix_mul" {% if mix_multiply %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_mul">Vermenigvuldigen (×)</label>
+    <label class="form-check-label fs-5" for="mix_mul">{{ _('Vermenigvuldigen (×)') }}</label>
   </div>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_negation" id="mix_neg" {% if mix_negation %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_neg">Aftrekken (−)</label>
+    <label class="form-check-label fs-5" for="mix_neg">{{ _('Aftrekken (−)') }}</label>
   </div>
 
   <p class="text-muted small mt-3 mb-0">
-    Minstens één optie verplicht wanneer <strong>Mix</strong> aan staat.
+    {% trans %}Minstens één optie verplicht wanneer <strong>Mix</strong> aan staat.{% endtrans %}
   </p>
 </div>
 
@@ -280,47 +280,47 @@
     <hr class="my-4">
 
     <!-- MOEILIJKHEID -->
-    <h5 class="text-success fw-bold mb-2">🎯 Moeilijkheid</h5>
+    <h5 class="text-success fw-bold mb-2">🎯 {{ _('Moeilijkheid') }}</h5>
     <p class="text-muted small mb-3">
-      Bepaal hoe de moeilijkheid wordt gekozen: vast, door leerlingen zelf, of adaptief op basis van prestaties.
+      {{ _('Bepaal hoe de moeilijkheid wordt gekozen: vast, door leerlingen zelf, of adaptief op basis van prestaties.') }}
     </p>
 
-    <label class="form-label fs-5">Moeilijkheidsmodus:</label>
+    <label class="form-label fs-5">{{ _('Moeilijkheidsmodus:') }}</label>
     <select class="form-select form-select-lg mb-3" name="difficulty_choice">
-      <option value="0" {% if difficulty_choice==0 %}selected{% endif %}>Vaste moeilijkheid</option>
-      <option value="1" {% if difficulty_choice==1 %}selected{% endif %}>Leerling kiest zelf</option>
-      <option value="2" {% if difficulty_choice==2 %}selected{% endif %}>Adaptief (ELO)</option>
+      <option value="0" {% if difficulty_choice==0 %}selected{% endif %}>{{ _('Vaste moeilijkheid') }}</option>
+      <option value="1" {% if difficulty_choice==1 %}selected{% endif %}>{{ _('Leerling kiest zelf') }}</option>
+      <option value="2" {% if difficulty_choice==2 %}selected{% endif %}>{{ _('Adaptief (ELO)') }}</option>
     </select>
 
-    <label class="form-label fs-5">Vaste moeilijkheid (indien van toepassing):</label>
+    <label class="form-label fs-5">{{ _('Vaste moeilijkheid (indien van toepassing):') }}</label>
     <select class="form-select form-select-lg mb-4" name="fixed_difficulty">
-      <option value="1" {% if fixed_difficulty==1 %}selected{% endif %}>★ Makkelijk</option>
-      <option value="2" {% if fixed_difficulty==2 %}selected{% endif %}>★★ Gemiddeld</option>
-      <option value="3" {% if fixed_difficulty==3 %}selected{% endif %}>★★★ Moeilijk</option>
-      <option value="4" {% if fixed_difficulty==4 %}selected{% endif %}> Mix</option>
+      <option value="1" {% if fixed_difficulty==1 %}selected{% endif %}>★ {{ _('Makkelijk') }}</option>
+      <option value="2" {% if fixed_difficulty==2 %}selected{% endif %}>★★ {{ _('Gemiddeld') }}</option>
+      <option value="3" {% if fixed_difficulty==3 %}selected{% endif %}>★★★ {{ _('Moeilijk') }}</option>
+      <option value="4" {% if fixed_difficulty==4 %}selected{% endif %}> {{ _('Mix') }}</option>
     </select>
 
     <hr class="my-4">
 
     <!-- AANTAL -->
-    <h5 class="text-success fw-bold mb-2">🔢 Aantal oefeningen per reeks</h5>
-    <p class="text-muted small mb-2">Hoeveel oefeningen bevat één reeks?</p>
+    <h5 class="text-success fw-bold mb-2">🔢 {{ _('Aantal oefeningen per reeks') }}</h5>
+    <p class="text-muted small mb-2">{{ _('Hoeveel oefeningen bevat één reeks?') }}</p>
 
     <input type="number" min="1" max="50" step="1" name="questions_per_set" class="form-control form-control-lg mb-2"
       value="{{ group_settings['questions_per_set'] }}">
-    <p class="text-muted small">Meest gebruikt: 5, 10, 15… Standaard: 10.</p>
+    <p class="text-muted small">{{ _('Meest gebruikt: 5, 10, 15… Standaard: 10.') }}</p>
 
     <hr class="my-4">
 
     <!-- METACOGNITIE -->
-    <h5 class="text-success fw-bold mb-2">🧭 Metacognitie</h5>
+    <h5 class="text-success fw-bold mb-2">🧭 {{ _('Metacognitie') }}</h5>
     <p class="text-muted small mb-2">
-      Activeer een reflectiemoment na elke vraag.
+      {{ _('Activeer een reflectiemoment na elke vraag.') }}
     </p>
 
     <select class="form-select form-select-lg mb-2" name="meta_prompt_mode">
-      <option value="0" {% if meta_prompt_mode==0 %}selected{% endif %}>Uit</option>
-      <option value="1" {% if meta_prompt_mode==1 %}selected{% endif %}>Na elke vraag</option>
+      <option value="0" {% if meta_prompt_mode==0 %}selected{% endif %}>{{ _('Uit') }}</option>
+      <option value="1" {% if meta_prompt_mode==1 %}selected{% endif %}>{{ _('Na elke vraag') }}</option>
     </select>
 
     <hr class="my-4">
@@ -328,18 +328,18 @@
     {% endif %}
 
     <!-- ONDERZOEK -->
-    <h5 class="text-success fw-bold mb-2">🔬 Onderzoeksinstellingen</h5>
+    <h5 class="text-success fw-bold mb-2">🔬 {{ _('Onderzoeksinstellingen') }}</h5>
 
     <div class="p-3 border border-success rounded bg-light mb-4">
 
-      <h6 class="text-success mb-2">Onderzoeksmodus</h6>
+      <h6 class="text-success mb-2">{{ _('Onderzoeksmodus') }}</h6>
       <p class="text-muted small mb-3">
-        Schakel deze modus in wanneer leerlingen deelnemen aan het onderzoek.
+        {% trans %}Schakel deze modus in wanneer leerlingen deelnemen aan het onderzoek.
         De interface wordt dan aangepast om afleiding te beperken en de afname zo gecontroleerd mogelijk te laten verlopen.
         In deze modus worden onder andere:
         <br>• muisinteractie voor leerlingen uitgeschakeld
         <br>• storende of niet-noodzakelijke knoppen verborgen of uitgeschakeld
-        <br>• teksten aangepast aan een gestandaardiseerde onderzoeksafname
+        <br>• teksten aangepast aan een gestandaardiseerde onderzoeksafname{% endtrans %}
       </p>
 
       <div class="form-check mb-2">
@@ -347,16 +347,16 @@
               name="research_mode" id="research_mode"
               {% if research_mode %}checked{% endif %}>
         <label class="form-check-label fs-5" for="research_mode">
-          Onderzoeksmodus inschakelen
+          {{ _('Onderzoeksmodus inschakelen') }}
         </label>
       </div>
 
-      
+
 
       <hr class="my-4">
-      <h6 class="text-success mb-2">Demo: metacognitie-uitleg</h6>
+      <h6 class="text-success mb-2">{{ _('Demo: metacognitie-uitleg') }}</h6>
       <p class="text-muted small mb-3">
-        Kies of de demo ook het metacognitie-gedeelte (reflectie/uitleg) bevat.
+        {{ _('Kies of de demo ook het metacognitie-gedeelte (reflectie/uitleg) bevat.') }}
       </p>
 
       <div class="form-check mb-2">
@@ -364,57 +364,56 @@
               name="demo_metacognition" id="demo_metacognition"
               {% if demo_metacognition %}checked{% endif %}>
         <label class="form-check-label fs-5" for="demo_metacognition">
-          Demo bevat metacognitie-uitleg
+          {{ _('Demo bevat metacognitie-uitleg') }}
         </label>
       </div>
 
       <hr class="my-4">
 
-      <h6 class="text-success mb-2">Fixatiescherm</h6>
+      <h6 class="text-success mb-2">{{ _('Fixatiescherm') }}</h6>
       <p class="text-muted small mb-3">
-        Toon voor elke oefening een fixatiekruis gedurende 1000 ms voordat de som verschijnt.
+        {{ _('Toon voor elke oefening een fixatiekruis gedurende 1000 ms voordat de som verschijnt.') }}
       </p>
 
       <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" name="fixation_screen" id="fixation_screen"
                {% if fixation_screen %}checked{% endif %}>
         <label class="form-check-label fs-5" for="fixation_screen">
-          Fixatiescherm inschakelen
+          {{ _('Fixatiescherm inschakelen') }}
         </label>
       </div>
 
       <hr class="my-4">
 
-      <h6 class="text-success mb-2">Herhalingsregels</h6>
+      <h6 class="text-success mb-2">{{ _('Herhalingsregels') }}</h6>
       <p class="text-muted small mb-3">
-        Deze regels bepalen hoe oefenvragen worden samengesteld.
-        Ze helpen om herhaling en ongewenste patronen in de opgaven te vermijden.
+        {% trans %}Deze regels bepalen hoe oefenvragen worden samengesteld.
+        Ze helpen om herhaling en ongewenste patronen in de opgaven te vermijden.{% endtrans %}
       </p>
 
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="avoid_duplicate_pairs" id="avoid_duplicate_pairs" {% if
           avoid_duplicate_pairs %}checked{% endif %}>
-        <label class="form-check-label fs-5" for="avoid_duplicate_pairs">Voorkom identieke opgaven binnen één oefenset</label>
+        <label class="form-check-label fs-5" for="avoid_duplicate_pairs">{{ _('Voorkom identieke opgaven binnen één oefenset') }}</label>
       </div>
 
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="avoid_tie_problems" id="avoid_tie_problems" {% if
           avoid_tie_problems %}checked{% endif %}>
-        <label class="form-check-label fs-5" for="avoid_tie_problems">Vermijd opgaven met twee gelijke getallen (tie problems) (vb: 4+4,
-          7x7)</label>
+        <label class="form-check-label fs-5" for="avoid_tie_problems">{{ _('Vermijd opgaven met twee gelijke getallen (tie problems) (vb: 4+4, 7x7)') }}</label>
       </div>
 
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="avoid_duplicate_answers" id="avoid_duplicate_answers" {%
           if avoid_duplicate_answers %}checked{% endif %}>
-        <label class="form-check-label fs-5" for="avoid_duplicate_answers">Voorkom dezelfde uitkomst binnen één oefenset</label>
+        <label class="form-check-label fs-5" for="avoid_duplicate_answers">{{ _('Voorkom dezelfde uitkomst binnen één oefenset') }}</label>
       </div>
 
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="treat_symmetric_as_duplicates"
           id="treat_symmetric_as_duplicates" {% if treat_symmetric_as_duplicates %}checked{% endif %}>
         <label class="form-check-label fs-5" for="treat_symmetric_as_duplicates">
-          Commutativiteit: Beschouw omgekeerde opgaven als dezelfde (vb: behandel 3×7 en 7×3 als dezelfde opgave)
+          {{ _('Commutativiteit: Beschouw omgekeerde opgaven als dezelfde (vb: behandel 3×7 en 7×3 als dezelfde opgave)') }}
         </label>
       </div>
 
@@ -422,26 +421,26 @@
         <input class="form-check-input" type="checkbox" name="operand_position_counterbalancing"
           id="operand_position_counterbalancing" {% if operand_position_counterbalancing %}checked{% endif %}>
         <label class="form-check-label fs-5" for="operand_position_counterbalancing">
-          Balans in positie van het grootste getal
+          {{ _('Balans in positie van het grootste getal') }}
         </label>
       </div>
 
       <hr class="my-4">
 
-      <h6 class="text-success mb-2">Getallen uitsluiten</h6>
-      <p class="text-muted small mb-3">Komma-gescheiden lijst, bv. <strong>0, 1, 11</strong></p>
+      <h6 class="text-success mb-2">{{ _('Getallen uitsluiten') }}</h6>
+      <p class="text-muted small mb-3">{{ _('Komma-gescheiden lijst, bv.') }} <strong>0, 1, 11</strong></p>
 
-      <label class="form-label fs-5" for="excluded_a">Verboden waarden voor A (Eerste operand van de bewerking):</label>
+      <label class="form-label fs-5" for="excluded_a">{{ _('Verboden waarden voor A (Eerste operand van de bewerking):') }}</label>
       <input type="text" class="form-control form-control-lg mb-3" name="excluded_a" id="excluded_a"
-        value="{{ excluded_a }}" placeholder="bijv. 0, 1, 11">
+        value="{{ excluded_a }}" placeholder="{{ _('bijv. 0, 1, 11') }}">
 
-      <label class="form-label fs-5" for="excluded_b">Verboden waarden voor B (Tweede operand van de bewerking):</label>
+      <label class="form-label fs-5" for="excluded_b">{{ _('Verboden waarden voor B (Tweede operand van de bewerking):') }}</label>
       <input type="text" class="form-control form-control-lg mb-3" name="excluded_b" id="excluded_b"
-        value="{{ excluded_b }}" placeholder="bijv. 0, 1, 11">
+        value="{{ excluded_b }}" placeholder="{{ _('bijv. 0, 1, 11') }}">
 
-      <label class="form-label fs-5" for="excluded_answers">Verboden antwoorden:</label>
+      <label class="form-label fs-5" for="excluded_answers">{{ _('Verboden antwoorden:') }}</label>
       <input type="text" class="form-control form-control-lg" name="excluded_answers" id="excluded_answers"
-        value="{{ excluded_answers }}" placeholder="bijv. 0, 1, 10, 11">
+        value="{{ excluded_answers }}" placeholder="{{ _('bijv. 0, 1, 10, 11') }}">
     </div>
 
     <div class="row mt-4 align-items-end">
@@ -449,13 +448,13 @@
       <div class="col-9">
         <a href="{{ url_for('teacher.preview_group_exercise', group_id=group_id) }}"
            class="btn btn-success btn-lg w-100">
-          Bekijk voorbeeldopgave
+          {{ _('Bekijk voorbeeldopgave') }}
         </a>
       </div>
 
       <div class="col-3 text-end">
         <button type="submit" class="btn btn-success btn-lg w-100">
-          💾 Instellingen opslaan
+          💾 {{ _('Instellingen opslaan') }}
         </button>
       </div>
 
@@ -464,16 +463,16 @@
 
   <hr class="my-4">
 
-  <h5 class="text-success fw-bold mb-2">📋 Instellingen kopiëren</h5>
+  <h5 class="text-success fw-bold mb-2">📋 {{ _('Instellingen kopiëren') }}</h5>
   <p class="text-muted small mb-3">
-    Exporteer de instellingen van deze groep als een bestand, of laad eerder opgeslagen instellingen in.
+    {{ _('Exporteer de instellingen van deze groep als een bestand, of laad eerder opgeslagen instellingen in.') }}
   </p>
 
   <div class="row g-3 align-items-center">
     <div class="col-auto">
       <a href="{{ url_for('teacher.export_group_settings', group_id=group_id) }}"
          class="btn btn-outline-success btn-lg">
-        ⬇️ Exporteer instellingen
+        ⬇️ {{ _('Exporteer instellingen') }}
       </a>
     </div>
 
@@ -485,8 +484,8 @@
         <input type="file" name="settings_file" accept=".json"
                class="form-control form-control-lg" required>
         <button type="submit" class="btn btn-outline-success btn-lg text-nowrap"
-                onclick="return confirm('Ben je zeker? Dit overschrijft de huidige instellingen van deze groep.');">
-          ⬆️ Importeer instellingen
+                onclick="return confirm('{{ _('Ben je zeker? Dit overschrijft de huidige instellingen van deze groep.') }}');">
+          ⬆️ {{ _('Importeer instellingen') }}
         </button>
       </form>
     </div>
@@ -497,7 +496,7 @@
 <!-- Terug naar dashboard -->
 <div class="mt-4">
   <a href="{{ url_for('teacher.dashboard') }}" class="btn btn-outline-success btn-lg">
-    ← Terug naar dashboard
+    ← {{ _('Terug naar dashboard') }}
   </a>
 </div>
 
@@ -506,13 +505,13 @@
   style="z-index: 2000;">
   <div class="d-flex flex-column justify-content-center align-items-center h-100">
     <div class="spinner-border text-light" role="status" style="width: 4rem; height: 4rem;">
-      <span class="visually-hidden">Bezig met opslaan...</span>
+      <span class="visually-hidden">{{ _('Bezig met opslaan...') }}</span>
     </div>
     <p class="mt-3 text-light fs-4 fw-bold">
-      Instellingen worden opgeslagen en oefenreeksen voorbereid...
+      {{ _('Instellingen worden opgeslagen en oefenreeksen voorbereid...') }}
     </p>
     <p class="text-light fs-4 fw-bold">
-      Even geduld a.u.b. Dit kan tot een minuut duren.
+      {{ _('Even geduld a.u.b. Dit kan tot een minuut duren.') }}
     </p>
   </div>
 </div>

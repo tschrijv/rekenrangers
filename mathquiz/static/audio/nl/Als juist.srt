@@ -1,0 +1,8 @@
+1
+00:00:00,000 --> 00:00:01,380
+Dat heb jij goed gedaan.
+
+2
+00:00:01,920 --> 00:00:04,100
+Het juiste antwoord was inderdaad 8.
+

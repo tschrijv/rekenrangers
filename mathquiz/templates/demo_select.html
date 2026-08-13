@@ -3,39 +3,39 @@
 {% block content %}
 <div class="container text-center" style="max-width: 1000px;">
 
-  <h1 class="display-4 fw-bold text-success mb-3">De volgende oefening</h1>
+  <h1 class="display-4 fw-bold text-success mb-3">{{ _('De volgende oefening') }}</h1>
   <p class="fs-3 text-success mb-4">
-    Straks maak je de volgende oefening.
-    Volg rustig de aanwijzingen en druk op <strong>Start</strong> wanneer dat gevraagd wordt.
+    {% trans %}Straks maak je de volgende oefening.
+    Volg rustig de aanwijzingen en druk op <strong>Start</strong> wanneer dat gevraagd wordt.{% endtrans %}
   </p>
 
   <!-- Compact instellingenkader -->
   <div class="settings-panel mb-5">
-    <div class="settings-title">Zo zal deze oefening verlopen</div>
+    <div class="settings-title">{{ _('Zo zal deze oefening verlopen') }}</div>
 
     <div class="settings-grid">
 
       <div class="setting-pill">
-        <div class="setting-label">🎯 Moeilijkheid</div>
+        <div class="setting-label">🎯 {{ _('Moeilijkheid') }}</div>
         <div class="setting-value">
-          ★ Makkelijk
+          ★ {{ _('Makkelijk') }}
         </div>
       </div>
 
       <div class="setting-pill">
-        <div class="setting-label">⏱️ Timer</div>
+        <div class="setting-label">⏱️ {{ _('Timer') }}</div>
         <div class="setting-value">
-          Verborgen
+          {{ _('Verborgen') }}
         </div>
       </div>
 
       <div class="setting-pill">
-        <div class="setting-label">🧭 Metacognitie</div>
+        <div class="setting-label">🧭 {{ _('Metacognitie') }}</div>
         <div class="setting-value">
           {% if meta_prompt_mode == 1 %}
-            Aan
+            {{ _('Aan') }}
           {% else %}
-            Uit
+            {{ _('Uit') }}
           {% endif %}
         </div>
       </div>
@@ -44,7 +44,7 @@
   </div>
 
   <h2 class="text-success fw-bold mb-4">
-    Klik op <strong>Start</strong> bij de oefening die de onderzoeker aanduidt
+    {% trans %}Klik op <strong>Start</strong> bij de oefening die de onderzoeker aanduidt{% endtrans %}
   </h2>
 
   <div class="d-flex flex-wrap justify-content-center gap-4 mb-5 demo-no-clicks">
@@ -52,8 +52,8 @@
     <a href="#" class="text-decoration-none text-center" onclick="return false;">
       <div class="bg-light rounded shadow p-4" style="width:280px;">
         <div class="display-1 text-success fw-bold">+</div>
-        <p class="mt-3 fs-3 text-dark mb-3">Optellen</p>
-        <button type="button" class="btn btn-jungle btn-jungle-md">Start</button>
+        <p class="mt-3 fs-3 text-dark mb-3">{{ _('Optellen') }}</p>
+        <button type="button" class="btn btn-jungle btn-jungle-md">{{ _('Start') }}</button>
       </div>
     </a>
 

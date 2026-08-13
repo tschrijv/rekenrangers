@@ -2,82 +2,82 @@
 {% block content %}
 
 <h1 class="display-4 fw-bold text-success mb-3">
-  Blok aanpassen – groep: {{ group_name }}
+  {{ _('Blok aanpassen – groep:') }} {{ group_name }}
 </h1>
 
 <div class="card shadow-sm p-4 w-75 mb-3">
-  <h3 class="text-success mb-2">Blok #{{ step[1] }}</h3>
-  <p class="text-muted mb-4">Pas de instellingen aan en klik op opslaan.</p>
+  <h3 class="text-success mb-2">{{ _('Blok #%(num)s', num=step[1]) }}</h3>
+  <p class="text-muted mb-4">{{ _('Pas de instellingen aan en klik op opslaan.') }}</p>
 
   <form method="post" action="{{ url_for('teacher.update_sequence_step', group_id=group_id, step_id=step[0]) }}">
 
     <!-- Timer -->
-    <h5 class="text-success fw-bold mb-2">⏱️ Timerinstellingen</h5>
+    <h5 class="text-success fw-bold mb-2">⏱️ {{ _('Timerinstellingen') }}</h5>
     <div class="form-check mb-2">
       <input class="form-check-input" type="checkbox" name="allow_timer_choice" id="allow_timer_choice"
              {% if step[4] == 1 %}checked{% endif %}>
       <label class="form-check-label fs-5" for="allow_timer_choice">
-        Leerling mag zelf kiezen of de timer zichtbaar is
+        {{ _('Leerling mag zelf kiezen of de timer zichtbaar is') }}
       </label>
     </div>
 
-    <label class="form-label fs-5">Standaard timerinstelling:</label>
+    <label class="form-label fs-5">{{ _('Standaard timerinstelling:') }}</label>
     <select class="form-select form-select-lg mb-4" name="fixed_show_timer">
-      <option value="1" {% if step[5] == 1 %}selected{% endif %}>⏱️ Zichtbaar</option>
-      <option value="0" {% if step[5] == 0 %}selected{% endif %}>🙈 Verborgen</option>
+      <option value="1" {% if step[5] == 1 %}selected{% endif %}>⏱️ {{ _('Zichtbaar') }}</option>
+      <option value="0" {% if step[5] == 0 %}selected{% endif %}>🙈 {{ _('Verborgen') }}</option>
     </select>
 
     <!-- Bewerking -->
-    <h5 class="text-success fw-bold mb-2">➕ Bewerkingen</h5>
+    <h5 class="text-success fw-bold mb-2">➕ {{ _('Bewerkingen') }}</h5>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_add_visible" id="op_add"
              {% if step[8] == 1 %}checked{% endif %}>
-      <label class="form-check-label fs-5" for="op_add">Optellen (+)</label>
+      <label class="form-check-label fs-5" for="op_add">{{ _('Optellen (+)') }}</label>
     </div>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_multiply_visible" id="op_mul"
              {% if step[9] == 1 %}checked{% endif %}>
-      <label class="form-check-label fs-5" for="op_mul">Vermenigvuldigen (×)</label>
+      <label class="form-check-label fs-5" for="op_mul">{{ _('Vermenigvuldigen (×)') }}</label>
     </div>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_negation_visible" id="op_neg"
              {% if step[10] == 1 %}checked{% endif %}>
-      <label class="form-check-label fs-5" for="op_neg">Aftrekken (−)</label>
+      <label class="form-check-label fs-5" for="op_neg">{{ _('Aftrekken (−)') }}</label>
     </div>
     <div class="form-check mb-2">
   <input class="form-check-input" type="checkbox" name="operation_mix_visible" id="op_mix" {% if
     operation_mix_visible %}checked{% endif %}>
-  <label class="form-check-label fs-5" for="op_mix">Mix (willekeurig)</label>
+  <label class="form-check-label fs-5" for="op_mix">{{ _('Mix (willekeurig)') }}</label>
 </div>
 
 <!-- MIX BLOCK -->
 <div id="mix-settings-block"
      class="p-3 border border-success rounded bg-light mb-4 mix-settings-block {% if not operation_mix_visible %}d-none{% endif %}">
   <div class="d-flex align-items-center mb-2">
-    <h6 class="text-success mb-0">Samenstelling van “Mix”</h6>
+    <h6 class="text-success mb-0">{{ _('Samenstelling van “Mix”') }}</h6>
   </div>
 
   <p class="text-muted small mb-3">
-    Welke bewerkingen kunnen verschijnen als een leerling <strong>“Mix”</strong> kiest?
+    {% trans %}Welke bewerkingen kunnen verschijnen als een leerling <strong>“Mix”</strong> kiest?{% endtrans %}
   </p>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_add" id="mix_add" {% if mix_add %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_add">Optellen (+)</label>
+    <label class="form-check-label fs-5" for="mix_add">{{ _('Optellen (+)') }}</label>
   </div>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_multiply" id="mix_mul" {% if mix_multiply %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_mul">Vermenigvuldigen (×)</label>
+    <label class="form-check-label fs-5" for="mix_mul">{{ _('Vermenigvuldigen (×)') }}</label>
   </div>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_negation" id="mix_neg" {% if mix_negation %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_neg">Aftrekken (−)</label>
+    <label class="form-check-label fs-5" for="mix_neg">{{ _('Aftrekken (−)') }}</label>
   </div>
 
   <p class="text-muted small mt-3 mb-0">
-    Minstens één optie verplicht wanneer <strong>Mix</strong> aan staat.
+    {% trans %}Minstens één optie verplicht wanneer <strong>Mix</strong> aan staat.{% endtrans %}
   </p>
 </div>
 
@@ -105,43 +105,43 @@
 </script>
 
     <!-- Moeilijkheid -->
-    <h5 class="text-success fw-bold mb-2">🎯 Moeilijkheid</h5>
-    <label class="form-label fs-5">Moeilijkheidsmodus:</label>
+    <h5 class="text-success fw-bold mb-2">🎯 {{ _('Moeilijkheid') }}</h5>
+    <label class="form-label fs-5">{{ _('Moeilijkheidsmodus:') }}</label>
     <select class="form-select form-select-lg mb-3" name="difficulty_choice">
-      <option value="0" {% if step[6] == 0 %}selected{% endif %}>Vaste moeilijkheid</option>
-      <option value="1" {% if step[6] == 1 %}selected{% endif %}>Leerling kiest zelf</option>
-      <option value="2" {% if step[6] == 2 %}selected{% endif %}>Adaptief (ELO)</option>
+      <option value="0" {% if step[6] == 0 %}selected{% endif %}>{{ _('Vaste moeilijkheid') }}</option>
+      <option value="1" {% if step[6] == 1 %}selected{% endif %}>{{ _('Leerling kiest zelf') }}</option>
+      <option value="2" {% if step[6] == 2 %}selected{% endif %}>{{ _('Adaptief (ELO)') }}</option>
     </select>
 
-    <label class="form-label fs-5">Vaste moeilijkheid (indien van toepassing):</label>
+    <label class="form-label fs-5">{{ _('Vaste moeilijkheid (indien van toepassing):') }}</label>
     <select class="form-select form-select-lg mb-4" name="fixed_difficulty">
-      <option value="1" {% if step[7] == 1 %}selected{% endif %}>★ Makkelijk</option>
-      <option value="2" {% if step[7] == 2 %}selected{% endif %}>★★ Gemiddeld</option>
-      <option value="3" {% if step[7] == 3 %}selected{% endif %}>★★★ Moeilijk</option>
-      <option value="4" {% if step[7] == 4 %}selected{% endif %}> Mix</option>
+      <option value="1" {% if step[7] == 1 %}selected{% endif %}>★ {{ _('Makkelijk') }}</option>
+      <option value="2" {% if step[7] == 2 %}selected{% endif %}>★★ {{ _('Gemiddeld') }}</option>
+      <option value="3" {% if step[7] == 3 %}selected{% endif %}>★★★ {{ _('Moeilijk') }}</option>
+      <option value="4" {% if step[7] == 4 %}selected{% endif %}> {{ _('Mix') }}</option>
     </select>
 
     <!-- Aantal vragen -->
-    <h5 class="text-success fw-bold mb-2">🔢 Aantal oefeningen in dit blok</h5>
+    <h5 class="text-success fw-bold mb-2">🔢 {{ _('Aantal oefeningen in dit blok') }}</h5>
     <input type="number" min="1" max="50" step="1" name="questions_per_set"
            class="form-control form-control-lg mb-4"
            value="{{ step[2] }}">
 
     <!-- Meta -->
-    <h5 class="text-success fw-bold mb-2">🧭 Metacognitie</h5>
+    <h5 class="text-success fw-bold mb-2">🧭 {{ _('Metacognitie') }}</h5>
     <select class="form-select form-select-lg mb-4" name="meta_prompt_mode">
-      <option value="0" {% if step[3] == 0 %}selected{% endif %}>Uit</option>
-      <option value="1" {% if step[3] == 1 %}selected{% endif %}>Na elke vraag</option>
+      <option value="0" {% if step[3] == 0 %}selected{% endif %}>{{ _('Uit') }}</option>
+      <option value="1" {% if step[3] == 1 %}selected{% endif %}>{{ _('Na elke vraag') }}</option>
     </select>
 
     <div class="d-flex justify-content-between">
       <a href="{{ url_for('teacher.group_sequence', group_id=group_id) }}"
          class="btn btn-outline-success btn-lg">
-        ← Terug
+        ← {{ _('Terug') }}
       </a>
 
       <button type="submit" class="btn btn-success btn-lg">
-        💾 Opslaan
+        💾 {{ _('Opslaan') }}
       </button>
     </div>
 

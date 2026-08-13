@@ -1,0 +1,36 @@
+1
+00:00:00,000 --> 00:00:05,920
+Oké, die smileys kan je dus gebruiken om na het oplossen van de rekenoefening aan te geven
+
+2
+00:00:05,920 --> 00:00:08,420
+hoe zeker je bent van je antwoord.
+
+3
+00:00:09,040 --> 00:00:11,980
+Maar wat betekenen die smileys nu?
+
+4
+00:00:12,620 --> 00:00:18,800
+Als je heel zeker bent dat je antwoord juist is, dan druk je op de groene smiley.
+
+5
+00:00:19,220 --> 00:00:26,280
+Als je niet helemaal zeker bent, maar wel een beetje zeker bent dat het antwoord juist is,
+
+6
+00:00:26,800 --> 00:00:28,940
+dan druk je op de gele smiley.
+
+7
+00:00:28,940 --> 00:00:37,140
+Als je hard twijfelt en dus onzeker bent dat je antwoord juist is, dan druk je op de oranje smiley.
+
+8
+00:00:37,800 --> 00:00:45,700
+Als je heel erg hard twijfelt en dus heel onzeker bent over je antwoord en je misschien zelfs denkt dat het fout is,
+
+9
+00:00:46,320 --> 00:00:47,960
+druk je op de rode smiley.
+

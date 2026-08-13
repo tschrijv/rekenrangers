@@ -89,11 +89,11 @@
 <div class="d-flex justify-content-between gap-3 align-items-center mb-3 no-print">
   <a href="{{ url_for('teacher.group', group_id=group_id) }}"
      class="btn btn-success btn-lg">
-    ← Terug naar groep
+    ← {{ _('Terug naar groep') }}
   </a>
 
   <button class="btn btn-success btn-lg" onclick="window.print()">
-    Print
+    {{ _('Print') }}
   </button>
 </div>
 
@@ -101,12 +101,12 @@
   <h1 class="fw-bold text-success print-title mb-1">{{ group_name }}</h1>
 
   <div class="print-subtitle">
-    Activatiecode:
+    {{ _('Activatiecode') }}:
     <span class="badge bg-success group-badge">{{ activation_code }}</span>
   </div>
 
   <div class="text-muted" style="font-size: 0.9rem;">
-    Knip de kaartjes uit en deel ze uit aan de leerlingen.
+    {{ _('Knip de kaartjes uit en deel ze uit aan de leerlingen.') }}
   </div>
 </div>
 
@@ -117,13 +117,13 @@
         <div class="student-name">{{ s[0] }}</div>
         <div class="animal-code">{{ s[2] }}</div>
         <div class="meta-line">
-          Groepcode: <strong>{{ activation_code }}</strong>
+          {{ _('Groepcode:') }} <strong>{{ activation_code }}</strong>
         </div>
       </div>
     {% endfor %}
   </div>
 {% else %}
-  <p class="text-muted text-center">Nog geen leerlingen toegevoegd.</p>
+  <p class="text-muted text-center">{{ _('Nog geen leerlingen toegevoegd.') }}</p>
 {% endif %}
 
 {% endblock %}

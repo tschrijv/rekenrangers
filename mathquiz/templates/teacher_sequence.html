@@ -2,25 +2,25 @@
 
 {% block content %}
 <h1 class="display-4 fw-bold text-success mb-3">
-  Oefenreeks – groep: {{ group_name }}
+  {{ _('Oefenreeks – groep:') }} {{ group_name }}
 </h1>
 
 
 
 <!-- Bestaande stappen -->
 <div class="card shadow-sm p-4 mb-3 w-75">
-  <h3 class="text-success mb-3">Blokken in deze reeks</h3>
+  <h3 class="text-success mb-3">{{ _('Blokken in deze reeks') }}</h3>
 
   {% if steps %}
   <table class="table table-hover align-middle text-center">
     <thead class="table-success">
       <tr>
         <th>#</th>
-        <th>Aantal Vragen</th>
-        <th>Meta</th>
-        <th>Moeilijkheid</th>
-        <th>Operaties</th>
-        <th>Acties</th>
+        <th>{{ _('Aantal Vragen') }}</th>
+        <th>{{ _('Meta') }}</th>
+        <th>{{ _('Moeilijkheid') }}</th>
+        <th>{{ _('Operaties') }}</th>
+        <th>{{ _('Acties') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -29,32 +29,32 @@
         <td class="fs-5">{{ s[1] }}</td>
         <td class="fs-5">{{ s[2] }}</td>
         <td class="fs-5">
-          {% if s[3] == 1 %}Aan{% else %}Uit{% endif %}
+          {% if s[3] == 1 %}{{ _('Aan') }}{% else %}{{ _('Uit') }}{% endif %}
         </td>
         <td class="fs-5">
           {% if s[6] == 2 %}
-          Adaptief
+          {{ _('Adaptief') }}
           {% elif s[6] == 1 %}
-          Leerling kiest
+          {{ _('Leerling kiest') }}
           {% else %}
-          Vast ({{ s[7] }})
+          {{ _('Vast (%(level)s)', level=s[7]) }}
           {% endif %}
         </td>
         <td class="fs-5">
           {% if s[8] %}+{% endif %}
           {% if s[9] %} ×{% endif %}
           {% if s[10] %} −{% endif %}
-          {% if s[11] %} mix{% endif %}
+          {% if s[11] %} {{ _('mix') }}{% endif %}
         </td>
         <td>
           <a href="{{ url_for('teacher.edit_sequence_step', group_id=group_id, step_id=s[0]) }}"
             class="btn btn-outline-success btn-sm me-2">
-            Aanpassen
+            {{ _('Aanpassen') }}
           </a>
 
           <form method="post" action="{{ url_for('teacher.delete_sequence_step', group_id=group_id, step_id=s[0]) }}"
-            onsubmit="return confirm('Stap verwijderen?');" style="display:inline;">
-            <button class="btn btn-outline-danger btn-sm">Verwijderen</button>
+            onsubmit="return confirm('{{ _('Stap verwijderen?') }}');" style="display:inline;">
+            <button class="btn btn-outline-danger btn-sm">{{ _('Verwijderen') }}</button>
           </form>
         </td>
 
@@ -63,7 +63,7 @@
     </tbody>
   </table>
   {% else %}
-  <p class="text-muted">Nog geen blokken toegevoegd.</p>
+  <p class="text-muted">{{ _('Nog geen blokken toegevoegd.') }}</p>
   {% endif %}
 </div>
 
@@ -72,19 +72,19 @@
 
   <!-- Reset student progress -->
   <form method="post" action="{{ url_for('teacher.reset_sequence_students', group_id=group_id) }}"
-    onsubmit="return confirm('Weet je zeker dat je voor ALLE leerlingen opnieuw wilt starten vanaf stap 1?');">
+    onsubmit="return confirm('{{ _('Weet je zeker dat je voor ALLE leerlingen opnieuw wilt starten vanaf stap 1?') }}');">
 
     <button class="btn btn-warning btn-lg w-100 fw-bold">
-      Reset voortgang leerlingen (stap 1)
+      {{ _('Reset voortgang leerlingen (stap 1)') }}
     </button>
   </form>
 
   <!-- Delete entire sequence -->
   <form method="post" action="{{ url_for('teacher.clear_sequence_steps', group_id=group_id) }}"
-    onsubmit="return confirm('Alle stappen verwijderen? De groep gebruikt weer de standaardinstellingen.');">
+    onsubmit="return confirm('{{ _('Alle stappen verwijderen? De groep gebruikt weer de standaardinstellingen.') }}');">
 
     <button class="btn btn-danger btn-lg w-100 fw-bold">
-      Verwijder volledige reeks
+      {{ _('Verwijder volledige reeks') }}
     </button>
   </form>
 
@@ -93,73 +93,73 @@
 
 <!-- Nieuwe stap -->
 <div class="card shadow-sm p-4 w-75 mb-3">
-  <h3 class="text-success mb-4">Nieuw blok toevoegen</h3>
+  <h3 class="text-success mb-4">{{ _('Nieuw blok toevoegen') }}</h3>
 
   <form method="post" action="{{ url_for('teacher.add_sequence_step', group_id=group_id) }}">
 
     <!-- Timer -->
-    <h5 class="text-success fw-bold mb-2">⏱️ Timerinstellingen</h5>
+    <h5 class="text-success fw-bold mb-2">⏱️ {{ _('Timerinstellingen') }}</h5>
     <div class="form-check mb-2">
       <input class="form-check-input" type="checkbox" name="allow_timer_choice" id="allow_timer_choice" checked>
       <label class="form-check-label fs-5" for="allow_timer_choice">
-        Leerling mag zelf kiezen of de timer zichtbaar is
+        {{ _('Leerling mag zelf kiezen of de timer zichtbaar is') }}
       </label>
     </div>
 
-    <label class="form-label fs-5">Standaard timerinstelling:</label>
+    <label class="form-label fs-5">{{ _('Standaard timerinstelling:') }}</label>
     <select class="form-select form-select-lg mb-4" name="fixed_show_timer">
-      <option value="1" selected>⏱️ Zichtbaar</option>
-      <option value="0">🙈 Verborgen</option>
+      <option value="1" selected>⏱️ {{ _('Zichtbaar') }}</option>
+      <option value="0">🙈 {{ _('Verborgen') }}</option>
     </select>
 
     <!-- Bewerking -->
-    <h5 class="text-success fw-bold mb-2">➕ Bewerkingen</h5>
+    <h5 class="text-success fw-bold mb-2">➕ {{ _('Bewerkingen') }}</h5>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_add_visible" id="op_add" checked>
-      <label class="form-check-label fs-5" for="op_add">Optellen (+)</label>
+      <label class="form-check-label fs-5" for="op_add">{{ _('Optellen (+)') }}</label>
     </div>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_multiply_visible" id="op_mul" checked>
-      <label class="form-check-label fs-5" for="op_mul">Vermenigvuldigen (×)</label>
+      <label class="form-check-label fs-5" for="op_mul">{{ _('Vermenigvuldigen (×)') }}</label>
     </div>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="operation_negation_visible" id="op_neg" checked>
-      <label class="form-check-label fs-5" for="op_neg">Aftrekken (−)</label>
+      <label class="form-check-label fs-5" for="op_neg">{{ _('Aftrekken (−)') }}</label>
     </div>
     <div class="form-check mb-2">
   <input class="form-check-input" type="checkbox" name="operation_mix_visible" id="op_mix" {% if
     operation_mix_visible %}checked{% endif %}>
-  <label class="form-check-label fs-5" for="op_mix">Mix (willekeurig)</label>
+  <label class="form-check-label fs-5" for="op_mix">{{ _('Mix (willekeurig)') }}</label>
 </div>
 
 <!-- MIX BLOCK -->
 <div id="mix-settings-block"
      class="p-3 border border-success rounded bg-light mb-4 mix-settings-block {% if not operation_mix_visible %}d-none{% endif %}">
   <div class="d-flex align-items-center mb-2">
-    <h6 class="text-success mb-0">Samenstelling van “Mix”</h6>
+    <h6 class="text-success mb-0">{{ _('Samenstelling van “Mix”') }}</h6>
   </div>
 
   <p class="text-muted small mb-3">
-    Welke bewerkingen kunnen verschijnen als een leerling <strong>“Mix”</strong> kiest?
+    {% trans %}Welke bewerkingen kunnen verschijnen als een leerling <strong>“Mix”</strong> kiest?{% endtrans %}
   </p>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_add" id="mix_add" {% if mix_add %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_add">Optellen (+)</label>
+    <label class="form-check-label fs-5" for="mix_add">{{ _('Optellen (+)') }}</label>
   </div>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_multiply" id="mix_mul" {% if mix_multiply %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_mul">Vermenigvuldigen (×)</label>
+    <label class="form-check-label fs-5" for="mix_mul">{{ _('Vermenigvuldigen (×)') }}</label>
   </div>
 
   <div class="form-check">
     <input class="form-check-input" type="checkbox" name="mix_negation" id="mix_neg" {% if mix_negation %}checked{% endif %}>
-    <label class="form-check-label fs-5" for="mix_neg">Aftrekken (−)</label>
+    <label class="form-check-label fs-5" for="mix_neg">{{ _('Aftrekken (−)') }}</label>
   </div>
 
   <p class="text-muted small mt-3 mb-0">
-    Minstens één optie verplicht wanneer <strong>Mix</strong> aan staat.
+    {% trans %}Minstens één optie verplicht wanneer <strong>Mix</strong> aan staat.{% endtrans %}
   </p>
 </div>
 
@@ -188,36 +188,36 @@
 </script>
 
     <!-- Moeilijkheid -->
-    <h5 class="text-success fw-bold mb-2">🎯 Moeilijkheid</h5>
-    <label class="form-label fs-5">Moeilijkheidsmodus:</label>
+    <h5 class="text-success fw-bold mb-2">🎯 {{ _('Moeilijkheid') }}</h5>
+    <label class="form-label fs-5">{{ _('Moeilijkheidsmodus:') }}</label>
     <select class="form-select form-select-lg mb-3" name="difficulty_choice">
-      <option value="0">Vaste moeilijkheid</option>
-      <option value="1">Leerling kiest zelf</option>
-      <option value="2">Adaptief (ELO)</option>
+      <option value="0">{{ _('Vaste moeilijkheid') }}</option>
+      <option value="1">{{ _('Leerling kiest zelf') }}</option>
+      <option value="2">{{ _('Adaptief (ELO)') }}</option>
     </select>
 
-    <label class="form-label fs-5">Vaste moeilijkheid (indien van toepassing):</label>
+    <label class="form-label fs-5">{{ _('Vaste moeilijkheid (indien van toepassing):') }}</label>
     <select class="form-select form-select-lg mb-4" name="fixed_difficulty">
-      <option value="1">★ Makkelijk</option>
-      <option value="2">★★ Gemiddeld</option>
-      <option value="3">★★★ Moeilijk</option>
-      <option value="4"> Mix</option>
+      <option value="1">★ {{ _('Makkelijk') }}</option>
+      <option value="2">★★ {{ _('Gemiddeld') }}</option>
+      <option value="3">★★★ {{ _('Moeilijk') }}</option>
+      <option value="4"> {{ _('Mix') }}</option>
     </select>
 
     <!-- Aantal vragen -->
-    <h5 class="text-success fw-bold mb-2">🔢 Aantal oefeningen in dit blok</h5>
+    <h5 class="text-success fw-bold mb-2">🔢 {{ _('Aantal oefeningen in dit blok') }}</h5>
     <input type="number" min="1" max="50" step="1" name="questions_per_set" class="form-control form-control-lg mb-4"
       value="10">
 
     <!-- Meta -->
-    <h5 class="text-success fw-bold mb-2">🧭 Metacognitie</h5>
+    <h5 class="text-success fw-bold mb-2">🧭 {{ _('Metacognitie') }}</h5>
     <select class="form-select form-select-lg mb-4" name="meta_prompt_mode">
-      <option value="0">Uit</option>
-      <option value="1" selected>Na elke vraag</option>
+      <option value="0">{{ _('Uit') }}</option>
+      <option value="1" selected>{{ _('Na elke vraag') }}</option>
     </select>
 
     <div class="text-end">
-      <button type="submit" class="btn btn-success btn-lg">➕ Blok toevoegen</button>
+      <button type="submit" class="btn btn-success btn-lg">➕ {{ _('Blok toevoegen') }}</button>
     </div>
 
 
@@ -228,7 +228,7 @@
 
 <p class="mb-3">
   <a href="{{ url_for('teacher.group', group_id=group_id) }}" class="btn btn-outline-success btn-lg">
-    ← Terug naar groep
+    ← {{ _('Terug naar groep') }}
   </a>
 </p>
 {% endblock %}

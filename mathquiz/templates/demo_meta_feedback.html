@@ -1,36 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="display-4 text-success fw-bold mb-3 text-center">Feedback</h1>
+<h1 class="display-4 text-success fw-bold mb-3 text-center">{{ _('Feedback') }}</h1>
 
 <div class="container text-center">
 
   <div class="p-4 mb-3 border rounded-4 bg-light">
-    <h3 class="fw-bold text-success mb-3">Jouw antwoord</h3>
+    <h3 class="fw-bold text-success mb-3">{{ _('Jouw antwoord') }}</h3>
 
     <p class="fs-2 fw-bold">
       5 + 3 = 8
     </p>
 
-    <p class="fs-2 feedback-correct fw-bold">✓ Juist! Goed gedaan!</p>
+    <p class="fs-2 feedback-correct fw-bold">✓ {{ _('Juist! Goed gedaan!') }}</p>
   </div>
 
   <div class="p-4 mt-2 border rounded-4 bg-light">
-    <h3 class="fw-bold text-success mb-3">Jouw gevoel</h3>
+    <h3 class="fw-bold text-success mb-3">{{ _('Jouw gevoel') }}</h3>
 
     <img src="{{ url_for('static', filename='smiley_3.png') }}"
-         alt="Jouw zelfscore"
+         alt="{{ _('Jouw zelfscore') }}"
          class="smiley-option mb-3"
          style="width: 80px;">
 
     <p class="fs-2 feedback-correct fw-bold">
-      ✓ Een goede inschatting van jezelf!
+      ✓ {{ _('Een goede inschatting van jezelf!') }}
     </p>
   </div>
 
   <form id="feedback-form" method="post" action="{{ url_for('student.demo_next') }}" class="mt-4">
     <button id="feedback-btn" type="submit" class="btn btn-jungle btn-jungle-md" disabled>
-      Verdergaan
+      {{ _('Verdergaan') }}
     </button>
   </form>
 

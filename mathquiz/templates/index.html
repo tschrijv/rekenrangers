@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="mb-5 display-3 fw-bold text-center title-safari-font">Welkom bij RekenRangers</h1>
+<h1 class="mb-5 display-3 fw-bold text-center title-safari-font">{{ _('Welkom bij RekenRangers') }}</h1>
 
 
 <div class="d-flex justify-content-center flex-column align-items-center gap-4">
@@ -9,13 +9,13 @@
   <!-- Student button -->
   <a href="{{ url_for('auth.login_group') }}"
      class="btn btn-jungle px-5 py-3 fs-1 fw-bold text-center">
-     Leerling
+     {{ _('Leerling') }}
   </a>
 
   <!-- Teacher button -->
   <a href="{{ url_for('auth.login_teacher') }}"
      class="btn btn-jungle px-5 py-3 fs-1 fw-bold text-center">
-     Leerkracht
+     {{ _('Leerkracht') }}
   </a>
 
 </div>

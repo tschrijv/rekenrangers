@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:01,880
+Ja, daar staan de cijfers met stickers.
+
+2
+00:00:02,380 --> 00:00:04,060
+Maar je klikte niet op de 5.
+
+3
+00:00:04,340 --> 00:00:05,140
+Waar staat de 5?
+

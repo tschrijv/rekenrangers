@@ -14,7 +14,7 @@
      class="container text-center"
      {% if fixation_screen %}style="display:none;"{% endif %}>
 
-  <h1 class="display-4 fw-bold text-success mb-4">Oefening</h1>
+  <h1 class="display-4 fw-bold text-success mb-4">{{ _('Oefening') }}</h1>
 
   <!-- De som groot in beeld -->
   <p class="display-1 fw-bold text-dark mb-5">
@@ -47,7 +47,7 @@
        max="999">
 
     <button type="submit" id="submitBtn" class="btn btn-jungle btn-jungle-md">
-      Verstuur
+      {{ _('Verstuur') }}
     </button>
   </form>
 
@@ -67,11 +67,11 @@
 
 <!-- TIMEOUT SCREEN -->
 <div id="timeoutScreen" class="container text-center" style="display:none; max-width: 900px;">
-  <h1 class="display-4 fw-bold text-success mb-4">Oeps!</h1>
+  <h1 class="display-4 fw-bold text-success mb-4">{{ _('Oeps!') }}</h1>
 
   <div class="p-4 mb-3 border rounded-4 bg-light shadow-sm" style="border-radius: 20px;">
     <p class="fs-2  text-success mb-4">
-      Je was te laat, probeer volgende keer sneller te werken.
+      {{ _('Je was te laat, probeer volgende keer sneller te werken.') }}
     </p>
 
     <!-- Vervang dit pad door jouw eigen afbeelding -->
@@ -80,7 +80,7 @@
          style="max-height: 260px;">
 
     <button type="button" id="timeoutContinueBtn" class="btn btn-jungle btn-jungle-md">
-      Verder
+      {{ _('Verder') }}
     </button>
   </div>
 </div>

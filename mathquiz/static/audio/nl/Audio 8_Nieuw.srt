@@ -1,0 +1,24 @@
+1
+00:00:00,000 --> 00:00:05,600
+Als je klaar bent met de drie blokjes, en dus alle oefeningen van die dag gemaakt hebt,
+
+2
+00:00:06,080 --> 00:00:10,020
+mag je puzzelstukken kopen met de muntjes die je verzameld hebt.
+
+3
+00:00:10,900 --> 00:00:15,740
+Rechtsboven op het scherm kan je zien hoeveel muntjes jij al hebt.
+
+4
+00:00:16,740 --> 00:00:21,660
+Om een puzzel te kiezen, kan je gebruik maken van de pijltjestoetsen op het toetsenbord.
+
+5
+00:00:22,200 --> 00:00:23,740
+Ik wil graag de leeuw kiezen.
+
+6
+00:00:24,600 --> 00:00:28,820
+Druk jij even op de blauwe bol om me te helpen met het kiezen van die puzzel?
+

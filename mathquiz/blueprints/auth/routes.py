@@ -1,6 +1,7 @@
 # blueprints/auth/routes.py
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask_babel import gettext as _
 from models.db import db_query_one, db_query_all, db_execute
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -22,9 +23,9 @@ def login_teacher():
             session.clear()
             session['username'] = username
             session['role'] = 'teacher'
-            flash("Login geslaagd!", "success")
+            flash(_("Login geslaagd!"), "success")
             return redirect(url_for('teacher.dashboard'))
-        flash("Login mislukt! Verkeerde gebruikersnaam of wachtwoord.", "danger")
+        flash(_("Login mislukt! Verkeerde gebruikersnaam of wachtwoord."), "danger")
         return redirect(url_for('auth.login_teacher'))
     return render_template('login_teacher.html')
 
@@ -44,10 +45,10 @@ def register_teacher():
                 'p': generate_password_hash(password)
             })
         except Exception:
-            flash("Registratie mislukt! Gebruikersnaam al in gebruik.", "danger")
+            flash(_("Registratie mislukt! Gebruikersnaam al in gebruik."), "danger")
             return redirect(url_for('auth.register_teacher'))
 
-        flash("Registratie geslaagd!", "success")
+        flash(_("Registratie geslaagd!"), "success")
         return redirect(url_for('auth.login_teacher'))
 
     return render_template('register_teacher.html')
@@ -66,7 +67,7 @@ def login_group():
 def login_group_students(code):
     grp = db_query_one('SELECT id, teacher_id FROM `groups` WHERE activation_code=:c', {'c': code})
     if not grp:
-        flash("Ongeldige activatiecode!", "danger")
+        flash(_("Ongeldige activatiecode!"), "danger")
         return redirect(url_for('auth.login_group'))
 
     group_id, teacher_id = grp
@@ -79,14 +80,14 @@ def login_group_students(code):
             WHERE username=:u AND group_id=:g AND pin=:p
             ''', {'u': username, 'g': group_id, 'p': pin})
         if not row:
-            flash("Inloggen mislukt! Gebruiker niet in deze groep of verkeerde pincode ingevoerd!", "danger")
+            flash(_("Inloggen mislukt! Gebruiker niet in deze groep of verkeerde pincode ingevoerd!"), "danger")
             return redirect(url_for('auth.login_group_students', code=code))
 
         session.clear()
         session['username'] = username
         session['role'] = 'student'
         session['student_id'] = row[0]
-        flash("Inloggen geslaagd!", "success")
+        flash(_("Inloggen geslaagd!"), "success")
         demo = db_query_one('SELECT demo_seen FROM students WHERE id=:u', {'u': row[0]})
         demo_seen = int(demo[0]) if demo and demo[0] is not None else 0
         if demo_seen == 0:

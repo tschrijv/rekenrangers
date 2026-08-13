@@ -3,7 +3,7 @@
 {% block content %}
 {% include "_demo_overlay.html" %}
 
-<h1 class="display-4 fw-bold text-success mb-4">Oefening</h1>
+<h1 class="display-4 fw-bold text-success mb-4">{{ _('Oefening') }}</h1>
 
 <!-- Fake demo som -->
 <p class="display-1 fw-bold text-dark mb-5">
@@ -12,11 +12,11 @@
 
 <!-- Audio for wrong answer -->
 <audio id="audio-wrong">
-  <source src="{{ url_for('static', filename='audio/Als fout.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('Als fout.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-correct">
-  <source src="{{ url_for('static', filename='audio/Als juist.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('Als juist.mp3') }}" type="audio/mpeg">
 </audio>
 
 <form id="demo-exercise-form" method="post" action="{{ url_for('student.demo_next') }}"
@@ -29,7 +29,7 @@
          disabled>
 
   <button id="submitBtn" type="submit" class="btn btn-jungle btn-jungle-md" disabled>
-    Verstuur
+    {{ _('Verstuur') }}
   </button>
 </form>
 

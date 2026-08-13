@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1 class="display-1 text-success mb-4 fw-bold text-center">Kies je naam</h1>
+<h1 class="display-1 text-success mb-4 fw-bold text-center">{{ _('Kies je naam') }}</h1>
 
 <!-- Hidden form submitted after PIN entry -->
 <form id="student-login-form" method="post">
@@ -23,8 +23,8 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center p-4" style="border-radius: 20px;">
       
-      <h3 class="mb-3 text-success fw-bold">Kies je dieren-code</h3>
-      <p class="text-muted mb-4">Klik de dieren in de juiste volgorde!</p>
+      <h3 class="mb-3 text-success fw-bold">{{ _('Kies je dieren-code') }}</h3>
+      <p class="text-muted mb-4">{{ _('Klik de dieren in de juiste volgorde!') }}</p>
 
       <!-- Entered code slots -->
       <div class="d-flex justify-content-center gap-3 mb-3">
@@ -50,7 +50,7 @@
         <button type="button" class="btn btn-light fw-bold px-3 py-2"
                 style="border-radius: 12px;"
                 onclick="resetAnimalPin()">
-          Reset
+          {{ _('Reset') }}
         </button>
       </div>
 
@@ -58,13 +58,13 @@
         <button type="button" class="btn btn-success px-4 py-3 fw-bold"
                 style="border-radius: 12px; font-size: 1.4rem;"
                 onclick="submitAnimalPin()">
-          Start!
+          {{ _('Start!') }}
         </button>
 
         <button type="button" class="btn btn-secondary px-4 py-3 fw-bold"
                 style="border-radius: 12px; font-size: 1.2rem;"
                 data-bs-dismiss="modal">
-          Annuleren
+          {{ _('Annuleren') }}
         </button>
       </div>
     </div>

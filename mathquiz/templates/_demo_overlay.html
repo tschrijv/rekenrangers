@@ -5,7 +5,7 @@
 <div id="listen-indicator" class="listen-indicator d-none" aria-live="polite">
   <div class="listen-indicator-inner">
     <span class="listen-ear">👂</span>
-    <span class="listen-text">Luister</span>
+    <span class="listen-text">{{ _('Luister') }}</span>
   </div>
 </div>
 
@@ -71,7 +71,7 @@
 <div id="listen-indicator" class="listen-indicator d-none" aria-live="polite">
   <div class="listen-indicator-inner">
     <span class="listen-ear">👂</span>
-    <span class="listen-text">Luister</span>
+    <span class="listen-text">{{ _('Luister') }}</span>
   </div>
 </div>
 
@@ -160,7 +160,7 @@
           {{ [demo_audio] | tojson }}
         {% endif %};
 
-      const base = "{{ url_for('static', filename='audio/') }}";
+      const base = "{{ url_for('static', filename='audio/' ~ LANGUAGE ~ '/') }}";
       const playlist = (list || []).map(name => base + name);
 
       let idx = 0;

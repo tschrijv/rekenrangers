@@ -4,25 +4,25 @@
 <div class="container text-center">
 
   <!-- Title -->
-  <h1 class="mb-1 display-3 fw-bold text-success">PUZZEL</h1>
+  <h1 class="mb-1 display-3 fw-bold text-success">{{ _('PUZZEL') }}</h1>
   <h2 class="display-4 fw-bold text-success mb-3">{{ name }}</h2>
 
   <!-- Action button -->
   <form action="{{ url_for('student.buy_piece', puzzle_id=puzzle_id) }}" method="post" class="mb-3">
     {% if puzzle_complete %}
       <button type="button" class="btn btn-secondary btn-lg px-5 py-3 fw-bold" disabled>
-        Puzzel compleet!
+        {{ _('Puzzel compleet!') }}
       </button>
-      <p class="mt-2 text-success fw-semibold">Goed gedaan! Je hebt de puzzel voltooid.</p>
+      <p class="mt-2 text-success fw-semibold">{{ _('Goed gedaan! Je hebt de puzzel voltooid.') }}</p>
     {% elif current_points >= cost %}
       <button type="submit" id="buyPieceButton" class="btn btn-jungle btn-jungle-md px-5 py-3 fw-bold">
-        Koop een puzzelstukje (<i class="bi bi-coin fs-4"></i> {{ cost }})
+        {{ _('Koop een puzzelstukje') }} (<i class="bi bi-coin fs-4"></i> {{ cost }})
       </button>
     {% else %}
       <button type="button" class="btn btn-secondary btn-lg px-5 py-3 fw-bold" disabled>
-        Niet genoeg punten (<i class="bi bi-coin fs-4"></i> {{ cost }})
+        {{ _('Niet genoeg punten') }} (<i class="bi bi-coin fs-4"></i> {{ cost }})
       </button>
-      <p class="mt-2 text-danger fw-semibold">Verdien meer punten door oefeningen te maken!</p>
+      <p class="mt-2 text-danger fw-semibold">{{ _('Verdien meer punten door oefeningen te maken!') }}</p>
     {% endif %}
   </form>
 
@@ -49,18 +49,18 @@
   <!-- Reset Puzzle Button -->
   <form action="{{ url_for('student.reset_puzzle', puzzle_id=puzzle_id) }}" method="post" class="mb-3">
     <button type="submit" class="btn btn-outline-danger"
-            onclick="return confirm('Weet je zeker dat je de puzzel opnieuw wilt beginnen?')">
-      🔄 Reset puzzel
+            onclick="return confirm('{{ _('Weet je zeker dat je de puzzel opnieuw wilt beginnen?') }}')">
+      🔄 {{ _('Reset puzzel') }}
     </button>
   </form>
 
   <!-- Navigation buttons -->
   <div class="d-flex justify-content-center gap-3">
     <a href="{{ url_for('student.puzzles_list') }}" class="btn btn-jungle btn-jungle-md">
-      ← Terug naar puzzellijst
+      ← {{ _('Terug naar puzzellijst') }}
     </a>
     <a href="{{ url_for('student.select_exercise') }}" class="btn btn-jungle btn-jungle-md">
-      ← Terug naar oefeningen
+      ← {{ _('Terug naar oefeningen') }}
     </a>
   </div>
 </div>

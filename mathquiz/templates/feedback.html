@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="display-4 text-success fw-bold mb-3 text-center">Feedback</h1>
+<h1 class="display-4 text-success fw-bold mb-3 text-center">{{ _('Feedback') }}</h1>
 
 <div class="container text-center">
 
     <!-- ======= BLOK 1: REKENFEEDBACK ======= -->
     <div class="p-4 mb-3 border rounded-4 bg-light">
-        <h3 class="fw-bold text-success mb-3">Jouw antwoord</h3>
+        <h3 class="fw-bold text-success mb-3">{{ _('Jouw antwoord') }}</h3>
 
         <p class="fs-2 fw-bold">
             {{ a }} {% if operation=='add' %}+{% elif operation=='multiply' %}×{% else %}−{% endif %} {{ b }} =
             {% if answer is none %}
-                <span class="text-muted">Geen antwoord</span>
+                <span class="text-muted">{{ _('Geen antwoord') }}</span>
             {% else %}
                 {{ answer }}
             {% endif %}
         </p>
 
         {% if answer == correct %}
-            <p class="fs-2  feedback-correct fw-bold">✓ Juist! Goed gedaan!</p>
+            <p class="fs-2  feedback-correct fw-bold">✓ {{ _('Juist! Goed gedaan!') }}</p>
         {% else %}
             <p class="fs-2 feedback-wrong fw-bold">
-                ✗ Foutje.<br>
+                ✗ {{ _('Foutje.') }}<br>
                 {{ a }} {% if operation=='add' %}+{% elif operation=='multiply' %}×{% else %}−{% endif %} {{ b }} = {{ correct }}
             </p>
         {% endif %}
@@ -31,10 +31,10 @@
     {% if meta_answer is not none %}
     <!-- ======= BLOK 2: METACOGNITIEVE FEEDBACK ======= -->
     <div class="p-4 mt-2 border rounded-4 bg-light">
-        <h3 class="fw-bold text-success mb-3">Jouw gevoel</h3>
+        <h3 class="fw-bold text-success mb-3">{{ _('Jouw gevoel') }}</h3>
 
         <img src="{{ url_for('static', filename='smiley_' ~ (meta_answer-1) ~ '.png') }}"
-             alt="Jouw zelfscore"
+             alt="{{ _('Jouw zelfscore') }}"
              class="smiley-option mb-3"
              style="width: 80px;">
 
@@ -44,15 +44,15 @@
 
         {% if correct_flag and low %}
             <p class="fs-2 feedback-wrong fw-bold">
-                ✗ Hier heb je jezelf fout ingeschat!
+                ✗ {{ _('Hier heb je jezelf fout ingeschat!') }}
             </p>
         {% elif (not correct_flag) and high %}
             <p class="fs-2 feedback-wrong fw-bold">
-                ✗ Hier heb je jezelf fout ingeschat!
+                ✗ {{ _('Hier heb je jezelf fout ingeschat!') }}
             </p>
         {% else %}
             <p class="fs-2 feedback-correct fw-bold">
-                ✓ Een goede inschatting van jezelf!
+                ✓ {{ _('Een goede inschatting van jezelf!') }}
             </p>
         {% endif %}
     </div>
@@ -60,7 +60,7 @@
 
     <form id="feedback-form" method="post" class="mt-4">
         <input type="hidden" name="time_feedback" id="time_feedback" value="0">
-        <button type="submit" class="btn btn-jungle btn-jungle-md">Verdergaan</button>
+        <button type="submit" class="btn btn-jungle btn-jungle-md">{{ _('Verdergaan') }}</button>
     </form>
 
 </div>

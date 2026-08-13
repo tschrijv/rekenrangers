@@ -2,6 +2,7 @@ from flask import (
     Blueprint, render_template, request, redirect, url_for,
     session, flash, g
 )
+from flask_babel import gettext as _
 from datetime import datetime
 import random
 
@@ -387,13 +388,13 @@ def exercise():
         if op_arg not in visible or not visible[op_arg]:
             session.pop('set_id', None)
             session.pop('points_awarded', None)
-            flash("Ongeldige operatie!", "danger")
+            flash(_("Ongeldige operatie!"), "danger")
             return redirect(url_for('student.select_exercise'))
 
         if op_arg == 'mix' and not (gs['mix_add'] or gs['mix_multiply'] or gs['mix_negation']):
             session.pop('set_id', None)
             session.pop('points_awarded', None)
-            flash("Mix is leeg!", "danger")
+            flash(_("Mix is leeg!"), "danger")
             return redirect(url_for('student.select_exercise'))
 
         session['operation'] = op_arg
@@ -613,7 +614,7 @@ def exercise():
                             group_id)
 
     if exercise is None:
-        flash("Geen oefeningen mogelijk met deze instellingen.", "danger")
+        flash(_("Geen oefeningen mogelijk met deze instellingen."), "danger")
         return redirect(url_for('student.select_exercise'))
 
     a = exercise["a"]
@@ -874,7 +875,7 @@ def puzzle(puzzle_id):
     )
 
     if not puzzle:
-        flash("Puzzel bestaat niet!", "danger")
+        flash(_("Puzzel bestaat niet!"), "danger")
         return redirect(url_for('student.puzzles_list'))
 
     pid, name, img, rows, cols, cost = puzzle
@@ -914,7 +915,7 @@ def buy_piece(puzzle_id):
     )
 
     if not puzzle:
-        flash("Puzzel bestaat niet!", "danger")
+        flash(_("Puzzel bestaat niet!"), "danger")
         return redirect(url_for('student.puzzles_list'))
 
     rows, cols, cost = puzzle
@@ -927,11 +928,11 @@ def buy_piece(puzzle_id):
     owned_set = {r[0] for r in owned}
 
     if len(owned_set) >= total:
-        flash("Puzzel is al volledig!", "danger")
+        flash(_("Puzzel is al volledig!"), "danger")
         return redirect(url_for('student.puzzle', puzzle_id=puzzle_id))
 
     if get_user_points(student_id) < cost:
-        flash("Niet genoeg punten!", "danger")
+        flash(_("Niet genoeg punten!"), "danger")
         return redirect(url_for('student.puzzle', puzzle_id=puzzle_id))
 
     add_points(student_id, -cost)
@@ -955,7 +956,7 @@ def reset_puzzle(puzzle_id):
     db_execute('DELETE FROM student_puzzle_pieces WHERE student_id=:u AND puzzle_id=:p',
                {'u': student_id, 'p': puzzle_id})
 
-    flash("Puzzel is gereset!", "warning")
+    flash(_("Puzzel is gereset!"), "warning")
     return redirect(url_for('student.puzzle', puzzle_id=puzzle_id))
 
 # -----------------------------------

@@ -5,15 +5,15 @@
 
 <!-- Feedback audios -->
 <audio id="audio-toprow-wrong" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/2.1.2 Scherm met toetsenbord.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('2.1.2 Scherm met toetsenbord.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-numpad-wrong" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/2.1.1 Scherm met toetsenbord.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('2.1.1 Scherm met toetsenbord.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="audio-correct" preload="auto" playsinline>
-  <source src="{{ url_for('static', filename='audio/2.1.3 Scherm met toetsenbord.mp3') }}" type="audio/mpeg">
+  <source src="{{ audio_url('2.1.3 Scherm met toetsenbord.mp3') }}" type="audio/mpeg">
 </audio>
 
 <form id="demo-next-form" method="post" action="{{ url_for('student.demo_next') }}" class="d-none">
@@ -27,8 +27,8 @@
 
     <div class="text-center mb-4">
       <div class="display-5 text-success fw-bold">⌨️</div>
-      <p class="fs-3 text-dark mb-1">Druk op de <strong>5</strong></p>
-      <p class="text-muted mb-0">Gebruik de cijfertoetsen bovenaan het toetsenbord</p>
+      <p class="fs-3 text-dark mb-1">{% trans %}Druk op de <strong>5</strong>{% endtrans %}</p>
+      <p class="text-muted mb-0">{{ _('Gebruik de cijfertoetsen bovenaan het toetsenbord') }}</p>
     </div>
 
     <div class="keyboard-layout">
@@ -85,13 +85,13 @@
         </div>
 
         <div class="keyboard-row">
-          <div class="fake-spacebar">spatie</div>
+          <div class="fake-spacebar">{{ _('spatie') }}</div>
         </div>
       </div>
 
       <!-- Numpad -->
       <div class="numpad-block">
-        <div class="numpad-title text-center mb-2">Niet deze toetsen</div>
+        <div class="numpad-title text-center mb-2">{{ _('Niet deze toetsen') }}</div>
         <div class="numpad-grid">
           <button type="button" class="btn btn-lg key-btn key-numpad key-numpad-wrong-style" data-key="7">7</button>
           <button type="button" class="btn btn-lg key-btn key-numpad key-numpad-wrong-style" data-key="8">8</button>
