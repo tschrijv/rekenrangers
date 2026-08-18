@@ -9,8 +9,8 @@
 /*}*/
 
 body {
-  /* safari achtergrond */
-  background-image: url('/static/safaridieren.png');
+  /* safari achtergrond: background-image is set inline in base.html
+     so it can point at the deployment's language-specific artwork */
   background-repeat: no-repeat; /* voorkomt herhaling */
   background-size: cover;       /* laat de afbeelding het hele scherm vullen */
   background-position: center;  /* centreert de afbeelding */

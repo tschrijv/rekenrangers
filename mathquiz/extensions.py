@@ -22,3 +22,9 @@ def audio_url(filename):
     """Build the static URL for a voiceover clip in the deployment's language."""
     lang = current_app.config["LANGUAGE"]
     return url_for("static", filename=f"audio/{lang}/{filename}")
+
+
+def image_url(filename):
+    """Build the static URL for a themed illustration in the deployment's language."""
+    lang = current_app.config["LANGUAGE"]
+    return url_for("static", filename=f"images/{lang}/{filename}")

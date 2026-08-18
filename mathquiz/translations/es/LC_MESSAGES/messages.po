@@ -609,7 +609,7 @@ msgstr "¡Aquí te evaluaste mal a ti mismo!"
 
 #: templates/index.html:4
 msgid "Welkom bij RekenRangers"
-msgstr "¡Bienvenido a RekenRangers!"
+msgstr "¡Bienvenido a MateXploradores!"
 
 #: templates/index.html:12
 msgid "Leerling"
