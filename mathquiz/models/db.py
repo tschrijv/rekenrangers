@@ -272,6 +272,58 @@ def init_db():
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ''')
 
+    # ARITHMETIC METACOGNITIVE MONITORING TASK ATTEMPTS
+    db_execute('''
+        CREATE TABLE IF NOT EXISTS arith_task_attempts (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_id INT NOT NULL,
+            label ENUM('pretest','posttest') NOT NULL,
+            started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            completed_at DATETIME,
+            fixed_total INT,
+            fixed_correct INT,
+            adaptive_total INT,
+            adaptive_correct INT,
+            final_difficulty INT,
+            avg_response_time DOUBLE,
+            avg_confidence DOUBLE,
+            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+            INDEX(student_id),
+            INDEX(student_id, label)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ''')
+
+    # ARITHMETIC METACOGNITIVE MONITORING TASK TRIALS
+    db_execute('''
+        CREATE TABLE IF NOT EXISTS arith_task_trials (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_id INT NOT NULL,
+            attempt_id INT,
+            label ENUM('pretest','posttest') NOT NULL,
+            block ENUM('practice','fixed','adaptive') NOT NULL,
+            trial_index INT NOT NULL,
+            stimulus VARCHAR(50),
+            difficulty TINYINT,
+            first_operand INT NOT NULL,
+            second_operand INT NOT NULL,
+            option_left INT NOT NULL,
+            option_right INT NOT NULL,
+            correct_response ENUM('left','right') NOT NULL,
+            given_response ENUM('left','right'),
+            is_correct TINYINT(1),
+            response_time DOUBLE,
+            timed_out TINYINT(1) DEFAULT 0,
+            confidence TINYINT,
+            confidence_response_time DOUBLE,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+            FOREIGN KEY (attempt_id) REFERENCES arith_task_attempts(id) ON DELETE SET NULL,
+            INDEX(student_id),
+            INDEX(attempt_id),
+            INDEX(student_id, label)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ''')
+
 
     add_puzzle('Giraf', '/static/puzzles/giraf.png', 5, 3, 10)
     add_puzzle('Leeuw', '/static/puzzles/lion.png', 5, 3, 30)

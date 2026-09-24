@@ -10,6 +10,7 @@ from models.db import db_query_one, db_query_all, db_execute
 from services.points import get_user_points, add_points
 from services.difficulty import calculate_elo, get_difficulty_from_elo, get_zone_from_elo
 from services.exercise_selector import (select_problem)
+from blueprints.student.arith_task_data import PRACTICE_ITEMS, FIXED_ITEMS, ADAPTIVE_ITEMS
 
 
 student_bp = Blueprint("student", __name__)
@@ -1349,6 +1350,449 @@ def motor_task_trial():
         'motor_task_trial.html',
         stimulus_url=url_for('static', filename=f'motor_task/slides/{stimulus}.png')
     )
+
+
+# -----------------------------------
+# ARITHMETIC METACOGNITIVE MONITORING TASK
+# -----------------------------------
+
+# Ported from Arithmetic_AdaptiveTask_2nd&3rdGrade_SREB_FINAL.osexp:
+# 4 practice items -> 30 fixed items (same for every child) -> 30 adaptive
+# items drawn from a 190-item bank, with difficulty adjusted by a win/lose
+# staircase targeting ~80% accuracy. Every answered (non-timed-out) trial
+# is followed by a 4-point confidence rating (F/G/H/J, red->green), reusing
+# the same smiley scale as the adaptive training tool's self-scoring step.
+
+ARITH_TIME_LIMIT = 40  # seconds, matches Keyboard_Arithmetic timeout=40000
+
+# Stimulus ids used in the fixed block are permanently excluded from the
+# adaptive draw (matches used_stimuli_from_table in the original script).
+ARITH_FIXED_STIMULI = sorted({item['stimulus'] for item in FIXED_ITEMS})
+
+
+def _arith_reset_session():
+    for key in (
+        'arith_phase', 'arith_index', 'arith_attempt_id', 'arith_pending',
+        'arith_fixed_by_difficulty', 'arith_fixed_results',
+        'arith_adaptive_state', 'arith_adaptive_results',
+        'arith_rt_confidence_log',
+    ):
+        session.pop(key, None)
+
+
+def _arith_pick_adaptive_item():
+    """Port of the setuptrial inline_script: adjusts the running difficulty
+    based on overall accuracy and the last 2 trials, then draws an unused
+    item at that difficulty (falling back to reusing items once a
+    difficulty's pool is exhausted)."""
+    state = session['arith_adaptive_state']
+
+    if state['current_difficulty'] == state['previous_difficulty']:
+        state['trials_at_current_difficulty'] += 1
+    else:
+        state['trials_at_current_difficulty'] = 1
+
+    total = state['total_answers']
+    correct = state['correct_responses']
+    accuracy = (100 * correct / total) if total else 0
+    target, threshold = 80, 2
+    recent = state['recent_results']
+
+    if state['trials_at_current_difficulty'] >= 2:
+        if accuracy < (target - threshold):
+            if sum(recent) <= 1:
+                if state['current_difficulty'] > 1:
+                    state['current_difficulty'] = max(1, state['current_difficulty'] - 1)
+                    state['trials_at_current_difficulty'] = 0
+            elif state['trials_at_current_difficulty'] >= 10 and sum(recent) == 2:
+                state['current_difficulty'] = min(6, state['current_difficulty'] + 1)
+                state['trials_at_current_difficulty'] = 0
+        elif accuracy > (target + threshold):
+            state['current_difficulty'] = min(6, state['current_difficulty'] + 1)
+            state['trials_at_current_difficulty'] = 0
+
+    state['previous_difficulty'] = state['current_difficulty']
+    difficulty = state['current_difficulty']
+
+    used_at_difficulty = state['used_trials_by_difficulty'].setdefault(str(difficulty), [])
+    used_stimuli = set(state['used_stimuli'])
+
+    candidates = [
+        item for item in ADAPTIVE_ITEMS
+        if item['difficulty'] == difficulty
+        and item['stimulus'] not in used_at_difficulty
+        and item['stimulus'] not in used_stimuli
+    ]
+
+    if not candidates:
+        # Pool exhausted at this difficulty: reset it, and also release this
+        # difficulty's fixed-block items from the permanent exclusion.
+        state['used_trials_by_difficulty'][str(difficulty)] = []
+        state['used_stimuli'] = [
+            s for s in state['used_stimuli']
+            if not any(it['stimulus'] == s and it['difficulty'] == difficulty for it in ADAPTIVE_ITEMS)
+        ]
+        candidates = [item for item in ADAPTIVE_ITEMS if item['difficulty'] == difficulty]
+
+    chosen = random.choice(candidates)
+    used_at_difficulty.append(chosen['stimulus'])
+    session['arith_adaptive_state'] = state
+    return chosen
+
+
+def _arith_advance_block(phase):
+    if phase == 'practice':
+        session['arith_phase'] = 'fixed'
+        session['arith_index'] = 0
+        session['arith_fixed_by_difficulty'] = {}
+        session['arith_fixed_results'] = []
+        return redirect(url_for('student.arith_task_ready_fixed'))
+
+    if phase == 'fixed':
+        by_diff = session.get('arith_fixed_by_difficulty', {})
+        best_difficulty = None
+        min_difference = float('inf')
+        for d_str in sorted(by_diff, key=int):
+            entry = by_diff[d_str]
+            if entry['total'] > 0:
+                acc = 100 * entry['correct'] / entry['total']
+                difference = abs(acc - 80)
+                d = int(d_str)
+                if difference < min_difference or (
+                    difference == min_difference and (best_difficulty is None or d > best_difficulty)
+                ):
+                    min_difference = difference
+                    best_difficulty = d
+        starting_difficulty = (best_difficulty + 1) if best_difficulty is not None else 3
+
+        session['arith_adaptive_state'] = {
+            'current_difficulty': starting_difficulty,
+            'previous_difficulty': starting_difficulty,
+            'trials_at_current_difficulty': 0,
+            'total_answers': 0,
+            'correct_responses': 0,
+            'recent_results': [],
+            'used_trials_by_difficulty': {},
+            'used_stimuli': list(ARITH_FIXED_STIMULI),
+        }
+        session['arith_adaptive_results'] = []
+        session['arith_phase'] = 'adaptive'
+        session['arith_index'] = 0
+        return redirect(url_for('student.arith_task_ready_adaptive'))
+
+    # phase == 'adaptive' -> the whole task is done
+    fixed_results = session.get('arith_fixed_results', [])
+    adaptive_results = session.get('arith_adaptive_results', [])
+    rt_conf_log = session.get('arith_rt_confidence_log', [])
+
+    fixed_total = len(fixed_results)
+    fixed_correct = sum(r['correct'] for r in fixed_results)
+    adaptive_total = len(adaptive_results)
+    adaptive_correct = sum(r['correct'] for r in adaptive_results)
+    final_difficulty = session.get('arith_adaptive_state', {}).get('current_difficulty')
+    avg_rt = (sum(r['rt'] for r in rt_conf_log) / len(rt_conf_log)) if rt_conf_log else 0
+    avg_confidence = (sum(r['confidence'] for r in rt_conf_log) / len(rt_conf_log)) if rt_conf_log else 0
+
+    attempt_id = session.get('arith_attempt_id')
+    if attempt_id:
+        db_execute('''
+            UPDATE arith_task_attempts
+            SET completed_at=NOW(), fixed_total=:ft, fixed_correct=:fc,
+                adaptive_total=:at, adaptive_correct=:ac, final_difficulty=:fd,
+                avg_response_time=:art, avg_confidence=:aconf
+            WHERE id=:aid
+        ''', {
+            'ft': fixed_total, 'fc': fixed_correct,
+            'at': adaptive_total, 'ac': adaptive_correct,
+            'fd': final_difficulty, 'art': avg_rt, 'aconf': avg_confidence,
+            'aid': attempt_id,
+        })
+
+    _arith_reset_session()
+    session['arith_last_result'] = {
+        'fixed_total': fixed_total,
+        'fixed_correct': fixed_correct,
+        'adaptive_total': adaptive_total,
+        'adaptive_correct': adaptive_correct,
+        'final_difficulty': final_difficulty,
+        'avg_rt': round(avg_rt, 2),
+        'avg_confidence': round(avg_confidence, 2),
+    }
+    return redirect(url_for('student.arith_task_done'))
+
+
+@student_bp.route('/arith_task/<label>')
+def arith_task_intro(label):
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    if label not in ('pretest', 'posttest'):
+        return redirect(url_for('student.select_mode'))
+
+    _arith_reset_session()
+    session['arith_label'] = label
+    return render_template('arith_task_intro.html', show_points=True, label=label)
+
+
+@student_bp.route('/arith_task/begin')
+def arith_task_begin():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    label = session.get('arith_label')
+    if label not in ('pretest', 'posttest'):
+        return redirect(url_for('student.select_mode'))
+
+    student_id = session['student_id']
+
+    db_execute('''
+        INSERT INTO arith_task_attempts (student_id, label, started_at)
+        VALUES (:sid, :label, NOW())
+    ''', {'sid': student_id, 'label': label})
+    attempt_id = db_query_one('''
+        SELECT id FROM arith_task_attempts
+        WHERE student_id=:sid AND label=:label ORDER BY id DESC LIMIT 1
+    ''', {'sid': student_id, 'label': label})[0]
+
+    session['arith_phase'] = 'practice'
+    session['arith_index'] = 0
+    session['arith_attempt_id'] = attempt_id
+    return redirect(url_for('student.arith_task_trial'))
+
+
+@student_bp.route('/arith_task/ready_fixed')
+def arith_task_ready_fixed():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    if session.get('arith_phase') != 'fixed':
+        return redirect(url_for('student.select_mode'))
+
+    return render_template('arith_task_ready_fixed.html', show_points=True)
+
+
+@student_bp.route('/arith_task/ready_adaptive')
+def arith_task_ready_adaptive():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    if session.get('arith_phase') != 'adaptive':
+        return redirect(url_for('student.select_mode'))
+
+    return render_template('arith_task_ready_adaptive.html', show_points=True)
+
+
+@student_bp.route('/arith_task/done')
+def arith_task_done():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    result = session.pop('arith_last_result', None)
+    return render_template(
+        'arith_task_done.html', show_points=True, result=result,
+        label=session.get('arith_label')
+    )
+
+
+@student_bp.route('/arith_task/too_late')
+def arith_task_too_late():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    return render_template('arith_task_too_late.html', show_points=True)
+
+
+@student_bp.route('/arith_task/trial', methods=['GET', 'POST'])
+def arith_task_trial():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    student_id = session['student_id']
+
+    # ------------------------
+    # SCORE THE ARITHMETIC ANSWER THAT WAS JUST GIVEN
+    # ------------------------
+    if request.method == 'POST':
+        pending = session.get('arith_pending')
+        if not pending:
+            return redirect(url_for('student.select_mode'))
+        if 'given' in pending:
+            # Arithmetic answer already scored, awaiting confidence rating —
+            # a replayed POST shouldn't double-count it.
+            return redirect(url_for('student.arith_task_confidence'))
+
+        given_response = request.form.get('response')
+        if given_response not in ('left', 'right'):
+            given_response = None
+        timed_out = request.form.get('timed_out', '0') == '1'
+        response_time = float(request.form.get('response_time', 0.0))
+        is_correct = int(given_response == pending['correct']) if given_response else 0
+
+        block = pending['block']
+
+        # Difficulty/accuracy bookkeeping happens right after the arithmetic
+        # answer, independent of the confidence rating — this matches the
+        # original script, where Script_Store_Answer(_inline_script) and
+        # track_performance_per_difficulty run before Monitoring.
+        if block == 'fixed':
+            by_diff = session.get('arith_fixed_by_difficulty', {})
+            entry = by_diff.setdefault(str(pending['difficulty']), {'total': 0, 'correct': 0})
+            if not timed_out:
+                entry['total'] += 1
+                if is_correct:
+                    entry['correct'] += 1
+            session['arith_fixed_by_difficulty'] = by_diff
+
+            results = session.get('arith_fixed_results', [])
+            results.append({'correct': is_correct})
+            session['arith_fixed_results'] = results
+
+        elif block == 'adaptive':
+            state = session['arith_adaptive_state']
+            if not timed_out:
+                state['total_answers'] += 1
+                if is_correct:
+                    state['correct_responses'] += 1
+            recent = state.get('recent_results', [])
+            recent.append(1 if is_correct else 0)
+            state['recent_results'] = recent[-2:]
+            session['arith_adaptive_state'] = state
+
+            results = session.get('arith_adaptive_results', [])
+            results.append({'correct': is_correct})
+            session['arith_adaptive_results'] = results
+
+        if timed_out:
+            db_execute('''
+                INSERT INTO arith_task_trials
+                (student_id, attempt_id, label, block, trial_index, stimulus, difficulty,
+                 first_operand, second_operand, option_left, option_right,
+                 correct_response, given_response, is_correct, response_time,
+                 timed_out, confidence, confidence_response_time, timestamp)
+                VALUES (:sid, :aid, :label, :block, :idx, :stim, :diff,
+                        :a, :b, :left, :right,
+                        :correct, :given, :ok, :rt,
+                        1, NULL, NULL, NOW())
+            ''', {
+                'sid': student_id,
+                'aid': session.get('arith_attempt_id'),
+                'label': session.get('arith_label'),
+                'block': block,
+                'idx': pending['index'],
+                'stim': pending.get('stimulus'),
+                'diff': pending.get('difficulty'),
+                'a': pending['a'],
+                'b': pending['b'],
+                'left': pending['left'],
+                'right': pending['right'],
+                'correct': pending['correct'],
+                'given': given_response,
+                'ok': is_correct,
+                'rt': response_time,
+            })
+            session['arith_index'] = session['arith_index'] + 1
+            session.pop('arith_pending', None)
+            return redirect(url_for('student.arith_task_too_late'))
+
+        pending['given'] = given_response
+        pending['is_correct'] = is_correct
+        pending['response_time'] = response_time
+        session['arith_pending'] = pending
+        return redirect(url_for('student.arith_task_confidence'))
+
+    # ------------------------
+    # SERVE THE NEXT TRIAL
+    # ------------------------
+    if 'arith_phase' not in session:
+        return redirect(url_for('student.select_mode'))
+
+    phase = session['arith_phase']
+    index = session['arith_index']
+
+    if phase == 'practice':
+        block_items, block_len = PRACTICE_ITEMS, len(PRACTICE_ITEMS)
+    elif phase == 'fixed':
+        block_items, block_len = FIXED_ITEMS, len(FIXED_ITEMS)
+    else:
+        block_items, block_len = None, 30
+
+    if index >= block_len:
+        return _arith_advance_block(phase)
+
+    item = _arith_pick_adaptive_item() if phase == 'adaptive' else block_items[index]
+
+    session['arith_pending'] = {
+        'block': phase,
+        'index': index,
+        'a': item['a'],
+        'b': item['b'],
+        'left': item['left'],
+        'right': item['right'],
+        'correct': item['correct'],
+        'difficulty': item.get('difficulty'),
+        'stimulus': item.get('stimulus'),
+    }
+
+    return render_template(
+        'arith_task_trial.html',
+        a=item['a'], b=item['b'], left=item['left'], right=item['right'],
+        time_limit=ARITH_TIME_LIMIT,
+    )
+
+
+@student_bp.route('/arith_task/confidence', methods=['GET', 'POST'])
+def arith_task_confidence():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    pending = session.get('arith_pending')
+    if not pending or 'given' not in pending:
+        return redirect(url_for('student.select_mode'))
+
+    if request.method == 'POST':
+        confidence = request.form.get('self_score', type=int)
+        conf_rt = float(request.form.get('response_time', 0.0))
+
+        db_execute('''
+            INSERT INTO arith_task_trials
+            (student_id, attempt_id, label, block, trial_index, stimulus, difficulty,
+             first_operand, second_operand, option_left, option_right,
+             correct_response, given_response, is_correct, response_time,
+             timed_out, confidence, confidence_response_time, timestamp)
+            VALUES (:sid, :aid, :label, :block, :idx, :stim, :diff,
+                    :a, :b, :left, :right,
+                    :correct, :given, :ok, :rt,
+                    0, :conf, :conf_rt, NOW())
+        ''', {
+            'sid': session['student_id'],
+            'aid': session.get('arith_attempt_id'),
+            'label': session.get('arith_label'),
+            'block': pending['block'],
+            'idx': pending['index'],
+            'stim': pending.get('stimulus'),
+            'diff': pending.get('difficulty'),
+            'a': pending['a'],
+            'b': pending['b'],
+            'left': pending['left'],
+            'right': pending['right'],
+            'correct': pending['correct'],
+            'given': pending['given'],
+            'ok': pending['is_correct'],
+            'rt': pending['response_time'],
+            'conf': confidence,
+            'conf_rt': conf_rt,
+        })
+
+        if pending['block'] in ('fixed', 'adaptive'):
+            log = session.get('arith_rt_confidence_log', [])
+            log.append({'rt': pending['response_time'], 'confidence': confidence})
+            session['arith_rt_confidence_log'] = log
+
+        session['arith_index'] = session['arith_index'] + 1
+        session.pop('arith_pending', None)
+        return redirect(url_for('student.arith_task_trial'))
+
+    return render_template('arith_task_confidence.html')
 
 
 # -----------------------------------

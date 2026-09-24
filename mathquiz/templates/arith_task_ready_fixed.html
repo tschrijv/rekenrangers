@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="max-width: 700px;">
+
+  <h1 class="display-4 fw-bold text-success mb-3">{{ _('Begrijp je het?') }}</h1>
+
+  <div class="bg-light rounded shadow p-4 mb-4">
+    <p class="fs-4 text-dark mb-0">
+      {{ _('Dan doen we het nu voor echt! Probeer zo goed en zo snel mogelijk te antwoorden.') }}
+    </p>
+  </div>
+
+  <a href="{{ url_for('student.arith_task_trial') }}" class="btn btn-jungle btn-jungle-md px-5 py-3">
+    {{ _('Start') }}
+  </a>
+
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="fixationOverlay" class="fixation-overlay show" aria-hidden="false">
+  <div class="fixation-dot"></div>
+</div>
+
+<div id="problemContent" class="container text-center" style="display:none; max-width: 700px;">
+  <div class="arith-equation mb-5">{{ a }} &times; {{ b }} = ?</div>
+
+  <div class="d-flex justify-content-center gap-5">
+    <div class="arith-option">{{ left }}</div>
+    <div class="arith-option">{{ right }}</div>
+  </div>
+</div>
+
+<form method="post" id="trialForm">
+  <input type="hidden" name="response" id="responseInput" value="">
+  <input type="hidden" name="response_time" id="responseTimeInput" value="">
+  <input type="hidden" name="timed_out" id="timedOutInput" value="0">
+</form>
+
+<style>
+  .fixation-overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .fixation-overlay.show {
+    display: flex;
+  }
+
+  .fixation-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  .arith-equation {
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: #212529;
+  }
+
+  .arith-option {
+    min-width: 160px;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #198754;
+    background: #f8fbf9;
+    border: 3px solid #d7eadc;
+    border-radius: 20px;
+    padding: 16px 24px;
+  }
+</style>
+
+<script>
+(function () {
+  const fixationOverlay = document.getElementById("fixationOverlay");
+  const problemContent = document.getElementById("problemContent");
+  const responseInput = document.getElementById("responseInput");
+  const responseTimeInput = document.getElementById("responseTimeInput");
+  const timedOutInput = document.getElementById("timedOutInput");
+  const form = document.getElementById("trialForm");
+  const timeLimit = {{ time_limit }};
+
+  let stimulusOnset = null;
+  let answered = false;
+  let listening = false;
+  let timeoutHandle = null;
+
+  function submitForm() {
+    document.removeEventListener("keydown", onKeydown);
+    if (timeoutHandle) clearTimeout(timeoutHandle);
+    form.submit();
+  }
+
+  function onKeydown(e) {
+    if (!listening || answered) return;
+
+    let response = null;
+    if (e.key === "ArrowLeft") response = "left";
+    else if (e.key === "ArrowRight") response = "right";
+    if (!response) return;
+
+    e.preventDefault();
+    answered = true;
+    listening = false;
+
+    responseInput.value = response;
+    responseTimeInput.value = ((Date.now() - stimulusOnset) / 1000).toFixed(3);
+    submitForm();
+  }
+
+  function onTimeout() {
+    if (answered) return;
+    answered = true;
+    listening = false;
+
+    responseInput.value = "";
+    responseTimeInput.value = timeLimit.toFixed(3);
+    timedOutInput.value = "1";
+    submitForm();
+  }
+
+  document.addEventListener("keydown", onKeydown);
+
+  // Fixation dot: 745ms, then reveal the problem and start the response window.
+  setTimeout(function () {
+    fixationOverlay.classList.remove("show");
+    problemContent.style.display = "block";
+    stimulusOnset = Date.now();
+    listening = true;
+    timeoutHandle = setTimeout(onTimeout, timeLimit * 1000);
+  }, 745);
+})();
+</script>
+{% endblock %}

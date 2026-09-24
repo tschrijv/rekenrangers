@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-24 13:41+0200\n"
+"POT-Creation-Date: 2026-09-24 16:03+0200\n"
 "PO-Revision-Date: 2026-08-12 15:52+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -50,31 +50,31 @@ msgstr ""
 msgid "Inloggen geslaagd!"
 msgstr "¡Inicio de sesión correcto!"
 
-#: blueprints/student/routes.py:412
+#: blueprints/student/routes.py:413
 msgid "Ongeldige operatie!"
 msgstr "¡Operación no válida!"
 
-#: blueprints/student/routes.py:418
+#: blueprints/student/routes.py:419
 msgid "Mix is leeg!"
 msgstr "¡La mezcla está vacía!"
 
-#: blueprints/student/routes.py:638
+#: blueprints/student/routes.py:639
 msgid "Geen oefeningen mogelijk met deze instellingen."
 msgstr "No es posible generar ejercicios con esta configuración."
 
-#: blueprints/student/routes.py:899 blueprints/student/routes.py:939
+#: blueprints/student/routes.py:900 blueprints/student/routes.py:940
 msgid "Puzzel bestaat niet!"
 msgstr "¡El rompecabezas no existe!"
 
-#: blueprints/student/routes.py:952
+#: blueprints/student/routes.py:953
 msgid "Puzzel is al volledig!"
 msgstr "¡El rompecabezas ya está completo!"
 
-#: blueprints/student/routes.py:956
+#: blueprints/student/routes.py:957
 msgid "Niet genoeg punten!"
 msgstr "¡No tienes suficientes puntos!"
 
-#: blueprints/student/routes.py:980
+#: blueprints/student/routes.py:981
 msgid "Puzzel is gereset!"
 msgstr "¡El rompecabezas se ha reiniciado!"
 
@@ -309,6 +309,172 @@ msgstr "Configuración importada y guardada correctamente."
 msgid "Luister"
 msgstr "Escuchar"
 
+#: templates/arith_task_confidence.html:4 templates/demo_selfscore.html:4
+#: templates/selfscore_q.html:4
+msgid "Hoe zeker ben je van je antwoord?"
+msgstr "¿Qué tan seguro estás de tu respuesta?"
+
+#: templates/arith_task_confidence.html:19
+#: templates/arith_task_confidence.html:34
+#: templates/arith_task_confidence.html:49
+#: templates/arith_task_confidence.html:64 templates/demo_selfscore.html:77
+#: templates/selfscore_q.html:19 templates/selfscore_q.html:34
+#: templates/selfscore_q.html:49 templates/selfscore_q.html:64
+msgid "Heel onzeker"
+msgstr "Muy inseguro"
+
+#: templates/arith_task_confidence.html:22 templates/demo_selfscore.html:80
+#: templates/selfscore_q.html:22
+msgid "heel onzeker"
+msgstr "muy inseguro"
+
+#: templates/arith_task_confidence.html:23 templates/demo_selfscore.html:81
+#: templates/selfscore_q.html:23
+msgid "ik denk dat ik fout was"
+msgstr "creo que me equivoqué"
+
+#: templates/arith_task_confidence.html:37 templates/demo_selfscore.html:95
+#: templates/selfscore_q.html:37
+msgid "onzeker"
+msgstr "inseguro"
+
+#: templates/arith_task_confidence.html:38
+#: templates/arith_task_confidence.html:53
+#: templates/arith_task_confidence.html:68 templates/demo_selfscore.html:96
+#: templates/demo_selfscore.html:111 templates/demo_selfscore.html:126
+#: templates/selfscore_q.html:38 templates/selfscore_q.html:53
+#: templates/selfscore_q.html:68
+msgid "dat ik juist was"
+msgstr "de que acerté"
+
+#: templates/arith_task_confidence.html:52 templates/demo_selfscore.html:110
+#: templates/selfscore_q.html:52
+msgid "een beetje zeker"
+msgstr "un poco seguro"
+
+#: templates/arith_task_confidence.html:67 templates/demo_selfscore.html:125
+#: templates/selfscore_q.html:67
+msgid "heel zeker"
+msgstr "muy seguro"
+
+#: templates/arith_task_confidence.html:76 templates/demo_exercise.html:32
+#: templates/demo_selfscore.html:135 templates/exercise.html:50
+#: templates/selfscore_q.html:76
+msgid "Verstuur"
+msgstr "Enviar"
+
+#: templates/arith_task_done.html:7 templates/arith_task_intro.html:6
+#: templates/select_mode.html:27 templates/select_mode.html:28
+msgid "Pre-test"
+msgstr "Preprueba"
+
+#: templates/arith_task_done.html:7 templates/arith_task_intro.html:6
+#: templates/select_mode.html:34 templates/select_mode.html:35
+msgid "Post-test"
+msgstr "Posprueba"
+
+#: templates/arith_task_done.html:9 templates/arith_task_ready_adaptive.html:6
+#: templates/motor_task_done.html:6
+msgid "Goed gedaan!"
+msgstr "¡Bien hecho!"
+
+#: templates/arith_task_done.html:13 templates/motor_task_done.html:10
+msgid "Je bent klaar met deze oefening."
+msgstr "Has terminado este ejercicio."
+
+#: templates/arith_task_done.html:19 templates/motor_task_done.html:16
+msgid "Jouw resultaat"
+msgstr "Tu resultado"
+
+#: templates/arith_task_done.html:22
+msgid "Eerste deel"
+msgstr "Primera parte"
+
+#: templates/arith_task_done.html:26
+msgid "Tweede deel"
+msgstr "Segunda parte"
+
+#: templates/arith_task_done.html:30
+msgid "Bereikt niveau"
+msgstr "Nivel alcanzado"
+
+#: templates/arith_task_done.html:34 templates/motor_task_done.html:23
+msgid "Gemiddelde reactietijd"
+msgstr "Tiempo de reacción promedio"
+
+#: templates/arith_task_done.html:35 templates/motor_task_done.html:24
+msgid "sec"
+msgstr "seg"
+
+#: templates/arith_task_done.html:38
+msgid "Gemiddelde zekerheid"
+msgstr "Certeza promedio"
+
+#: templates/arith_task_done.html:46 templates/arith_task_too_late.html:17
+#: templates/demo_too_late.html:20 templates/exercise.html:83
+#: templates/motor_task_done.html:31
+msgid "Verder"
+msgstr "Continuar"
+
+#: templates/arith_task_intro.html:7 templates/motor_task_intro.html:6
+msgid "Welkom!"
+msgstr "¡Bienvenido/a!"
+
+#: templates/arith_task_intro.html:14
+msgid ""
+"Zo meteen zie je enkele rekenoefeningen. Sommige zijn makkelijk, andere "
+"wat moeilijker."
+msgstr ""
+"Dentro de un momento verás algunos ejercicios de cálculo. Algunos son "
+"fáciles, otros un poco más difíciles."
+
+#: templates/arith_task_intro.html:17
+msgid ""
+"Er zijn telkens 2 mogelijke antwoorden. Duid het juiste antwoord aan door"
+" op het pijltje links of rechts te drukken."
+msgstr ""
+"Siempre hay 2 respuestas posibles. Indica la respuesta correcta pulsando "
+"la flecha izquierda o derecha."
+
+#: templates/arith_task_intro.html:20
+msgid "Antwoord zo goed en zo snel als je kan!"
+msgstr "¡Responde lo mejor y lo más rápido que puedas!"
+
+#: templates/arith_task_intro.html:25
+#: templates/arith_task_ready_adaptive.html:15
+#: templates/arith_task_ready_fixed.html:15 templates/demo_select.html:56
+#: templates/motor_task_intro.html:24 templates/motor_task_ready.html:15
+#: templates/select.html:161 templates/select.html:171
+#: templates/select.html:181 templates/select.html:193
+msgid "Start"
+msgstr "Empezar"
+
+#: templates/arith_task_ready_adaptive.html:10
+msgid "Nu komt het tweede stukje."
+msgstr "Ahora viene la segunda parte."
+
+#: templates/arith_task_ready_fixed.html:6
+msgid "Begrijp je het?"
+msgstr "¿Lo entiendes?"
+
+#: templates/arith_task_ready_fixed.html:10
+msgid ""
+"Dan doen we het nu voor echt! Probeer zo goed en zo snel mogelijk te "
+"antwoorden."
+msgstr ""
+"¡Entonces ahora vamos en serio! Intenta responder lo mejor y lo más "
+"rápido posible."
+
+#: templates/arith_task_too_late.html:5 templates/demo_too_late.html:6
+#: templates/exercise.html:70
+msgid "Oeps!"
+msgstr "¡Ups!"
+
+#: templates/arith_task_too_late.html:9 templates/demo_too_late.html:10
+#: templates/exercise.html:74
+msgid "Je was te laat, probeer volgende keer sneller te werken."
+msgstr "Se te acabó el tiempo, intenta responder más rápido la próxima vez."
+
 #: templates/base.html:44
 msgid "Close"
 msgstr "Cerrar"
@@ -360,11 +526,6 @@ msgstr "Ir a la zona de rompecabezas"
 #: templates/demo_exercise.html:6 templates/exercise.html:17
 msgid "Oefening"
 msgstr "Ejercicio"
-
-#: templates/demo_exercise.html:32 templates/demo_selfscore.html:135
-#: templates/exercise.html:50 templates/selfscore_q.html:76
-msgid "Verstuur"
-msgstr "Enviar"
 
 #: templates/demo_feedback.html:4 templates/demo_meta_feedback.html:4
 #: templates/feedback.html:4
@@ -557,77 +718,21 @@ msgstr ""
 msgid "Optellen"
 msgstr "Sumar"
 
-#: templates/demo_select.html:56 templates/motor_task_intro.html:24
-#: templates/motor_task_ready.html:15 templates/select.html:161
-#: templates/select.html:171 templates/select.html:181
-#: templates/select.html:193
-msgid "Start"
-msgstr "Empezar"
-
-#: templates/demo_selfscore.html:4 templates/selfscore_q.html:4
-msgid "Hoe zeker ben je van je antwoord?"
-msgstr "¿Qué tan seguro estás de tu respuesta?"
-
-#: templates/demo_selfscore.html:77 templates/selfscore_q.html:19
-#: templates/selfscore_q.html:34 templates/selfscore_q.html:49
-#: templates/selfscore_q.html:64
-msgid "Heel onzeker"
-msgstr "Muy inseguro"
-
-#: templates/demo_selfscore.html:80 templates/selfscore_q.html:22
-msgid "heel onzeker"
-msgstr "muy inseguro"
-
-#: templates/demo_selfscore.html:81 templates/selfscore_q.html:23
-msgid "ik denk dat ik fout was"
-msgstr "creo que me equivoqué"
-
 #: templates/demo_selfscore.html:92
 msgid "Onzeker"
 msgstr "Inseguro"
-
-#: templates/demo_selfscore.html:95 templates/selfscore_q.html:37
-msgid "onzeker"
-msgstr "inseguro"
-
-#: templates/demo_selfscore.html:96 templates/demo_selfscore.html:111
-#: templates/demo_selfscore.html:126 templates/selfscore_q.html:38
-#: templates/selfscore_q.html:53 templates/selfscore_q.html:68
-msgid "dat ik juist was"
-msgstr "de que acerté"
 
 #: templates/demo_selfscore.html:107
 msgid "Een beetje zeker"
 msgstr "Un poco seguro"
 
-#: templates/demo_selfscore.html:110 templates/selfscore_q.html:52
-msgid "een beetje zeker"
-msgstr "un poco seguro"
-
 #: templates/demo_selfscore.html:122
 msgid "Heel zeker"
 msgstr "Muy seguro"
 
-#: templates/demo_selfscore.html:125 templates/selfscore_q.html:67
-msgid "heel zeker"
-msgstr "muy seguro"
-
-#: templates/demo_too_late.html:6 templates/exercise.html:70
-msgid "Oeps!"
-msgstr "¡Ups!"
-
-#: templates/demo_too_late.html:10 templates/exercise.html:74
-msgid "Je was te laat, probeer volgende keer sneller te werken."
-msgstr "Se te acabó el tiempo, intenta responder más rápido la próxima vez."
-
 #: templates/demo_too_late.html:16
 msgid "Te laat"
 msgstr "Demasiado tarde"
-
-#: templates/demo_too_late.html:20 templates/exercise.html:83
-#: templates/motor_task_done.html:31
-msgid "Verder"
-msgstr "Continuar"
 
 #: templates/feedback.html:15
 msgid "Geen antwoord"
@@ -722,33 +827,9 @@ msgstr "¿Aún no tienes cuenta? ¡Regístrate!"
 msgid "Handleiding openen"
 msgstr "Abrir el manual"
 
-#: templates/motor_task_done.html:6
-msgid "Goed gedaan!"
-msgstr "¡Bien hecho!"
-
-#: templates/motor_task_done.html:10
-msgid "Je bent klaar met deze oefening."
-msgstr "Has terminado este ejercicio."
-
-#: templates/motor_task_done.html:16
-msgid "Jouw resultaat"
-msgstr "Tu resultado"
-
 #: templates/motor_task_done.html:19
 msgid "Juiste antwoorden"
 msgstr "Respuestas correctas"
-
-#: templates/motor_task_done.html:23
-msgid "Gemiddelde reactietijd"
-msgstr "Tiempo de reacción promedio"
-
-#: templates/motor_task_done.html:24
-msgid "sec"
-msgstr "seg"
-
-#: templates/motor_task_intro.html:6
-msgid "Welkom!"
-msgstr "¡Bienvenido/a!"
 
 #: templates/motor_task_intro.html:13
 msgid "Zo dadelijk krijg je enkele figuren te zien."
@@ -1677,4 +1758,7 @@ msgstr "Tiempo de reacción (s)"
 #: templates/teacher_student.html:81
 msgid "Nog geen oefeningen gemaakt."
 msgstr "Aún no se han hecho ejercicios."
+
+#~ msgid "Slim Rekenen"
+#~ msgstr "Cálculo Inteligente"
 

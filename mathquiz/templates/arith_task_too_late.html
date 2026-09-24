@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="max-width: 700px;">
+  <h1 class="display-4 fw-bold text-success mb-4">{{ _('Oeps!') }}</h1>
+
+  <div class="p-4 mb-3 border rounded-4 bg-light shadow-sm" style="border-radius: 20px;">
+    <p class="fs-2 text-success mb-4">
+      {{ _('Je was te laat, probeer volgende keer sneller te werken.') }}
+    </p>
+
+    <img src="{{ image_url('too_late.png') }}"
+         class="img-fluid mx-auto d-block mb-4"
+         style="max-height: 260px;">
+
+    <a href="{{ url_for('student.arith_task_trial') }}" class="btn btn-jungle btn-jungle-md">
+      {{ _('Verder') }}
+    </a>
+  </div>
+</div>
+{% endblock %}

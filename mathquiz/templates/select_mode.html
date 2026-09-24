@@ -1,12 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container text-center" style="max-width: 1000px;">
+<div class="container text-center" style="max-width: 1400px;">
 
   <h1 class="display-4 fw-bold text-success mb-3">{{ _('Wat wil je doen?') }}</h1>
   <p class="fs-3 text-success mb-5">{{ _('Kies hieronder waarmee je aan de slag wil.') }}</p>
 
   <div class="d-flex flex-wrap justify-content-center gap-4 mb-4">
+
+    <a href="{{ url_for('student.motor_task_intro') }}" class="text-decoration-none text-center mode-card">
+      <div class="bg-light rounded shadow p-4">
+        <img src="{{ url_for('static', filename='motor_task/astronaut.png') }}" alt="{{ _('Reactiespel') }}" class="mode-card-img" style="object-fit: contain; background: #000;">
+        <p class="fs-3 text-dark fw-bold mb-0 mt-3">{{ _('Reactiespel') }}</p>
+      </div>
+    </a>
+
+    <a href="{{ url_for('student.arith_task_intro', label='pretest') }}" class="text-decoration-none text-center mode-card">
+      <div class="bg-light rounded shadow p-4">
+        <img src="{{ url_for('static', filename='arith_task/icon.png') }}" alt="{{ _('Pre-test') }}" class="mode-card-img" style="object-fit: contain; background: #000;">
+        <p class="fs-3 text-dark fw-bold mb-0 mt-3">{{ _('Pre-test') }}</p>
+      </div>
+    </a>
 
     <a href="{{ url_for('student.start_exercises') }}" class="text-decoration-none text-center mode-card">
       <div class="bg-light rounded shadow p-4">
@@ -15,10 +29,10 @@
       </div>
     </a>
 
-    <a href="{{ url_for('student.motor_task_intro') }}" class="text-decoration-none text-center mode-card">
+    <a href="{{ url_for('student.arith_task_intro', label='posttest') }}" class="text-decoration-none text-center mode-card">
       <div class="bg-light rounded shadow p-4">
-        <img src="{{ url_for('static', filename='motor_task/astronaut.png') }}" alt="{{ _('Reactiespel') }}" class="mode-card-img" style="object-fit: contain; background: #000;">
-        <p class="fs-3 text-dark fw-bold mb-0 mt-3">{{ _('Reactiespel') }}</p>
+        <img src="{{ url_for('static', filename='arith_task/icon.png') }}" alt="{{ _('Post-test') }}" class="mode-card-img" style="object-fit: contain; background: #000;">
+        <p class="fs-3 text-dark fw-bold mb-0 mt-3">{{ _('Post-test') }}</p>
       </div>
     </a>
 

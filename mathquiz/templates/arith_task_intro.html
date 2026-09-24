@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="max-width: 700px;">
+
+  <div class="label-badge mb-2">{{ _('Pre-test') if label == 'pretest' else _('Post-test') }}</div>
+  <h1 class="display-4 fw-bold text-success mb-3">{{ _('Welkom!') }}</h1>
+
+  <div class="bg-light rounded shadow p-4 mb-4">
+    <img src="{{ url_for('static', filename='arith_task/icon.png') }}"
+         alt="" class="mb-3" style="max-height: 120px;">
+
+    <p class="fs-4 text-dark mb-2">
+      {{ _('Zo meteen zie je enkele rekenoefeningen. Sommige zijn makkelijk, andere wat moeilijker.') }}
+    </p>
+    <p class="fs-4 text-dark mb-2">
+      {{ _('Er zijn telkens 2 mogelijke antwoorden. Duid het juiste antwoord aan door op het pijltje links of rechts te drukken.') }}
+    </p>
+    <p class="fs-4 text-dark mb-0">
+      {{ _('Antwoord zo goed en zo snel als je kan!') }}
+    </p>
+  </div>
+
+  <a href="{{ url_for('student.arith_task_begin') }}" class="btn btn-jungle btn-jungle-md px-5 py-3">
+    {{ _('Start') }}
+  </a>
+
+</div>
+
+<style>
+  .label-badge {
+    display: inline-block;
+    background: #198754;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 4px 16px;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+</style>
+{% endblock %}
