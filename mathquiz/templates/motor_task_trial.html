@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="motorStage" class="motor-stage">
+  <div id="fixationDot" class="fixation-dot" hidden></div>
+  <img id="stimulusImg" class="stimulus-img" src="{{ stimulus_url }}" alt="" hidden>
+</div>
+
+<form method="post" id="trialForm">
+  <input type="hidden" name="response" id="responseInput" value="">
+  <input type="hidden" name="response_time" id="responseTimeInput" value="">
+</form>
+
+<style>
+  body { background-image: none !important; background-color: #000 !important; }
+
+  .motor-stage {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .fixation-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  .stimulus-img {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+</style>
+
+<script>
+(function () {
+  const fixationDot = document.getElementById("fixationDot");
+  const stimulusImg = document.getElementById("stimulusImg");
+  const responseInput = document.getElementById("responseInput");
+  const responseTimeInput = document.getElementById("responseTimeInput");
+  const form = document.getElementById("trialForm");
+
+  let stimulusOnset = null;
+  let answered = false;
+  let listening = false;
+
+  function onKeydown(e) {
+    if (!listening || answered) return;
+
+    let response = null;
+    if (e.key === "ArrowLeft") response = "left";
+    else if (e.key === "ArrowRight") response = "right";
+    if (!response) return;
+
+    e.preventDefault();
+    answered = true;
+    listening = false;
+
+    const responseTime = (Date.now() - stimulusOnset) / 1000;
+    responseInput.value = response;
+    responseTimeInput.value = responseTime.toFixed(3);
+    document.removeEventListener("keydown", onKeydown);
+    form.submit();
+  }
+
+  document.addEventListener("keydown", onKeydown);
+
+  // Fixation dot: 245ms
+  fixationDot.hidden = false;
+  setTimeout(function () {
+    fixationDot.hidden = true;
+
+    // Blank preparation screen: 745ms
+    setTimeout(function () {
+      stimulusImg.hidden = false;
+      stimulusOnset = Date.now();
+      listening = true;
+    }, 745);
+  }, 245);
+})();
+</script>
+{% endblock %}

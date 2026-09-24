@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-13 07:46+0200\n"
+"POT-Creation-Date: 2026-09-24 13:41+0200\n"
 "PO-Revision-Date: 2026-08-12 15:52+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -39,38 +39,42 @@ msgid "Ongeldige activatiecode!"
 msgstr "¡Código de activación no válido!"
 
 #: blueprints/auth/routes.py:83
-msgid "Inloggen mislukt! Gebruiker niet in deze groep of verkeerde pincode ingevoerd!"
-msgstr "¡Error al iniciar sesión! Usuario no encontrado en este grupo o PIN incorrecto."
+msgid ""
+"Inloggen mislukt! Gebruiker niet in deze groep of verkeerde pincode "
+"ingevoerd!"
+msgstr ""
+"¡Error al iniciar sesión! Usuario no encontrado en este grupo o PIN "
+"incorrecto."
 
 #: blueprints/auth/routes.py:90
 msgid "Inloggen geslaagd!"
 msgstr "¡Inicio de sesión correcto!"
 
-#: blueprints/student/routes.py:391
+#: blueprints/student/routes.py:412
 msgid "Ongeldige operatie!"
 msgstr "¡Operación no válida!"
 
-#: blueprints/student/routes.py:397
+#: blueprints/student/routes.py:418
 msgid "Mix is leeg!"
 msgstr "¡La mezcla está vacía!"
 
-#: blueprints/student/routes.py:617
+#: blueprints/student/routes.py:638
 msgid "Geen oefeningen mogelijk met deze instellingen."
 msgstr "No es posible generar ejercicios con esta configuración."
 
-#: blueprints/student/routes.py:878 blueprints/student/routes.py:918
+#: blueprints/student/routes.py:899 blueprints/student/routes.py:939
 msgid "Puzzel bestaat niet!"
 msgstr "¡El rompecabezas no existe!"
 
-#: blueprints/student/routes.py:931
+#: blueprints/student/routes.py:952
 msgid "Puzzel is al volledig!"
 msgstr "¡El rompecabezas ya está completo!"
 
-#: blueprints/student/routes.py:935
+#: blueprints/student/routes.py:956
 msgid "Niet genoeg punten!"
 msgstr "¡No tienes suficientes puntos!"
 
-#: blueprints/student/routes.py:959
+#: blueprints/student/routes.py:980
 msgid "Puzzel is gereset!"
 msgstr "¡El rompecabezas se ha reiniciado!"
 
@@ -121,12 +125,18 @@ msgid "Geen toegang!"
 msgstr "¡Sin acceso!"
 
 #: blueprints/teacher/routes.py:641 blueprints/teacher/routes.py:847
-msgid "Instellingen opslaan mislukt! Er moet minstens 1 operatie beschikbaar zijn."
-msgstr "¡Error al guardar la configuración! Debe haber al menos 1 operación disponible."
+msgid ""
+"Instellingen opslaan mislukt! Er moet minstens 1 operatie beschikbaar "
+"zijn."
+msgstr ""
+"¡Error al guardar la configuración! Debe haber al menos 1 operación "
+"disponible."
 
 #: blueprints/teacher/routes.py:645 blueprints/teacher/routes.py:851
 msgid "Instellingen opslaan mislukt! Mix moet minstens 1 operatie bevatten."
-msgstr "¡Error al guardar la configuración! La mezcla debe contener al menos 1 operación."
+msgstr ""
+"¡Error al guardar la configuración! La mezcla debe contener al menos 1 "
+"operación."
 
 #: blueprints/teacher/routes.py:651
 #, python-format
@@ -135,8 +145,13 @@ msgstr "¡Error al guardar la configuración! %(error)s"
 
 #: blueprints/teacher/routes.py:692
 #, python-format
-msgid "Instellingen opslaan mislukt! De nieuwe onderzoeksinstellingen zijn niet compatibel met stap %(step)s van de oefenreeksreeks. %(error)s"
-msgstr "¡Error al guardar la configuración! La nueva configuración de investigación no es compatible con el paso %(step)s de la secuencia de ejercicios. %(error)s"
+msgid ""
+"Instellingen opslaan mislukt! De nieuwe onderzoeksinstellingen zijn niet "
+"compatibel met stap %(step)s van de oefenreeksreeks. %(error)s"
+msgstr ""
+"¡Error al guardar la configuración! La nueva configuración de "
+"investigación no es compatible con el paso %(step)s de la secuencia de "
+"ejercicios. %(error)s"
 
 #: blueprints/teacher/routes.py:757
 msgid "Instellingen opgeslagen en oefenreeksen voorbereid."
@@ -156,8 +171,12 @@ msgid "Stap toegevoegd aan reeks."
 msgstr "Paso añadido a la secuencia."
 
 #: blueprints/teacher/routes.py:947 blueprints/teacher/routes.py:1143
-msgid "Alle stappen in de reeks zijn verwijderd. De groep gebruikt nu weer de standaardinstellingen."
-msgstr "Se han eliminado todos los pasos de la secuencia. El grupo vuelve a usar la configuración estándar."
+msgid ""
+"Alle stappen in de reeks zijn verwijderd. De groep gebruikt nu weer de "
+"standaardinstellingen."
+msgstr ""
+"Se han eliminado todos los pasos de la secuencia. El grupo vuelve a usar "
+"la configuración estándar."
 
 #: blueprints/teacher/routes.py:949
 msgid "Stap verwijderd."
@@ -206,7 +225,9 @@ msgstr "Nombre modificado correctamente."
 
 #: blueprints/teacher/routes.py:1285
 msgid "Naam wijzigen mislukt. Mogelijk bestaat deze naam al in de groep."
-msgstr "Error al cambiar el nombre. Es posible que este nombre ya exista en el grupo."
+msgstr ""
+"Error al cambiar el nombre. Es posible que este nombre ya exista en el "
+"grupo."
 
 #: blueprints/teacher/routes.py:1310 blueprints/teacher/routes.py:1339
 msgid "Je mag deze leerling niet verwijderen."
@@ -260,8 +281,12 @@ msgid "Importeren mislukt! Stap %(i)s: %(error)s"
 msgstr "¡Error al importar! Paso %(i)s: %(error)s"
 
 #: blueprints/teacher/routes.py:1829
-msgid "Instellingen en oefenreeks succesvol geïmporteerd. Alle leerlingen starten opnieuw vanaf stap 1."
-msgstr "Configuración y secuencia de ejercicios importadas correctamente. Todos los alumnos empiezan de nuevo desde el paso 1."
+msgid ""
+"Instellingen en oefenreeks succesvol geïmporteerd. Alle leerlingen "
+"starten opnieuw vanaf stap 1."
+msgstr ""
+"Configuración y secuencia de ejercicios importadas correctamente. Todos "
+"los alumnos empiezan de nuevo desde el paso 1."
 
 #: blueprints/teacher/routes.py:1848
 msgid "Importeren mislukt! Er moet minstens 1 operatie beschikbaar zijn."
@@ -284,7 +309,7 @@ msgstr "Configuración importada y guardada correctamente."
 msgid "Luister"
 msgstr "Escuchar"
 
-#: templates/base.html:41
+#: templates/base.html:44
 msgid "Close"
 msgstr "Cerrar"
 
@@ -317,7 +342,8 @@ msgid ""
 "Wacht nu rustig en in stilte tot de onderzoeker aangeeft\n"
 "        dat je klaar bent voor vandaag."
 msgstr ""
-"Espera ahora con calma y en silencio hasta que la persona investigadora indique\n"
+"Espera ahora con calma y en silencio hasta que la persona investigadora "
+"indique\n"
 "        que has terminado por hoy."
 
 #: templates/demo_end_sequence.html:40 templates/login_teacher.html:32
@@ -455,8 +481,10 @@ msgid ""
 "Heel goed bezig! Je bent een super-rekenranger! Je mag even rusten.\n"
 "      Wacht in stilte en blijf rustig zitten tot de onderzoeker komt."
 msgstr ""
-"¡Muy buen trabajo! ¡Eres un súper Rekenranger! Puedes descansar un momento.\n"
-"      Espera en silencio y quédate tranquilo en tu asiento hasta que llegue la persona investigadora."
+"¡Muy buen trabajo! ¡Eres un súper Rekenranger! Puedes descansar un "
+"momento.\n"
+"      Espera en silencio y quédate tranquilo en tu asiento hasta que "
+"llegue la persona investigadora."
 
 #: templates/demo_select.html:6 templates/select.html:7
 msgid "De volgende oefening"
@@ -465,10 +493,12 @@ msgstr "El siguiente ejercicio"
 #: templates/demo_select.html:8
 msgid ""
 "Straks maak je de volgende oefening.\n"
-"    Volg rustig de aanwijzingen en druk op <strong>Start</strong> wanneer dat gevraagd wordt."
+"    Volg rustig de aanwijzingen en druk op <strong>Start</strong> wanneer"
+" dat gevraagd wordt."
 msgstr ""
 "Dentro de poco harás el siguiente ejercicio.\n"
-"    Sigue tranquilamente las instrucciones y pulsa <strong>Empezar</strong> cuando se te indique."
+"    Sigue tranquilamente las instrucciones y pulsa "
+"<strong>Empezar</strong> cuando se te indique."
 
 #: templates/demo_select.html:14 templates/select.html:23
 msgid "Zo zal deze oefening verlopen"
@@ -519,13 +549,16 @@ msgstr "Desactivado"
 
 #: templates/demo_select.html:47 templates/select.html:148
 msgid "Klik op <strong>Start</strong> bij de oefening die de onderzoeker aanduidt"
-msgstr "Haz clic en <strong>Empezar</strong> en el ejercicio que indique la persona investigadora"
+msgstr ""
+"Haz clic en <strong>Empezar</strong> en el ejercicio que indique la "
+"persona investigadora"
 
 #: templates/demo_select.html:55 templates/select.html:160
 msgid "Optellen"
 msgstr "Sumar"
 
-#: templates/demo_select.html:56 templates/select.html:161
+#: templates/demo_select.html:56 templates/motor_task_intro.html:24
+#: templates/motor_task_ready.html:15 templates/select.html:161
 #: templates/select.html:171 templates/select.html:181
 #: templates/select.html:193
 msgid "Start"
@@ -592,6 +625,7 @@ msgid "Te laat"
 msgstr "Demasiado tarde"
 
 #: templates/demo_too_late.html:20 templates/exercise.html:83
+#: templates/motor_task_done.html:31
 msgid "Verder"
 msgstr "Continuar"
 
@@ -688,6 +722,50 @@ msgstr "¿Aún no tienes cuenta? ¡Regístrate!"
 msgid "Handleiding openen"
 msgstr "Abrir el manual"
 
+#: templates/motor_task_done.html:6
+msgid "Goed gedaan!"
+msgstr "¡Bien hecho!"
+
+#: templates/motor_task_done.html:10
+msgid "Je bent klaar met deze oefening."
+msgstr "Has terminado este ejercicio."
+
+#: templates/motor_task_done.html:16
+msgid "Jouw resultaat"
+msgstr "Tu resultado"
+
+#: templates/motor_task_done.html:19
+msgid "Juiste antwoorden"
+msgstr "Respuestas correctas"
+
+#: templates/motor_task_done.html:23
+msgid "Gemiddelde reactietijd"
+msgstr "Tiempo de reacción promedio"
+
+#: templates/motor_task_done.html:24
+msgid "sec"
+msgstr "seg"
+
+#: templates/motor_task_intro.html:6
+msgid "Welkom!"
+msgstr "¡Bienvenido/a!"
+
+#: templates/motor_task_intro.html:13
+msgid "Zo dadelijk krijg je enkele figuren te zien."
+msgstr "Dentro de un momento verás algunas figuras."
+
+#: templates/motor_task_intro.html:16
+msgid "Welke van de twee is wit gekleurd?"
+msgstr "¿Cuál de las dos está coloreada de blanco?"
+
+#: templates/motor_task_intro.html:19 templates/motor_task_ready.html:10
+msgid "Geef zo goed en zo snel als je kan het juiste antwoord."
+msgstr "Da la respuesta correcta lo mejor y lo más rápido que puedas."
+
+#: templates/motor_task_ready.html:6
+msgid "Goed zo!"
+msgstr "¡Muy bien!"
+
 #: templates/preview.html:5
 msgid "Voorbeeldopgave"
 msgstr "Ejercicio de ejemplo"
@@ -774,27 +852,35 @@ msgstr "Volver al login"
 msgid ""
 "Heel goed bezig! Je bent een super-rekenranger!\n"
 "      Je kan nu verder oefenen of de dieren helpen bevrijden.\n"
-"      Ga naar de puzzelomgeving om de rekendieren stap voor stap te bevrijden!"
+"      Ga naar de puzzelomgeving om de rekendieren stap voor stap te "
+"bevrijden!"
 msgstr ""
 "¡Muy buen trabajo! ¡Eres un súper Rekenranger!\n"
 "      Ahora puedes seguir practicando o ayudar a liberar a los animales.\n"
-"      ¡Ve a la zona de rompecabezas para liberar a los animales matemáticos paso a paso!"
+"      ¡Ve a la zona de rompecabezas para liberar a los animales "
+"matemáticos paso a paso!"
 
 #: templates/select.html:9
 msgid ""
 "Straks maak je de volgende oefening.\n"
-"      Volg rustig de aanwijzingen en druk op <strong>Start</strong> wanneer dat gevraagd wordt."
+"      Volg rustig de aanwijzingen en druk op <strong>Start</strong> "
+"wanneer dat gevraagd wordt."
 msgstr ""
 "Dentro de poco harás el siguiente ejercicio.\n"
-"      Sigue tranquilamente las instrucciones y pulsa <strong>Empezar</strong> cuando se te indique."
+"      Sigue tranquilamente las instrucciones y pulsa "
+"<strong>Empezar</strong> cuando se te indique."
 
 #: templates/select.html:13
 msgid "Kies je volgende oefening"
 msgstr "Elige tu siguiente ejercicio"
 
 #: templates/select.html:15
-msgid "Klaar voor een nieuwe oefening? Kies hieronder waarmee je verder wil oefenen."
-msgstr "¿Listo para un nuevo ejercicio? Elige abajo con qué quieres seguir practicando."
+msgid ""
+"Klaar voor een nieuwe oefening? Kies hieronder waarmee je verder wil "
+"oefenen."
+msgstr ""
+"¿Listo para un nuevo ejercicio? Elige abajo con qué quieres seguir "
+"practicando."
 
 #: templates/select.html:31 templates/select.html:52
 msgid "Kies zelf"
@@ -881,6 +967,22 @@ msgstr "Multiplicar"
 msgid "Demo opnieuw"
 msgstr "Repetir la demo"
 
+#: templates/select_mode.html:6
+msgid "Wat wil je doen?"
+msgstr "¿Qué quieres hacer?"
+
+#: templates/select_mode.html:7
+msgid "Kies hieronder waarmee je aan de slag wil."
+msgstr "Elige a continuación con qué quieres empezar."
+
+#: templates/select_mode.html:13 templates/select_mode.html:14
+msgid "Rekenoefeningen"
+msgstr "Ejercicios de cálculo"
+
+#: templates/select_mode.html:20 templates/select_mode.html:21
+msgid "Reactiespel"
+msgstr "Juego de reacción"
+
 #: templates/teacher_dashboard.html:4
 msgid "Leerkracht dashboard"
 msgstr "Panel del docente"
@@ -899,7 +1001,9 @@ msgstr "Crear"
 
 #: templates/teacher_dashboard.html:14
 msgid "Zodra een groep wordt aangemaakt, krijg je automatisch een activatiecode."
-msgstr "En cuanto se crea un grupo, recibes automáticamente un código de activación."
+msgstr ""
+"En cuanto se crea un grupo, recibes automáticamente un código de "
+"activación."
 
 #: templates/teacher_dashboard.html:20
 msgid "Leerlingen importeren uit CSV"
@@ -911,10 +1015,12 @@ msgstr "Subir e importar"
 
 #: templates/teacher_dashboard.html:38
 msgid ""
-"Vereist: CSV met <strong>Voornaam</strong>, <strong>Achternaam</strong>, <strong>Groepsnaam</strong><br>\n"
+"Vereist: CSV met <strong>Voornaam</strong>, <strong>Achternaam</strong>, "
+"<strong>Groepsnaam</strong><br>\n"
 "    Elke unieke groepsnaam wordt automatisch aangemaakt."
 msgstr ""
-"Requerido: CSV con <strong>Nombre</strong>, <strong>Apellido</strong>, <strong>Nombre del grupo</strong><br>\n"
+"Requerido: CSV con <strong>Nombre</strong>, <strong>Apellido</strong>, "
+"<strong>Nombre del grupo</strong><br>\n"
 "    Cada nombre de grupo único se crea automáticamente."
 
 #: templates/teacher_dashboard.html:44
@@ -938,8 +1044,12 @@ msgid "Open"
 msgstr "Abrir"
 
 #: templates/teacher_dashboard.html:71
-msgid "Weet je zeker dat je deze groep en ALLE leerlingen en data in deze groep wilt verwijderen?"
-msgstr "¿Seguro que quieres eliminar este grupo y TODOS los alumnos y datos de este grupo?"
+msgid ""
+"Weet je zeker dat je deze groep en ALLE leerlingen en data in deze groep "
+"wilt verwijderen?"
+msgstr ""
+"¿Seguro que quieres eliminar este grupo y TODOS los alumnos y datos de "
+"este grupo?"
 
 #: templates/teacher_dashboard.html:73 templates/teacher_group.html:102
 msgid "Verwijder"
@@ -1008,8 +1118,12 @@ msgstr "¿Seguro que quieres reiniciar a %(name)s?"
 
 #: templates/teacher_group.html:101
 #, python-format
-msgid "Ben je zeker dat je %(name)s wil verwijderen? Dit verwijdert ook alle resultaten."
-msgstr "¿Seguro que quieres eliminar a %(name)s? Esto también eliminará todos sus resultados."
+msgid ""
+"Ben je zeker dat je %(name)s wil verwijderen? Dit verwijdert ook alle "
+"resultaten."
+msgstr ""
+"¿Seguro que quieres eliminar a %(name)s? Esto también eliminará todos sus"
+" resultados."
 
 #: templates/teacher_group.html:112 templates/teacher_group_print.html:126
 msgid "Nog geen leerlingen toegevoegd."
@@ -1029,28 +1143,36 @@ msgstr "Gestionar secuencia de ejercicios para este grupo"
 
 #: templates/teacher_group.html:137
 msgid ""
-"In een <strong>oefenreeks</strong> kan je meerdere blokken instellen die leerlingen\n"
+"In een <strong>oefenreeks</strong> kan je meerdere blokken instellen die "
+"leerlingen\n"
 "    na elkaar doorlopen.\n"
-"    Elke blok kan eigen instellingen hebben voor <strong>moeilijkheid</strong>,\n"
+"    Elke blok kan eigen instellingen hebben voor "
+"<strong>moeilijkheid</strong>,\n"
 "    <strong>timer</strong>, <strong>bewerkingen</strong> en het\n"
 "    <strong>aantal oefeningen</strong>.\n"
 "    <br><br>\n"
-"    De <strong>onderzoekinstellingen</strong> (zoals dubbele paren vermijden of\n"
+"    De <strong>onderzoekinstellingen</strong> (zoals dubbele paren "
+"vermijden of\n"
 "    uitgesloten getallen) blijven altijd gelden voor de hele groep.\n"
 "    <br>\n"
-"    Als er geen blokken zijn aangemaakt, gebruiken leerlingen automatisch de\n"
+"    Als er geen blokken zijn aangemaakt, gebruiken leerlingen automatisch"
+" de\n"
 "    <strong>standaard groepsinstellingen</strong>."
 msgstr ""
-"En una <strong>secuencia de ejercicios</strong> puedes configurar varios bloques que los alumnos\n"
+"En una <strong>secuencia de ejercicios</strong> puedes configurar varios "
+"bloques que los alumnos\n"
 "    completan uno tras otro.\n"
-"    Cada bloque puede tener su propia configuración de <strong>dificultad</strong>,\n"
+"    Cada bloque puede tener su propia configuración de "
+"<strong>dificultad</strong>,\n"
 "    <strong>temporizador</strong>, <strong>operaciones</strong> y\n"
 "    <strong>número de ejercicios</strong>.\n"
 "    <br><br>\n"
-"    La <strong>configuración de investigación</strong> (como evitar pares duplicados o\n"
+"    La <strong>configuración de investigación</strong> (como evitar pares"
+" duplicados o\n"
 "    números excluidos) siempre se aplica a todo el grupo.\n"
 "    <br>\n"
-"    Si no se ha creado ningún bloque, los alumnos usan automáticamente la\n"
+"    Si no se ha creado ningún bloque, los alumnos usan automáticamente la"
+"\n"
 "    <strong>configuración estándar del grupo</strong>."
 
 #: templates/teacher_group.html:154
@@ -1059,11 +1181,15 @@ msgstr "Configuración para este grupo"
 
 #: templates/teacher_group.html:163
 msgid ""
-"Er is momenteel een <strong>oefenreeks actief</strong>. Daarom zijn de gewone groepsinstellingen verborgen.\n"
-"      Alleen de <strong>onderzoeksinstellingen</strong> blijven aanpasbaar voor deze groep."
+"Er is momenteel een <strong>oefenreeks actief</strong>. Daarom zijn de "
+"gewone groepsinstellingen verborgen.\n"
+"      Alleen de <strong>onderzoeksinstellingen</strong> blijven "
+"aanpasbaar voor deze groep."
 msgstr ""
-"Actualmente hay una <strong>secuencia de ejercicios activa</strong>. Por eso la configuración normal del grupo está oculta.\n"
-"      Solo la <strong>configuración de investigación</strong> sigue siendo modificable para este grupo."
+"Actualmente hay una <strong>secuencia de ejercicios activa</strong>. Por "
+"eso la configuración normal del grupo está oculta.\n"
+"      Solo la <strong>configuración de investigación</strong> sigue "
+"siendo modificable para este grupo."
 
 #: templates/teacher_group.html:171 templates/teacher_sequence.html:101
 #: templates/teacher_sequence_edit_step.html:15
@@ -1071,8 +1197,12 @@ msgid "Timerinstellingen"
 msgstr "Configuración del temporizador"
 
 #: templates/teacher_group.html:173
-msgid "Bepaal of leerlingen de timer zelf mogen kiezen en wat de standaardinstelling is."
-msgstr "Determina si los alumnos pueden elegir el temporizador y cuál es el ajuste predeterminado."
+msgid ""
+"Bepaal of leerlingen de timer zelf mogen kiezen en wat de "
+"standaardinstelling is."
+msgstr ""
+"Determina si los alumnos pueden elegir el temporizador y cuál es el "
+"ajuste predeterminado."
 
 #: templates/teacher_group.html:180
 msgid "Leerlingen mogen zelf kiezen of de timer zichtbaar is"
@@ -1090,10 +1220,12 @@ msgstr "Operaciones"
 #: templates/teacher_group.html:195
 msgid ""
 "Kies welke bewerkingen leerlingen mogen zien.\n"
-"      Als <strong>Mix</strong> beschikbaar is, moet minstens één onderdeel zijn ingeschakeld."
+"      Als <strong>Mix</strong> beschikbaar is, moet minstens één "
+"onderdeel zijn ingeschakeld."
 msgstr ""
 "Elige qué operaciones pueden ver los alumnos.\n"
-"      Si la <strong>Mezcla</strong> está disponible, debe estar activada al menos una opción."
+"      Si la <strong>Mezcla</strong> está disponible, debe estar activada "
+"al menos una opción."
 
 #: templates/teacher_group.html:199
 msgid "Zichtbare bewerkingen:"
@@ -1132,17 +1264,27 @@ msgstr "Composición de la “Mezcla”"
 
 #: templates/teacher_group.html:233 templates/teacher_sequence.html:143
 #: templates/teacher_sequence_edit_step.html:61
-msgid "Welke bewerkingen kunnen verschijnen als een leerling <strong>“Mix”</strong> kiest?"
-msgstr "¿Qué operaciones pueden aparecer cuando un alumno elige <strong>“Mezcla”</strong>?"
+msgid ""
+"Welke bewerkingen kunnen verschijnen als een leerling "
+"<strong>“Mix”</strong> kiest?"
+msgstr ""
+"¿Qué operaciones pueden aparecer cuando un alumno elige "
+"<strong>“Mezcla”</strong>?"
 
 #: templates/teacher_group.html:252 templates/teacher_sequence.html:162
 #: templates/teacher_sequence_edit_step.html:80
 msgid "Minstens één optie verplicht wanneer <strong>Mix</strong> aan staat."
-msgstr "Se requiere al menos una opción cuando la <strong>Mezcla</strong> está activada."
+msgstr ""
+"Se requiere al menos una opción cuando la <strong>Mezcla</strong> está "
+"activada."
 
 #: templates/teacher_group.html:285
-msgid "Bepaal hoe de moeilijkheid wordt gekozen: vast, door leerlingen zelf, of adaptief op basis van prestaties."
-msgstr "Determina cómo se elige la dificultad: fija, por el propio alumno, o adaptativa según el rendimiento."
+msgid ""
+"Bepaal hoe de moeilijkheid wordt gekozen: vast, door leerlingen zelf, of "
+"adaptief op basis van prestaties."
+msgstr ""
+"Determina cómo se elige la dificultad: fija, por el propio alumno, o "
+"adaptativa según el rendimiento."
 
 #: templates/teacher_group.html:288 templates/teacher_sequence.html:192
 #: templates/teacher_sequence_edit_step.html:109
@@ -1201,18 +1343,24 @@ msgstr "Modo de investigación"
 #: templates/teacher_group.html:337
 msgid ""
 "Schakel deze modus in wanneer leerlingen deelnemen aan het onderzoek.\n"
-"        De interface wordt dan aangepast om afleiding te beperken en de afname zo gecontroleerd mogelijk te laten verlopen.\n"
+"        De interface wordt dan aangepast om afleiding te beperken en de "
+"afname zo gecontroleerd mogelijk te laten verlopen.\n"
 "        In deze modus worden onder andere:\n"
 "        <br>• muisinteractie voor leerlingen uitgeschakeld\n"
-"        <br>• storende of niet-noodzakelijke knoppen verborgen of uitgeschakeld\n"
-"        <br>• teksten aangepast aan een gestandaardiseerde onderzoeksafname"
+"        <br>• storende of niet-noodzakelijke knoppen verborgen of "
+"uitgeschakeld\n"
+"        <br>• teksten aangepast aan een gestandaardiseerde "
+"onderzoeksafname"
 msgstr ""
 "Activa este modo cuando los alumnos participen en la investigación.\n"
-"        La interfaz se adapta entonces para limitar las distracciones y que la administración sea lo más controlada posible.\n"
+"        La interfaz se adapta entonces para limitar las distracciones y "
+"que la administración sea lo más controlada posible.\n"
 "        En este modo, entre otras cosas:\n"
 "        <br>• se desactiva la interacción con el ratón para los alumnos\n"
-"        <br>• se ocultan o desactivan los botones molestos o no esenciales\n"
-"        <br>• los textos se adaptan a una administración de investigación estandarizada"
+"        <br>• se ocultan o desactivan los botones molestos o no "
+"esenciales\n"
+"        <br>• los textos se adaptan a una administración de investigación"
+" estandarizada"
 
 #: templates/teacher_group.html:350
 msgid "Onderzoeksmodus inschakelen"
@@ -1224,7 +1372,9 @@ msgstr "Demo: explicación de la metacognición"
 
 #: templates/teacher_group.html:359
 msgid "Kies of de demo ook het metacognitie-gedeelte (reflectie/uitleg) bevat."
-msgstr "Elige si la demo también incluye la parte de metacognición (reflexión/explicación)."
+msgstr ""
+"Elige si la demo también incluye la parte de metacognición "
+"(reflexión/explicación)."
 
 #: templates/teacher_group.html:367
 msgid "Demo bevat metacognitie-uitleg"
@@ -1235,8 +1385,12 @@ msgid "Fixatiescherm"
 msgstr "Pantalla de fijación"
 
 #: templates/teacher_group.html:375
-msgid "Toon voor elke oefening een fixatiekruis gedurende 1000 ms voordat de som verschijnt."
-msgstr "Muestra una cruz de fijación durante 1000 ms antes de que aparezca cada ejercicio."
+msgid ""
+"Toon voor elke oefening een fixatiekruis gedurende 1000 ms voordat de som"
+" verschijnt."
+msgstr ""
+"Muestra una cruz de fijación durante 1000 ms antes de que aparezca cada "
+"ejercicio."
 
 #: templates/teacher_group.html:382
 msgid "Fixatiescherm inschakelen"
@@ -1249,10 +1403,12 @@ msgstr "Reglas de repetición"
 #: templates/teacher_group.html:390
 msgid ""
 "Deze regels bepalen hoe oefenvragen worden samengesteld.\n"
-"        Ze helpen om herhaling en ongewenste patronen in de opgaven te vermijden."
+"        Ze helpen om herhaling en ongewenste patronen in de opgaven te "
+"vermijden."
 msgstr ""
 "Estas reglas determinan cómo se componen los ejercicios.\n"
-"        Ayudan a evitar la repetición y los patrones no deseados en los ejercicios."
+"        Ayudan a evitar la repetición y los patrones no deseados en los "
+"ejercicios."
 
 #: templates/teacher_group.html:397
 msgid "Voorkom identieke opgaven binnen één oefenset"
@@ -1267,8 +1423,12 @@ msgid "Voorkom dezelfde uitkomst binnen één oefenset"
 msgstr "Evitar el mismo resultado dentro de una misma sesión"
 
 #: templates/teacher_group.html:416
-msgid "Commutativiteit: Beschouw omgekeerde opgaven als dezelfde (vb: behandel 3×7 en 7×3 als dezelfde opgave)"
-msgstr "Conmutatividad: considerar los ejercicios invertidos como iguales (ej.: tratar 3×7 y 7×3 como el mismo ejercicio)"
+msgid ""
+"Commutativiteit: Beschouw omgekeerde opgaven als dezelfde (vb: behandel "
+"3×7 en 7×3 als dezelfde opgave)"
+msgstr ""
+"Conmutatividad: considerar los ejercicios invertidos como iguales (ej.: "
+"tratar 3×7 y 7×3 como el mismo ejercicio)"
 
 #: templates/teacher_group.html:424
 msgid "Balans in positie van het grootste getal"
@@ -1315,8 +1475,12 @@ msgid "Instellingen kopiëren"
 msgstr "Copiar configuración"
 
 #: templates/teacher_group.html:468
-msgid "Exporteer de instellingen van deze groep als een bestand, of laad eerder opgeslagen instellingen in."
-msgstr "Exporta la configuración de este grupo como archivo, o carga una configuración guardada anteriormente."
+msgid ""
+"Exporteer de instellingen van deze groep als een bestand, of laad eerder "
+"opgeslagen instellingen in."
+msgstr ""
+"Exporta la configuración de este grupo como archivo, o carga una "
+"configuración guardada anteriormente."
 
 #: templates/teacher_group.html:475
 msgid "Exporteer instellingen"
@@ -1340,7 +1504,9 @@ msgstr "Guardando..."
 
 #: templates/teacher_group.html:511
 msgid "Instellingen worden opgeslagen en oefenreeksen voorbereid..."
-msgstr "Se está guardando la configuración y preparando las secuencias de ejercicios..."
+msgstr ""
+"Se está guardando la configuración y preparando las secuencias de "
+"ejercicios..."
 
 #: templates/teacher_group.html:514
 msgid "Even geduld a.u.b. Dit kan tot een minuut duren."
@@ -1413,8 +1579,12 @@ msgid "Nog geen blokken toegevoegd."
 msgstr "Aún no se han añadido bloques."
 
 #: templates/teacher_sequence.html:75
-msgid "Weet je zeker dat je voor ALLE leerlingen opnieuw wilt starten vanaf stap 1?"
-msgstr "¿Seguro que quieres que TODOS los alumnos vuelvan a empezar desde el paso 1?"
+msgid ""
+"Weet je zeker dat je voor ALLE leerlingen opnieuw wilt starten vanaf stap"
+" 1?"
+msgstr ""
+"¿Seguro que quieres que TODOS los alumnos vuelvan a empezar desde el paso"
+" 1?"
 
 #: templates/teacher_sequence.html:78
 msgid "Reset voortgang leerlingen (stap 1)"
@@ -1422,7 +1592,9 @@ msgstr "Restablecer progreso de los alumnos (paso 1)"
 
 #: templates/teacher_sequence.html:84
 msgid "Alle stappen verwijderen? De groep gebruikt weer de standaardinstellingen."
-msgstr "¿Eliminar todos los pasos? El grupo volverá a usar la configuración estándar."
+msgstr ""
+"¿Eliminar todos los pasos? El grupo volverá a usar la configuración "
+"estándar."
 
 #: templates/teacher_sequence.html:87
 msgid "Verwijder volledige reeks"

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="max-width: 700px;">
+
+  <h1 class="display-4 fw-bold text-success mb-3">{{ _('Goed gedaan!') }}</h1>
+
+  <div class="bg-light rounded shadow p-4 mb-4">
+    <p class="fs-4 text-dark mb-0">
+      {{ _('Je bent klaar met deze oefening.') }}
+    </p>
+  </div>
+
+  {% if result %}
+  <div class="settings-panel mb-4">
+    <div class="settings-title">{{ _('Jouw resultaat') }}</div>
+    <div class="settings-grid">
+      <div class="setting-pill">
+        <div class="setting-label">✅ {{ _('Juiste antwoorden') }}</div>
+        <div class="setting-value">{{ result.correct }} / {{ result.total }}</div>
+      </div>
+      <div class="setting-pill">
+        <div class="setting-label">⏱️ {{ _('Gemiddelde reactietijd') }}</div>
+        <div class="setting-value">{{ result.avg_rt }} {{ _('sec') }}</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <a href="{{ url_for('student.select_mode') }}" class="btn btn-jungle btn-jungle-md px-5 py-3">
+    {{ _('Verder') }}
+  </a>
+
+</div>
+
+<style>
+  .settings-panel {
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px solid #d7eadc;
+    border-radius: 20px;
+    padding: 24px 24px 20px 24px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  }
+
+  .settings-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #198754;
+    margin-bottom: 18px;
+  }
+
+  .settings-grid {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .setting-pill {
+    min-width: 200px;
+    background: #f8fbf9;
+    border: 2px solid #d7eadc;
+    border-radius: 16px;
+    padding: 14px 18px;
+  }
+
+  .setting-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #198754;
+    margin-bottom: 4px;
+  }
+
+  .setting-value {
+    font-size: 1.2rem;
+    color: #212529;
+    font-weight: 600;
+  }
+</style>
+{% endblock %}

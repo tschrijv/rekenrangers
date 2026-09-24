@@ -313,6 +313,27 @@ def _advance_sequence_step_if_any(student_id):
 
 
 
+@student_bp.route('/select_mode')
+def select_mode():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    return render_template('select_mode.html', show_points=True)
+
+
+@student_bp.route('/start_exercises')
+def start_exercises():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    demo = db_query_one('SELECT demo_seen FROM students WHERE id=:u', {'u': session['student_id']})
+    demo_seen = int(demo[0]) if demo and demo[0] is not None else 0
+    if demo_seen == 0:
+        return redirect(url_for('student.demo_start'))
+
+    return redirect(url_for('student.select_exercise'))
+
+
 @student_bp.route('/select_exercise')
 def select_exercise():
     if 'student_id' not in session:
@@ -1126,6 +1147,208 @@ def demo_exit():
 
     return redirect(url_for('student.select_exercise'))
 
+
+
+# -----------------------------------
+# MOTOR SPEED TASK
+# -----------------------------------
+
+# Fixed trial order, exactly as defined in the original OpenSesame experiment
+# (MotorRT_EB_FINAL.osexp): source=table, order=sequential, not randomized.
+MOTOR_PRACTICE_TRIALS = [
+    ('practice1', 'right'),
+    ('practice2', 'right'),
+    ('practice3', 'left'),
+]
+
+MOTOR_TEST_TRIALS = [
+    ('slide1', 'right'),
+    ('slide2', 'left'),
+    ('slide3', 'right'),
+    ('slide4', 'right'),
+    ('slide5', 'left'),
+    ('slide6', 'left'),
+    ('slide7', 'right'),
+    ('slide8', 'left'),
+    ('slide9', 'right'),
+    ('slide10', 'left'),
+    ('slide11', 'right'),
+    ('slide12', 'right'),
+    ('slide13', 'left'),
+    ('slide14', 'right'),
+    ('slide15', 'left'),
+    ('slide16', 'right'),
+    ('slide17', 'left'),
+    ('slide18', 'left'),
+    ('slide19', 'left'),
+    ('slide20', 'right'),
+]
+
+
+def _motor_reset_session():
+    session.pop('motor_phase', None)
+    session.pop('motor_index', None)
+    session.pop('motor_current_stimulus', None)
+    session.pop('motor_current_correct', None)
+    session.pop('motor_test_results', None)
+    session.pop('motor_attempt_id', None)
+
+
+@student_bp.route('/motor_task')
+def motor_task_intro():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    _motor_reset_session()
+    return render_template('motor_task_intro.html', show_points=True)
+
+
+@student_bp.route('/motor_task/begin')
+def motor_task_begin():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    student_id = session['student_id']
+
+    db_execute('''
+        INSERT INTO motor_task_attempts (student_id, started_at)
+        VALUES (:sid, NOW())
+    ''', {'sid': student_id})
+    attempt_id = db_query_one('''
+        SELECT id FROM motor_task_attempts
+        WHERE student_id=:sid ORDER BY id DESC LIMIT 1
+    ''', {'sid': student_id})[0]
+
+    session['motor_phase'] = 'practice'
+    session['motor_index'] = 0
+    session['motor_test_results'] = []
+    session['motor_attempt_id'] = attempt_id
+    return redirect(url_for('student.motor_task_trial'))
+
+
+@student_bp.route('/motor_task/ready')
+def motor_task_ready():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    if session.get('motor_phase') != 'test':
+        return redirect(url_for('student.motor_task_intro'))
+
+    return render_template('motor_task_ready.html', show_points=True)
+
+
+@student_bp.route('/motor_task/done')
+def motor_task_done():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    result = session.pop('motor_last_result', None)
+    return render_template('motor_task_done.html', show_points=True, result=result)
+
+
+@student_bp.route('/motor_task/trial', methods=['GET', 'POST'])
+def motor_task_trial():
+    if 'student_id' not in session:
+        return redirect(url_for('auth.index'))
+
+    student_id = session['student_id']
+
+    # ------------------------
+    # SCORE THE TRIAL THAT WAS JUST SHOWN
+    # ------------------------
+    if request.method == 'POST':
+        if 'motor_current_stimulus' not in session:
+            return redirect(url_for('student.motor_task_intro'))
+
+        given_response = request.form.get('response')
+        if given_response not in ('left', 'right'):
+            given_response = None
+
+        response_time = float(request.form.get('response_time', 0.0))
+        correct_response = session['motor_current_correct']
+        is_correct = int(given_response == correct_response) if given_response else 0
+
+        db_execute('''
+            INSERT INTO motor_task_trials
+            (student_id, attempt_id, phase, trial_index, stimulus, correct_response,
+             given_response, is_correct, response_time, timestamp)
+            VALUES (:sid, :aid, :phase, :idx, :stim, :correct, :given, :ok, :rt, NOW())
+        ''', {
+            'sid': student_id,
+            'aid': session.get('motor_attempt_id'),
+            'phase': session['motor_phase'],
+            'idx': session['motor_index'],
+            'stim': session['motor_current_stimulus'],
+            'correct': correct_response,
+            'given': given_response,
+            'ok': is_correct,
+            'rt': response_time,
+        })
+
+        if session['motor_phase'] == 'test':
+            session['motor_test_results'] = session.get('motor_test_results', []) + [
+                {'correct': is_correct, 'rt': response_time}
+            ]
+
+        session['motor_index'] = session['motor_index'] + 1
+        # Require a fresh GET (which re-renders a trial and re-populates these)
+        # before another POST is accepted, so a stray/replayed POST can't log
+        # a trial against a stale stimulus.
+        session.pop('motor_current_stimulus', None)
+        session.pop('motor_current_correct', None)
+        return redirect(url_for('student.motor_task_trial'))
+
+    # ------------------------
+    # SERVE THE NEXT TRIAL
+    # ------------------------
+    if 'motor_phase' not in session:
+        return redirect(url_for('student.motor_task_intro'))
+
+    phase = session['motor_phase']
+    index = session['motor_index']
+    trials = MOTOR_PRACTICE_TRIALS if phase == 'practice' else MOTOR_TEST_TRIALS
+
+    if index >= len(trials):
+        if phase == 'practice':
+            session['motor_phase'] = 'test'
+            session['motor_index'] = 0
+            return redirect(url_for('student.motor_task_ready'))
+        else:
+            results = session.get('motor_test_results', [])
+            total = len(results)
+            correct = sum(r['correct'] for r in results)
+            avg_rt = (sum(r['rt'] for r in results) / total) if total else 0
+
+            attempt_id = session.get('motor_attempt_id')
+            if attempt_id:
+                db_execute('''
+                    UPDATE motor_task_attempts
+                    SET completed_at=NOW(), total=:total, correct=:correct,
+                        avg_response_time=:avg_rt
+                    WHERE id=:aid
+                ''', {
+                    'total': total,
+                    'correct': correct,
+                    'avg_rt': avg_rt,
+                    'aid': attempt_id,
+                })
+
+            _motor_reset_session()
+            session['motor_last_result'] = {
+                'total': total,
+                'correct': correct,
+                'avg_rt': round(avg_rt, 2),
+            }
+            return redirect(url_for('student.motor_task_done'))
+
+    stimulus, correct_response = trials[index]
+    session['motor_current_stimulus'] = stimulus
+    session['motor_current_correct'] = correct_response
+
+    return render_template(
+        'motor_task_trial.html',
+        stimulus_url=url_for('static', filename=f'motor_task/slides/{stimulus}.png')
+    )
 
 
 # -----------------------------------

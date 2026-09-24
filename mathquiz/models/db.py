@@ -235,8 +235,44 @@ def init_db():
             INDEX(sequence_id, position)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ''')
-    
-    
+
+    # MOTOR SPEED TASK ATTEMPTS (one row per completed/abandoned run)
+    db_execute('''
+        CREATE TABLE IF NOT EXISTS motor_task_attempts (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_id INT NOT NULL,
+            started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            completed_at DATETIME,
+            total INT,
+            correct INT,
+            avg_response_time DOUBLE,
+            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+            INDEX(student_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ''')
+
+    # MOTOR SPEED TASK TRIALS
+    db_execute('''
+        CREATE TABLE IF NOT EXISTS motor_task_trials (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            student_id INT NOT NULL,
+            attempt_id INT,
+            phase ENUM('practice','test') NOT NULL,
+            trial_index INT NOT NULL,
+            stimulus VARCHAR(50) NOT NULL,
+            correct_response ENUM('left','right') NOT NULL,
+            given_response ENUM('left','right'),
+            is_correct TINYINT(1),
+            response_time DOUBLE,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+            FOREIGN KEY (attempt_id) REFERENCES motor_task_attempts(id) ON DELETE SET NULL,
+            INDEX(student_id),
+            INDEX(attempt_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ''')
+
+
     add_puzzle('Giraf', '/static/puzzles/giraf.png', 5, 3, 10)
     add_puzzle('Leeuw', '/static/puzzles/lion.png', 5, 3, 30)
     add_puzzle('Olifant', '/static/puzzles/elephant.png', 5, 3, 15)

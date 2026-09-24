@@ -88,12 +88,7 @@ def login_group_students(code):
         session['role'] = 'student'
         session['student_id'] = row[0]
         flash(_("Inloggen geslaagd!"), "success")
-        demo = db_query_one('SELECT demo_seen FROM students WHERE id=:u', {'u': row[0]})
-        demo_seen = int(demo[0]) if demo and demo[0] is not None else 0
-        if demo_seen == 0:
-            return redirect(url_for('student.demo_start'))
-
-        return redirect(url_for('student.select_exercise'))
+        return redirect(url_for('student.select_mode'))
 
     students = [s[0] for s in db_query_all(
         'SELECT username FROM students WHERE group_id=:g ORDER BY username',

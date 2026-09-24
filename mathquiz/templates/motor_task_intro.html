@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center" style="max-width: 700px;">
+
+  <h1 class="display-4 fw-bold text-success mb-3">{{ _('Welkom!') }}</h1>
+
+  <div class="bg-light rounded shadow p-4 mb-4">
+    <img src="{{ url_for('static', filename='motor_task/astronaut.png') }}"
+         alt="" class="img-fluid mb-3" style="max-height: 220px;">
+
+    <p class="fs-4 text-dark mb-2">
+      {{ _('Zo dadelijk krijg je enkele figuren te zien.') }}
+    </p>
+    <p class="fs-4 text-dark mb-2">
+      {{ _('Welke van de twee is wit gekleurd?') }}
+    </p>
+    <p class="fs-4 text-dark mb-0">
+      {{ _('Geef zo goed en zo snel als je kan het juiste antwoord.') }}
+    </p>
+  </div>
+
+  <a href="{{ url_for('student.motor_task_begin') }}" class="btn btn-jungle btn-jungle-md px-5 py-3">
+    {{ _('Start') }}
+  </a>
+
+</div>
+{% endblock %}
